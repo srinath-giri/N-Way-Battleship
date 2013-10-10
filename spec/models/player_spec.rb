@@ -1,5 +1,13 @@
 require 'spec_helper'
 
 describe Player do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+   it "validate an error is thrown when creating a player with empty name" do
+    grace = Player.new(name: "")
+
+    #grace.should_not be_valid
+    grace.should have(1).error_on(:name)
+  end
+
+
 end
