@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131010150003) do
+ActiveRecord::Schema.define(:version => 20131011212155) do
 
   create_table "misses", :force => true do |t|
     t.integer  "x"
@@ -24,6 +24,17 @@ ActiveRecord::Schema.define(:version => 20131010150003) do
   create_table "players", :force => true do |t|
     t.string   "name"
     t.boolean  "turn"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "ships", :force => true do |t|
+    t.string   "name"
+    t.integer  "x_start"
+    t.integer  "x_end"
+    t.integer  "y_start"
+    t.integer  "y_end"
+    t.text     "state"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
