@@ -1,5 +1,7 @@
 require 'spec_helper'
 
 describe Ship do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  #before :each do
+  #	@ship = Ship.new("1","1","2","3","destroyer","1=")
 end
