@@ -6,7 +6,7 @@ class CreateShips < ActiveRecord::Migration
       t.integer :x_end
       t.integer :y_start
       t.integer :y_end
-      t.text :state
+      t.string :state
 
       t.timestamps
     end

@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Ship do
 
   before do
-    @ship = Ship.new(name: "destroyer" , x_start: "1" , x_end:"1", y_start:"2",y_end: "5",state:{1=>"1",2=>"3"})
+    @ship = Ship.new(name:"Destroyer", x_start:1, x_end:1, y_start:2, y_end:2, state:nil) 
+     
+
   end
 
   subject {@ship}
