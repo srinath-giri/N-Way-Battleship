@@ -67,11 +67,10 @@ GEM
     mime-types (1.25)
     multi_json (1.8.0)
     orm_adapter (0.4.0)
-<<<<<<< HEAD
-=======
+
     pg (0.17.0)
     pg (0.17.0-x86-mingw32)
->>>>>>> fdbbeab65c90b81288f7cb05a30b7e4aa2dcd5e3
+
     polyglot (0.3.3)
     rack (1.4.5)
     rack-cache (1.2)
