@@ -24,14 +24,21 @@ class PlayersController < ApplicationController
 
   def self.determine_next_player(players, current_player)
 
+
     # we determine the next player based on the player id
     players.sort_by! { |player| player[:id] }
 
-    if current_player
+    current_player_index = players.index(current_player)
 
+    if current_player
+      if current_player_index < players.size - 1
+        return players[current_player_index + 1]
+      end
     else
-      players[0]  # return first player if none has the token
+      return players[0]  # return first player if none has the token
     end
+
+    nil # return nil if the next player couldn't be found
   end
 
 end

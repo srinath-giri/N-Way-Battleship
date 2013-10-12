@@ -19,6 +19,11 @@ describe PlayersController do
 
   end
 
-
+  it "passes the token to the second player if the first players has the token" do
+    @player1.turn = true
+    PlayersController.pass_turn(@players)
+    @player1.turn.should be_false
+    @player2.turn.should be_true
+  end
 
 end
