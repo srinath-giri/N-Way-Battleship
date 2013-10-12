@@ -2,15 +2,23 @@ require 'spec_helper'
 
 describe PlayersController do
 
-  it "passes the token to the player with the first ID if no player has the token" do
-    player1 = Player.create(name: "Grace", turn: false)
-    player2 = Player.create(name: "Ibrahim", turn: false)
-    player3 = Player.create(name: "Owen", turn: false)
-    player4 = Player.create(name: "Srinath", turn: false)
+  before do
+    @player1 = Player.create(name: "Grace", turn: false)      # created with id 1
+    @player2 = Player.create(name: "Ibrahim", turn: false)    # created with id 2
+    @player3 = Player.create(name: "Owen", turn: false)       # created with id 3
+    @player4 = Player.create(name: "Srinath", turn: false)    # created with id 4
 
-    PlayersController.passTurn
+    @players = [@player4, @player3, @player1, @player2]
 
-    player1.turn.should be_true
   end
+
+  it "passes the token to the player with the first ID if no player has the token" do
+
+    PlayersController.pass_turn(@players)
+    @player1.turn.should be_true
+
+  end
+
+
 
 end
