@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(:version => 20131011212155) do
     t.integer  "x_end"
     t.integer  "y_start"
     t.integer  "y_end"
-    t.text     "state"
+    t.string   "state"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
