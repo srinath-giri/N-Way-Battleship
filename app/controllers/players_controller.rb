@@ -27,18 +27,19 @@ class PlayersController < ApplicationController
 
     # we determine the next player based on the player id
     players.sort_by! { |player| player[:id] }
-
-    current_player_index = players.index(current_player)
+    # just modify the previous line if you want to assign turns based on something different than the player id
 
     if current_player
+      current_player_index = players.index(current_player)
       if current_player_index < players.size - 1
         return players[current_player_index + 1]
+      else
+        return players[0]  # return first player if the current player is the last of the list
       end
     else
       return players[0]  # return first player if none has the token
     end
 
-    nil # return nil if the next player couldn't be found
   end
 
 end
