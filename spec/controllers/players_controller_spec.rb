@@ -30,4 +30,26 @@ describe PlayersController do
     @player1.turn.should be_true
   end
 
+  it "ensures only one player has the token at all times" do
+    @player1.turn = true
+    PlayersController.pass_turn(@players)
+    sum_turns = @players.inject(0) { |sum, player| sum + (player.turn ? 1 : 0) }
+    sum_turns.should == 1
+
+    @player2.turn = true
+    PlayersController.pass_turn(@players)
+    sum_turns = @players.inject(0) { |sum, player| sum + (player.turn ? 1 : 0) }
+    sum_turns.should == 1
+
+    @player3.turn = true
+    PlayersController.pass_turn(@players)
+    sum_turns = @players.inject(0) { |sum, player| sum + (player.turn ? 1 : 0) }
+    sum_turns.should == 1
+
+    @player4.turn = true
+    PlayersController.pass_turn(@players)
+    sum_turns = @players.inject(0) { |sum, player| sum + (player.turn ? 1 : 0) }
+    sum_turns.should == 1
+  end
+
 end
