@@ -77,6 +77,17 @@ describe Ship do
       expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
+    it "raises error if ship is saved with starting grid point to the right of ending grid point" do
+      ship = Ship.new(name: "Destroyer", x_start: 5, x_end: 1, y_start: 1, y_end: 1)
+      expect { ship.save! }.to raise_error(Ship::InvalidGridPoint)
+    end
+
+    it "raises error if ship is saved with starting grid point to the bottom of ending grid point" do
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 5, y_end: 1)
+      expect { ship.save! }.to raise_error(Ship::InvalidGridPoint)
+    end
+
   end
+
 
 end
