@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Ship do
 
-  context "check attribute access" do
+  context "attribute access check" do
 
     before do
       @ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 4, state: nil)
@@ -19,14 +19,24 @@ describe Ship do
 
   end
 
-  context "arrange ships" do
+  context "arrangement" do
 
-    it "raises error if saved without name" do
-      ship = Ship.new
+    it "raises error if ship is saved without name" do
+      ship = Ship.new(x_start: 1, x_end: 1, y_start: 1, y_end: 4)
       expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
-    it "raises error if saved without grid points" do
+    it "raises error if ship's name is not one among the accepted names" do
+      ship = Ship.new(name: "Plane", x_start: 1, x_end: 1, y_start: 1, y_end: 4)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "ship is saved if ship's name is one among the accepted names" do
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 4)
+      expect { ship.save! }.to change { Ship.count }.by(1)
+    end
+
+    it "raises error if ship is saved without grid points" do
       ship = Ship.new(name: "Destroyer")
       expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
       ship = Ship.new(name: "Destroyer", x_start: 1)
@@ -34,6 +44,36 @@ describe Ship do
       ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1)
       expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
       ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "raises error if ship is saved with non-positive or non-integer grid points" do
+      ship = Ship.new(name: "Destroyer", x_start: 1.5, x_end: 1, y_start: 1, y_end: 4)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+      ship = Ship.new(name: "Destroyer", x_start: -1, x_end: 1, y_start: 1, y_end: 4)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+      ship = Ship.new(name: "Destroyer", x_start: 'A', x_end: 1, y_start: 1, y_end: 4)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1.5, y_start: 1, y_end: 4)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: -1, y_start: 1, y_end: 4)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 'A', y_start: 1, y_end: 4)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1.5, y_end: 4)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: -1, y_end: 4)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 'A', y_end: 4)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 1.5)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: -1)
+      expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
+      ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 'A')
       expect { ship.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
