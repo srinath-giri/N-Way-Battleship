@@ -16,8 +16,25 @@ describe GamesController do
   describe "play" do
     it "renders the play template" do
       get :play
+      response.should render_template("play")
     end
   end
+
+
+  context '#my_turn' do
+
+    before do
+      @player = Player.create(name: 'grace', turn: true)
+    end
+
+    it 'tells a player if it is his/her turn' do
+      get :my_turn, player_id: 1, format: :json
+
+      response.should be_true
+    end
+
+  end
+
 
 end
 
