@@ -12,6 +12,13 @@ describe GamesController do
       response.should contain(/[Aa]rrange/)
     end
   end
+
+  describe "play" do
+    it "renders the play template" do
+      get :play
+    end
+  end
+
 end
 
 

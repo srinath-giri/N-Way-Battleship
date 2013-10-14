@@ -1,6 +1,7 @@
 RoR007::Application.routes.draw do
 
   match '/arrange_ships' => 'games#arrange_ships', as: 'arrange_ships'
+  match '/play' => 'games#play', as: 'play'
 
 
   # The priority is based upon order of creation:
