@@ -1,4 +1,8 @@
 RoR007::Application.routes.draw do
+
+  match '/arrange_ships' => 'games#arrange_ships', as: 'arrange_ships'
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
