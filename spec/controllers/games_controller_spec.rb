@@ -9,7 +9,7 @@ describe GamesController do
   describe "arrange ships" do
     it "renders the arrange_ships template" do
       get :arrange_ships
-      #response.should contain(/[Aa]rrange/)
+      response.should contain(/[Aa]rrange/)
     end
   end
 end
