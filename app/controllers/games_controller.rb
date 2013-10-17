@@ -8,7 +8,7 @@ class GamesController < ApplicationController
 
   end
 
-  def is_it_my_turn
+  def refresh
     @my_turn = Player.find(params[:player_id]).turn
     respond_to do |format|
       format.json { render :json => { turn: @my_turn } }

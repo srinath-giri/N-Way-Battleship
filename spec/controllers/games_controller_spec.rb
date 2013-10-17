@@ -24,29 +24,32 @@ describe GamesController do
     end
   end
 
-  context '#is_it_my_turn' do
+  describe '#refresh' do
 
     before do
       @player = Player.create(name: 'grace', turn: true)
     end
 
-    it 'returns true if the player has the turn' do
-      get :is_it_my_turn, player_id: @player.id, format: :json
-      JSON.parse(response.body)['turn'].should be_true
+    it 'returns the state variable: my_turn as true if the player has the turn' do
+      #@player.update_attributes(turn: true)
+      get :refresh, player_id: @player.id, format: :json
+      JSON.parse(response.body)['my_turn'].should be_true
     end
 
-
-    it 'returns false if the player does not have the turn' do
+    it 'returns the state variable: my_turn as false if the player does not have the turn' do
       @player.update_attributes(turn: false)
-      get :is_it_my_turn, player_id: @player.id, format: :json
-      JSON.parse(response.body)['turn'].should be_false
+      get :refresh, player_id: 1, format: :json
+      JSON.parse(response.body)['my_turn'].should be_true
     end
 
+    it 'returns the state variable: update' do
+      pending
+    end
 
-
-
+    it 'returns the state variable: player_in_turn' do
+      pending
+    end
   end
-
 
 end
 
