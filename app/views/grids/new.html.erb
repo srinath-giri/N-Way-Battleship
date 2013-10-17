@@ -1,0 +1,29 @@
+<h2>New grid form</h2>
+
+<%= flash[:notice]%>
+
+		<%= form_for(@grid) do |f| %>
+		<ul>
+		<li>
+		<%= f.label :columns %> <%= f.text_field :columns %>
+		</li>
+		<br/>
+		<br/>
+		<li>
+		<%= f.label :rows %> <%= f.text_field :rows %>
+		</li>
+		<br/>
+		<br/>
+		<li>
+		<%= f.label :player_id %> <%= f.text_field :player_id %>
+		</li>
+		
+		</ul>
+	
+		
+		
+		
+		
+		
+		<%= f.submit "New grid" %>
+		<% end %>

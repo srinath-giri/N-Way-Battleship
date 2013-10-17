@@ -1,15 +1,27 @@
 RoR007::Application.routes.draw do
+ resources :grids
+ resources :ships
+  get "ships/new"
 
-  match '/arrange_ships' => 'games#arrange_ships', as: 'arrange_ships'
-  match '/play' => 'games#play', as: 'play'
+  get "ships/help"
+  
 
-  match '/my_turn/:player_id(.:format)' => 'games#my_turn', as: 'my_turn'
+  
+     #root 'grids#index'
+     get "grids/index"
+     get "grids/new"
+     get "grids/edit"
+  match '/ships/new' => 'ships#new'
+  
 
+   match '/arrange_ships' => 'games#arrange_ships', as: 'arrange_ships'
+   match '/play' => 'games#play', as: 'play'
+  
+    match '/my_turn/:player_id(.:format)' => 'games#my_turn', as: 'my_turn'
 
-  #  match '/reportsCount/:user_id(.:format)' => 'users#reportsCount', :as => 'reportsCount'
-
+   
   # The priority is based upon order of creation:
-  # first created -> highest priority.
+   #first created -> highest priority.
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
