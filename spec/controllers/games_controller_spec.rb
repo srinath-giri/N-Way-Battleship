@@ -5,6 +5,10 @@ require 'spec_helper'
 describe GamesController do
 
   render_views
+  # Why we render the views explanation:   http://stackoverflow.com/questions/9027518/what-does-render-views-do-in-rspec
+  # "it renders the view's in the controller spec. If you don't put render_views, the views won't render,
+  # that means the controller is called but after it returns the views are not rendered.
+  # Controller tests will run faster, as they won't have to render the view, but you might miss bugs in the view."
 
   describe "arrange ships" do
     it "renders the arrange_ships template" do
@@ -20,17 +24,26 @@ describe GamesController do
     end
   end
 
-
-  context '#my_turn' do
+  context '#is_it_my_turn' do
 
     before do
       @player = Player.create(name: 'grace', turn: true)
     end
 
-    it 'tells a player if it is his/her turn' do
-      get :my_turn, player_id: 1, format: :json
+    it 'returns true if it is his/her turn' do
+      get :is_it_my_turn, player_id: 1, format: :json
+      JSON.parse(response.body)['turn'].should be_true
+    end
 
-      response.should be_true
+    it 'returns false if it is not his/her turn' do
+      #@player.turn = false
+      @player.update_attributes(turn: false)
+      get :is_it_my_turn, player_id: 1, format: :json
+      JSON.parse(response.body)['turn'].should be_false
+    end
+
+    it 'updates the "play" view if the player has the turn' do
+      pending
     end
 
   end
