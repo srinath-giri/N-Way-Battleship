@@ -36,7 +36,6 @@ describe GamesController do
     end
 
     it 'returns false if it is not his/her turn' do
-      #@player.turn = false
       @player.update_attributes(turn: false)
       get :is_it_my_turn, player_id: 1, format: :json
       JSON.parse(response.body)['turn'].should be_false
