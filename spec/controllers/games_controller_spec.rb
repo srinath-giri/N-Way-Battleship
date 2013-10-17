@@ -30,20 +30,20 @@ describe GamesController do
       @player = Player.create(name: 'grace', turn: true)
     end
 
-    it 'returns true if it is his/her turn' do
-      get :is_it_my_turn, player_id: 1, format: :json
+    it 'returns true if the player has the turn' do
+      get :is_it_my_turn, player_id: @player.id, format: :json
       JSON.parse(response.body)['turn'].should be_true
     end
 
-    it 'returns false if it is not his/her turn' do
+
+    it 'returns false if the player does not have the turn' do
       @player.update_attributes(turn: false)
-      get :is_it_my_turn, player_id: 1, format: :json
+      get :is_it_my_turn, player_id: @player.id, format: :json
       JSON.parse(response.body)['turn'].should be_false
     end
 
-    it 'updates the "play" view if the player has the turn' do
-      pending
-    end
+
+
 
   end
 
