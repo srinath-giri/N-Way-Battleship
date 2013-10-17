@@ -11,9 +11,29 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131011212155) do
+<<<<<<< HEAD
+ActiveRecord::Schema.define(:version => 20131014175330) do
+
+  create_table "grids", :force => true do |t|
+    t.integer  "rows"
+    t.integer  "columns"
+=======
+ActiveRecord::Schema.define(:version => 20131017190948) do
 
   create_table "misses", :force => true do |t|
+    t.integer  "x"
+    t.integer  "y"
+>>>>>>> 9a8b81f4b8caf0dae641e7fd53083b9728a62935
+    t.integer  "player_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+<<<<<<< HEAD
+  create_table "misses", :force => true do |t|
+=======
+  create_table "moves", :force => true do |t|
+>>>>>>> 9a8b81f4b8caf0dae641e7fd53083b9728a62935
     t.integer  "x"
     t.integer  "y"
     t.integer  "player_id"
@@ -34,7 +54,11 @@ ActiveRecord::Schema.define(:version => 20131011212155) do
     t.integer  "x_end"
     t.integer  "y_start"
     t.integer  "y_end"
+<<<<<<< HEAD
     t.string   "state"
+=======
+    t.text     "state"
+>>>>>>> 9a8b81f4b8caf0dae641e7fd53083b9728a62935
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

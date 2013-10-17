@@ -1,0 +1,44 @@
+<h1>Enter ship coordinates</h1>
+
+<%= flash[:notice]%>
+
+		<%= form_for(@ship) do |f| %>
+		<ul>
+		<li>
+		<%= f.label :name %> <%= f.text_field :name %>
+		</li>
+		<br/>
+		<br/>
+		<li>
+		<%= f.label :x_start %> <%= f.text_field :x_start %>
+		</li>
+		<br/>
+		<br/>
+		<li>
+		<%= f.label :y_start %> <%= f.text_field :y_start %>
+		</li>
+		<br/>
+		<br/>
+		<%= f.label :x_end %> <%= f.text_field :x_end %>
+		</li>
+		<br/>
+		<br/>
+		<li>
+		<%= f.label :y_end %> <%= f.text_field :y_end %>
+		</li>
+		<br/>
+		<br/>
+		<li>
+		<%= f.label :state %> <%= f.text_field :state %>
+		</li>
+		</ul>
+	
+		
+		
+		
+		
+		
+		<%= f.submit "Place ship" %>
+		<% end %>
+
+
