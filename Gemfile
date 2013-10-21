@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.14'
 gem "webrat", ">= 0.7.2.beta.1" # gemfile to make certain methods (such as include) available in rspec
+gem "rails_best_practices"
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
