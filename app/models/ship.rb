@@ -11,6 +11,7 @@ class Ship < ActiveRecord::Base
   validates_presence_of(:y_end)
   validates_numericality_of(:y_end, :only_integer => true, :greater_than_or_equal_to => 1)
   belongs_to :player
+  serialize :state
 
   SHIP_LENGTH = {"Destroyer" => 3, "Battleship" => 4, "Carrier" => 5, "Submarine" => 3, "PatrolBoat" => 2}
   before_save :validate_grid_point!

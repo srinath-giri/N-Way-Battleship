@@ -5,7 +5,7 @@ describe Ship do
   context "attribute access check" do
 
     before do
-      @ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 4, state: nil)
+      @ship = Ship.new(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
     end
 
     subject { @ship }
