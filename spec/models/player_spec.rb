@@ -17,6 +17,7 @@ describe Player do
     maria = Player.create(name: "grace")
 
     maria.should_not be_valid
+    maria.should have(1).error_on(:name)
 
   end
 
@@ -24,16 +25,5 @@ describe Player do
   xit "has 5 ships" do
 
   end
-
-
-    xit "make sure that only one player has the token to take the turn" do
-      #grace = Player.new(name: "grace", turn: null)
-    end
-
-
-
-    xit "passing the token to the first player when no one has the token" do
-
-    end
 
 end

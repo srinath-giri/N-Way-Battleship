@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Rows:</b>
+  <%= @grid.rows %>
+</p>
+
+<p>
+  <b>Columns:</b>
+  <%= @grid.columns %>
+</p>
+
+<p>
+  <b>Player:</b>
+  <%= @grid.player_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_grid_path(@grid) %> |
+<%= link_to 'Back', grids_path %>

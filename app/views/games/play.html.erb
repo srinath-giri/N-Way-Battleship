@@ -1,0 +1,19 @@
+
+<h1>Play</h1>
+
+
+<%= link_to("future AJAX request: is it my turn?", "/is_it_my_turn/#{1}.json", method: :get, remote: true) %>
+
+
+<div id="turn_info">
+
+</div>
+
+<%= form_tag(:controller => "games", :action => "calculate_hits", :method => "post", remote: true) do %>
+  <%= hidden_field :player_id, :value => "??" %> 
+  <%= label_tag(:x, "Attack coordinates X:") %>
+  <%= text_field_tag(:x) %>
+  <%= label_tag(:y, "Attack coordinates Y:") %>
+  <%= text_field_tag(:y) %>
+  <%= submit_tag("Attack") %>
+<% end %>
