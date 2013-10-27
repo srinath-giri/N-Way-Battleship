@@ -35,6 +35,15 @@ describe GamesController do
 
   end
 
+  context 'my_turn validations' do
+
+    it 'turn coordinates submitted are inside battle grid' do
+      player = FactoryGirl.create(:player)
+      put :my_turn, player_id:player.id, x:3, y:3, format: :xml
+      response.should render_template :my_turn
+    end
+
+  end
 
 end
 

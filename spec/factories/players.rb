@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :player do
-    name "MyString"
-    turn false
+    name "Player1"
+    turn true
   end
 end
