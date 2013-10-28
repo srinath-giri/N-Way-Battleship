@@ -24,31 +24,41 @@ describe GamesController do
     end
   end
 
-  describe '#refresh' do
+  context '#refresh' do
 
     before do
-      @player = Player.create(name: 'grace', turn: true)
+      @player = Player.create(name: 'test2', turn: true)
+    end
+    after do
+      @player.destroy # with create in before, it is not in a transaction, meaning it is not rolled back - destroy explicitly to clean up.
     end
 
-    it 'returns the state variable: my_turn as true if the player has the turn' do
-      #@player.update_attributes(turn: true)
+    it 'returns the state variable: player_in_turn' do
+      @player.update_attributes(turn: true)
       get :refresh, player_id: @player.id, format: :json
-      JSON.parse(response.body)['my_turn'].should be_true
+      JSON.parse(response.body)['player_in_turn']['turn'].should be_true
+      JSON.parse(response.body)['player_in_turn']['name'].should_not == ''
     end
 
-    it 'returns the state variable: my_turn as false if the player does not have the turn' do
-      @player.update_attributes(turn: false)
-      get :refresh, player_id: 1, format: :json
-      JSON.parse(response.body)['my_turn'].should be_true
+    it 'returns the state variable: turn as true if the player has the turn' do
+      @player.update_attributes(turn: true)
+      get :refresh, player_id: @player.id, format: :json
+      JSON.parse(response.body)['turn'].should be_true
     end
+
+    it 'returns the state variable: turn as false if the player does not have the turn' do
+      @player.update_attributes(turn: false)
+      get :refresh, player_id: @player.id, format: :json
+      JSON.parse(response.body)['turn'].should be_false
+    end
+
+
 
     it 'returns the state variable: update' do
       pending
     end
 
-    it 'returns the state variable: player_in_turn' do
-      pending
-    end
+
   end
 
 end
