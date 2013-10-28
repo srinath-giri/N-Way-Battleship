@@ -24,21 +24,31 @@ describe GamesController do
     end
   end
 
-  context '#is_it_my_turn' do
+  context '#refresh' do
 
     before do
-      @player = Player.create(name: 'grace', turn: true)
+      @player = Player.create(name: 'test2', turn: true)
+    end
+    after do
+      @player.destroy # with create in before, it is not in a transaction, meaning it is not rolled back - destroy explicitly to clean up.
     end
 
-    it 'returns true if the player has the turn' do
-      get :is_it_my_turn, player_id: @player.id, format: :json
+    it 'returns the state variable: player_in_turn' do
+      @player.update_attributes(turn: true)
+      get :refresh, player_id: @player.id, format: :json
+      JSON.parse(response.body)['player_in_turn']['turn'].should be_true
+      JSON.parse(response.body)['player_in_turn']['name'].should_not == ''
+    end
+
+    it 'returns the state variable: turn as true if the player has the turn' do
+      @player.update_attributes(turn: true)
+      get :refresh, player_id: @player.id, format: :json
       JSON.parse(response.body)['turn'].should be_true
     end
 
-
-    it 'returns false if the player does not have the turn' do
+    it 'returns the state variable: turn as false if the player does not have the turn' do
       @player.update_attributes(turn: false)
-      get :is_it_my_turn, player_id: @player.id, format: :json
+      get :refresh, player_id: @player.id, format: :json
       JSON.parse(response.body)['turn'].should be_false
     end
 
@@ -75,13 +85,17 @@ describe GamesController do
       @player2.ships.first.state[1].should == @player1.id
     end
 
+
     it 'can change status of multiple ships if player hit more than one ship' do
       xhr :post, :calculate_hits, player_id: @player1.id, x: 1, y: 2
       @player2.ships.first.state[1].should == @player1.id
       @player3.ships.first.state[1].should == @player1.id
+     end
+
+
     end
 
-  end
+
 
   context 'my_turn validations' do
 
@@ -90,6 +104,7 @@ describe GamesController do
       put :my_turn, player_id:player.id, x:3, y:3, format: :xml
       response.should render_template :my_turn
     end
+
 
   end
 
