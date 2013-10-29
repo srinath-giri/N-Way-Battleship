@@ -3,15 +3,24 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 
+# game variable: to save instance variables from the view
+game = {
+  player_id: 0
+}
+
+# initialize the game variable with instance variables from the view
+@initialize_game = (player_id) ->
+  game.player_id = player_id
 
 
+# start the refresh cycle
 setInterval ->
   refresh()
 , 1000
 
-# We need to change the id 1 for the id of the current player
+
 refresh = ->
-  $.ajax "/refresh/#{1}.json",
+  $.ajax "/refresh/" + game.player_id + ".json",
     type: 'GET'
     dataType: 'json'
     error: (jqXHR, textStatus, errorThrown) ->
@@ -30,8 +39,8 @@ display_turn = (turn) ->
 
 
 display_player_in_turn = (player_in_turn) ->
-  if (player_in_turn.id != 1)
-    document.getElementById("player_in_turn_info").innerHTML = player_in_turn.name
+  if (player_in_turn.id != game.player_id)
+    document.getElementById("player_in_turn_info").innerHTML = "Player moving: " + player_in_turn.name
   else
     document.getElementById("player_in_turn_info").innerHTML = ""
 
