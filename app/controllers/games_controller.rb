@@ -23,21 +23,18 @@ class GamesController < ApplicationController
   def take_turn
     @player = Player.find(params[:player_id])
     @grid = Grid.find(params[:player_id])
-
+    error = false
     x = Integer(params[:x])
     y = Integer(params[:y])
 
-    if(x < @grid.columns && y < @grid.rows)
-        @player.turn = false
-        @player.save
+    if(x < @grid.columns && y < @grid.rows && @player.turn)
+      PlayersController.pass_turn(Player.all)
     else
-        @player.turn = true
-        error = true
-        @player.save
+      error = true
     end
 
     respond_to do |format|
-      format.json { render :json => { turn: @player.turn, error: true} }
+      format.json { render :json => { turn: Player.find(params[:player_id]).turn, error: error} }
     end
 
   end

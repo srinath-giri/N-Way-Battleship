@@ -95,27 +95,35 @@ describe GamesController do
     end
 
 
-  context 'take turn validations' do
+  context 'take turn' do
 
     before do
-      @player = FactoryGirl.create(:player)
-      @grid = FactoryGirl.create(:grid)
+      @player1 = FactoryGirl.create(:player, id:1, name:"Player1", turn:true)
+      @player2 = FactoryGirl.create(:player, id:2, name:"Player2", turn:false)
+      @grid1 = FactoryGirl.create(:grid,player_id:1)
+      @grid2 = FactoryGirl.create(:grid,player_id:2)
     end
 
-    it 'turn coordinates submitted inside battle grid are accepted' do
-      put :take_turn, player_id:@player.id, x: @grid.columns/2, y: @grid.rows/2, format: :json
+    it 'is not allowed for a player when it is not his turn' do
+      put :take_turn, player_id:@player2.id, x: @grid2.columns/2, y: @grid2.rows/2, format: :json
+      JSON.parse(response.body)['error'].should be_true
       JSON.parse(response.body)['turn'].should be_false
     end
 
-    it 'turn coordinates submitted outside battle grid are not accepted' do
-      put :take_turn, player_id:@player.id, x: @grid.columns+100, y: @grid.rows+100, format: :json
+    it 'coordinates submitted outside battle grid are not accepted' do
+      put :take_turn, player_id:@player1.id, x: @grid1.columns+100, y: @grid1.rows+100, format: :json
       JSON.parse(response.body)['error'].should be_true
       JSON.parse(response.body)['turn'].should be_true
     end
 
-    it 'turn ends after taking a proper shot' do
-      put :take_turn, player_id:@player.id, x: @grid.columns/2, y: @grid.rows/2, format: :json
+    it 'coordinates submitted inside battle grid are accepted' do
+      put :take_turn, player_id:@player1.id, x: @grid1.columns/2, y: @grid1.rows/2, format: :json
       JSON.parse(response.body)['turn'].should be_false
+    end
+
+    it 'passes turn to next player after taking a proper shot' do
+      put :take_turn, player_id:@player1.id, x: @grid1.columns/2, y: @grid1.rows/2, format: :json
+      Player.find(@player2.id).turn.should be_true
     end
 
   end
