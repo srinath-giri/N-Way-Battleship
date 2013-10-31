@@ -1,11 +1,11 @@
 class GamesController < ApplicationController
 
   def arrange_ships
-
+    @player = Player.find(params[:player_id])
   end
 
   def play
-
+    @player = Player.find(params[:player_id])
   end
 
   def refresh
@@ -32,6 +32,8 @@ class GamesController < ApplicationController
     else
       error = true
     end
+
+    calculate_hits
 
     respond_to do |format|
       format.json { render :json => { turn: Player.find(params[:player_id]).turn, error: error} }
@@ -71,7 +73,7 @@ class GamesController < ApplicationController
         end
       end
     end
-    head :ok 
+
   end
 
 

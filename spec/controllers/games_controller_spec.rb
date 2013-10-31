@@ -10,16 +10,26 @@ describe GamesController do
   # that means the controller is called but after it returns the views are not rendered.
   # Controller tests will run faster, as they won't have to render the view, but you might miss bugs in the view."
 
-  describe "arrange ships" do
+  context "arrange ships" do
+
+    before do
+      @player = FactoryGirl.create(:player, id:1, name:"Player1", turn:true)
+    end
+
     it "renders the arrange_ships template" do
-      get :arrange_ships
+      get :arrange_ships, player_id: @player.id
       response.should contain(/[Aa]rrange/)
     end
   end
 
-  describe "play" do
+  context "play" do
+
+    before do
+      @player = FactoryGirl.create(:player, id:1, name:"Player1", turn:true)
+    end
+
     it "renders the play template" do
-      get :play
+      get :play, player_id: @player.id
       response.should render_template("play")
     end
   end
@@ -59,35 +69,38 @@ describe GamesController do
       @player1 = Player.create(name: 'grace', turn: true)
       @player2 = Player.create(name: 'ibrahim', turn: false)
       @player3 = Player.create(name: 'owen', turn: false)
+      @grid1 = FactoryGirl.create(:grid,player_id:@player1.id)
+      @grid2 = FactoryGirl.create(:grid,player_id:@player2.id)
+      @grid3 = FactoryGirl.create(:grid,player_id:@player3.id)
       @player1.ships.create(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
       @player2.ships.create(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
       @player3.ships.create(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
     end
 
     it 'can change ship hit status when the attack is within range' do
-      xhr :post, :calculate_hits, player_id: @player1.id, x: 1, y: 2
+      xhr :post, :take_turn, player_id: @player1.id, x: 1, y: 2
       @player2.ships.first.state[1].should == @player1.id    
     end
 
     it 'does not change ship hit status when the attack is out of range' do
-      xhr :post, :calculate_hits, player_id: @player1.id, x: 2, y: 2
+      xhr :post, :take_turn, player_id: @player1.id, x: 2, y: 2
       @player2.ships.first.state.should == nil
     end
 
     it 'does not change ships hit status of attacker' do
-      xhr :post, :calculate_hits, player_id: @player1.id, x: 1, y: 2
+      xhr :post, :take_turn, player_id: @player1.id, x: 1, y: 2
       @player1.ships.first.state.should == nil
     end
 
     it 'does not change ships hit status if the slot of ship has already been hit' do
-      xhr :post, :calculate_hits, player_id: @player1.id, x: 1, y: 2
-      xhr :post, :calculate_hits, player_id: @player3.id, x: 1, y: 2
+      xhr :post, :take_turn, player_id: @player1.id, x: 1, y: 2
+      xhr :post, :take_turn, player_id: @player3.id, x: 1, y: 2
       @player2.ships.first.state[1].should == @player1.id
     end
 
 
     it 'can change status of multiple ships if player hit more than one ship' do
-      xhr :post, :calculate_hits, player_id: @player1.id, x: 1, y: 2
+      xhr :post, :take_turn, player_id: @player1.id, x: 1, y: 2
       @player2.ships.first.state[1].should == @player1.id
       @player3.ships.first.state[1].should == @player1.id
      end
@@ -131,6 +144,10 @@ describe GamesController do
       Player.find(@player2.id).turn.should be_true
     end
 
+    xit 'calculates hits' do
+      put :take_turn, player_id:@player1.id, x: @grid1.columns/2, y: @grid1.rows/2, format: :json
+      GamesController.should_receive(:calculate_hits).once
+    end
   end
 
 end
