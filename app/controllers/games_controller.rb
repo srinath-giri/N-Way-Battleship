@@ -27,7 +27,7 @@ class GamesController < ApplicationController
     x = Integer(params[:x])
     y = Integer(params[:y])
 
-    if(x < @grid.columns && y < @grid.rows && @player.turn)
+    if(x.between?(1,@grid.columns) && y.between?(1,@grid.rows) && @player.turn)
       PlayersController.pass_turn(Player.all)
     else
       error = true
