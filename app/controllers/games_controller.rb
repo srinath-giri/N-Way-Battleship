@@ -33,7 +33,7 @@ class GamesController < ApplicationController
       error = true
     end
 
-    calculate_hits
+    calculate_hits_and_misses
 
     respond_to do |format|
       format.json { render :json => { turn: Player.find(params[:player_id]).turn, error: error} }
@@ -41,11 +41,16 @@ class GamesController < ApplicationController
 
   end
 
-  def calculate_hits
+  def calculate_hits_and_misses
     x = Integer(params[:x])
     y = Integer(params[:y])
     player_id = Integer(params[:player_id])
-    #ship_on_slot = Ship.where("x_start <= ? AND y_start <= ? AND x_end >= ? AND y_end >= ? AND player_id == ?", x, y, x, y, player_id)
+    miss_record = Hash.new
+    Player.all.each do |player|
+      miss_record[player.id] = true
+    end
+    miss_record[player_id] = false
+    #ship_on_slot = Ship.where("x_start <= ? AND y_start <= ? AND x_end >= ? AND y_end >= ? AND player_id = ?", x, y, x, y, player_id)
     #ship_on_slot.each do |ship|
     #  Integer slot_number = x - ship.x_start + y - ship.y_start
     #    if ship.state == nil
@@ -61,6 +66,7 @@ class GamesController < ApplicationController
     
     Ship.all.each do |ship|
       if x >= ship.x_start && x <= ship.x_end && y >= ship.y_start && y <= ship.y_end && player_id != ship.player.id
+        miss_record[ship.player.id] = false
         Integer slot_number = x - ship.x_start + y -ship.y_start
         if ship.state == nil
           hash = Hash.new
@@ -70,6 +76,14 @@ class GamesController < ApplicationController
         elsif ship.state[slot_number] == nil
           ship.state[slot_number] = player_id
           ship.save
+        end
+      end
+    end
+
+    miss_record.each do |id,miss|
+      if miss == true
+        if Miss.where("player_id = ? AND x = ? AND y = ?",id,x,y).empty? == true
+          Miss.create(player_id: id,x: x,y: y)
         end
       end
     end

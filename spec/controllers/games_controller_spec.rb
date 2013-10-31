@@ -103,9 +103,47 @@ describe GamesController do
       xhr :post, :take_turn, player_id: @player1.id, x: 1, y: 2
       @player2.ships.first.state[1].should == @player1.id
       @player3.ships.first.state[1].should == @player1.id
-     end
-
     end
+
+  end
+
+  context 'calculate_misses' do
+    before do
+      @player1 = Player.create(name: 'grace', turn: true)
+      @player2 = Player.create(name: 'ibrahim', turn: false)
+      @player3 = Player.create(name: 'owen', turn: false)
+      @grid1 = FactoryGirl.create(:grid,player_id:@player1.id)
+      @grid2 = FactoryGirl.create(:grid,player_id:@player2.id)
+      @grid3 = FactoryGirl.create(:grid,player_id:@player3.id)
+      @player1.ships.create(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
+      @player2.ships.create(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
+      @player3.ships.create(name: "Destroyer", x_start: 2, x_end: 2, y_start: 1, y_end: 3, state: nil)
+    end
+
+    it 'can stores miss when the attack is outof range' do
+      xhr :post, :take_turn, player_id: @player1.id, x: 2, y: 2
+      Miss.first.player_id.should == @player2.id
+      Miss.first.x.should == 2
+      Miss.first.y.should == 2    
+    end
+
+    it 'does not store miss when the attack is in range' do
+      xhr :post, :take_turn, player_id: @player1.id, x: 2, y: 2
+      Miss.count.should == 1   
+    end
+
+    it 'does not store miss for the ship of attacker' do
+      xhr :post, :take_turn, player_id: @player1.id, x: 2, y: 2
+      Miss.count.should == 1  
+    end
+
+    it 'does not create duplicate miss records' do
+      xhr :post, :take_turn, player_id: @player1.id, x: 2, y: 2
+      xhr :post, :take_turn, player_id: @player3.id, x: 2, y: 2
+      Miss.count.should == 2  
+    end
+
+  end
 
 
   context 'take turn' do
