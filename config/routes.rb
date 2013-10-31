@@ -18,6 +18,7 @@ RoR007::Application.routes.draw do
   match '/play' => 'games#play', as: 'play'
   match '/calculate_hits' => 'games#calculate_hits' , as: 'calculate_hits'
   match '/refresh/:player_id(.:format)' => 'games#refresh', as: 'refresh'
+  match '/take_turn/:player_id(.:format)' => 'games#take_turn', as: 'take_turn'
 
   # The priority is based upon order of creation:
    #first created -> highest priority.

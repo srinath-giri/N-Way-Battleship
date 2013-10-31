@@ -20,6 +20,28 @@ class GamesController < ApplicationController
     end
   end
 
+  def take_turn
+    @player = Player.find(params[:player_id])
+    @grid = Grid.find(params[:player_id])
+
+    x = Integer(params[:x])
+    y = Integer(params[:y])
+
+    if(x < @grid.columns && y < @grid.rows)
+        @player.turn = false
+        @player.save
+    else
+        @player.turn = true
+        error = true
+        @player.save
+    end
+
+    respond_to do |format|
+      format.json { render :json => { turn: @player.turn, error: true} }
+    end
+
+  end
+
   def calculate_hits
     x = Integer(params[:x])
     y = Integer(params[:y])

@@ -92,19 +92,31 @@ describe GamesController do
       @player3.ships.first.state[1].should == @player1.id
      end
 
-
     end
 
 
+  context 'take turn validations' do
 
-  context 'my_turn validations' do
-
-    it 'turn coordinates submitted are inside battle grid' do
-      player = FactoryGirl.create(:player)
-      put :my_turn, player_id:player.id, x:3, y:3, format: :xml
-      response.should render_template :my_turn
+    before do
+      @player = FactoryGirl.create(:player)
+      @grid = FactoryGirl.create(:grid)
     end
 
+    it 'turn coordinates submitted inside battle grid are accepted' do
+      put :take_turn, player_id:@player.id, x: @grid.columns/2, y: @grid.rows/2, format: :json
+      JSON.parse(response.body)['turn'].should be_false
+    end
+
+    it 'turn coordinates submitted outside battle grid are not accepted' do
+      put :take_turn, player_id:@player.id, x: @grid.columns+100, y: @grid.rows+100, format: :json
+      JSON.parse(response.body)['error'].should be_true
+      JSON.parse(response.body)['turn'].should be_true
+    end
+
+    it 'turn ends after taking a proper shot' do
+      put :take_turn, player_id:@player.id, x: @grid.columns/2, y: @grid.rows/2, format: :json
+      JSON.parse(response.body)['turn'].should be_false
+    end
 
   end
 

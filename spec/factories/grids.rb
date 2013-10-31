@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :grid do
-    rows 1
-    columns 1
+    rows 40
+    columns 40
     player_id 1
   end
 end
