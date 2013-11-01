@@ -33,7 +33,6 @@ refresh = ->
 
 
 
-
 display_turn = (turn) ->
   if (turn == true)
     document.getElementById("turn_info").innerHTML = "It's your turn to take a shot"
