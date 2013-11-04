@@ -13,11 +13,18 @@ class GamesController < ApplicationController
 
     @player_in_turn = PlayersController.find_player_with_token(Player.all)
 
-    @ships = Ship.all
-    @misses = Miss.all
+    #@battlefield_cell = Cell.first #Last updated cell
+    #@my_ships_cell = Cell.first #Last updated cell
 
     respond_to do |format|
-      format.json { render :json => { turn: @my_turn, player_in_turn: @player_in_turn, ships: @ships, misses: @misses } }
+      format.json { render :json => {
+          turn: @my_turn,
+          player_in_turn: @player_in_turn
+
+          #battlefield_cell: @battlefield_cell,
+          #my_ships_cell: @my_ships_cell
+        }
+      }
 
     end
   end
