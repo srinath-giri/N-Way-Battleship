@@ -1,9 +1,10 @@
 class Player < ActiveRecord::Base
   attr_accessible :name, :turn
 
+  has_many :grids
+
   validates :name, presence: true
   validates :name, uniqueness: true
-  has_many :ships
 
 
 
