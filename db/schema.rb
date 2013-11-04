@@ -76,7 +76,16 @@ end
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131024062841) do
+ActiveRecord::Schema.define(:version => 20131104185917) do
+
+  create_table "cells", :force => true do |t|
+    t.integer  "x"
+    t.integer  "y"
+    t.string   "state"
+    t.integer  "grid_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "grids", :force => true do |t|
     t.integer  "rows"
@@ -84,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20131024062841) do
     t.integer  "player_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "grid_type"
   end
 
   create_table "misses", :force => true do |t|
