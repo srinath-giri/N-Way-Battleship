@@ -1,4 +1,5 @@
 class Player < ActiveRecord::Base
+  has_many :grids
   attr_accessible :name, :turn
 
   validates :name, presence: true

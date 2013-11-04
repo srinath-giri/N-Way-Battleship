@@ -8,15 +8,16 @@ class ShipsController < ApplicationController
   end
 
   def create
-    
-    @ship=Ship.create(name: "Carrier", x_start: 0, x_end: 3, y_start: 0,y_end: 0, state: " ")
+    debugger
+    #@ship=Ship.create(name: "Carrier", x_start: 0, x_end: 3, y_start: 0,y_end: 0, state: " ")
+    @player=Player.find(1)
+    @ship=@player.ships.build(params[:ship])
     if @ship.save
               flash[:notice] = "Ship added to grid."
-              #redirect_to @grid
-              render '/grids/index'
+             
             else
              flash[:notice] = "Ship not saved"
-              #flash[:notice] = @item.customer_id
+              
 
             render 'new'
             end
@@ -24,7 +25,7 @@ class ShipsController < ApplicationController
   end
   
   def ship_params
-        params.require(:ship).permit(:name, :x_start, :y_start, :x_end, :y_end)
+        params.require(:ship).permit(:name, :x_start, :y_start, :x_end, :y_end, :state)
       end
   
 end

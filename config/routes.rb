@@ -2,6 +2,7 @@ RoR007::Application.routes.draw do
 
   resources :grids
   resources :ships
+  resources :players
   get "ships/new"
 
   get "ships/help"
@@ -10,8 +11,11 @@ RoR007::Application.routes.draw do
   #root 'grids#index'
   get "grids/index"
   get "grids/new"
+  get "grids/new"
   get "grids/edit"
+  get "games/calculate_hits"
   match '/ships/new' => 'ships#new'
+  
   
 
   match '/arrange_ships' => 'games#arrange_ships', as: 'arrange_ships'

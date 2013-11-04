@@ -1,4 +1,3 @@
-
 # encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
@@ -12,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131024062841) do
+ActiveRecord::Schema.define(:version => 20131101062605) do
 
   create_table "grids", :force => true do |t|
     t.integer  "rows"
@@ -21,6 +20,8 @@ ActiveRecord::Schema.define(:version => 20131024062841) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "grids", ["player_id"], :name => "index_grids_on_player_id", :unique => true
 
   create_table "misses", :force => true do |t|
     t.integer  "x"
@@ -51,11 +52,12 @@ ActiveRecord::Schema.define(:version => 20131024062841) do
     t.integer  "x_end"
     t.integer  "y_start"
     t.integer  "y_end"
-    t.string   "state"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.text     "state",      :limit => 255
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
     t.integer  "player_id"
   end
 
-end
+  add_index "ships", ["player_id"], :name => "index_ships_on_player_id", :unique => true
 
+end

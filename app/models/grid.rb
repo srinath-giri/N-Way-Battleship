@@ -1,4 +1,5 @@
 class Grid < ActiveRecord::Base
+  belongs_to :player
   attr_accessible :columns, :player_id, :rows
   
   validates_presence_of(:columns)

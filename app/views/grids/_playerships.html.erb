@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html>
-
 
 <SCRIPT LANGUAGE ="JavaScript">
-//universal battlefield view
+//individual ship arrangement view
+//use player_id to pull ships and place them on grid
 function coordinate(table) {
 
     table.coordinates = [];
@@ -64,8 +62,6 @@ function coordinate(table) {
 }
 
 </SCRIPT>
-
-
 <table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3">
 	<tr>
 		<td>""</td>
@@ -188,9 +184,7 @@ function coordinate(table) {
 		<td>""</td>
 	</tr>
 </table>
-
 <SCRIPT LANGUAGE ="JavaScript">
-
 // The origin (0,0) is the top, leftmost cell
 var table = document.getElementsByTagName('table')[0];
 coordinate(table);
@@ -200,22 +194,10 @@ var cells = table.getElementsByTagName('td');
 for (var i=0,td; td=cells[i]; ++i)
     td.onclick = function () {
 	table.coordinates[3][2].innerHTML = 'x coord is '+ this.x + ', y coord is '+ this.y;
-   
-	 $.ajax({
-		type: 'post'
-		url: '/games/calculate_hits/'
-		data: {x: this.x, y: this.y, player_id: 1}
-		
-	})
-
+        
     };
 
+//methods to pull ship view for player_id
 
 
 </SCRIPT>
-</br>
-</br>
-</br>
-<%= render 'playerships'%>
-<%= render 'moveshistory'%>
-</html>

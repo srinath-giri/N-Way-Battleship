@@ -50,6 +50,8 @@ gem 'jquery-rails'
 gem 'factory_girl_rails' 
 gem 'rspec-rails' 
 gem 'devise' 
+gem 'gon'
+gem 'debugger'
 group :development do
 #  gem 'ruby-debug-base19x' 
 #  gem 'ruby-debug-ide' 

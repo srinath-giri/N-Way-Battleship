@@ -44,6 +44,13 @@ GEM
       execjs
     coffee-script-source (1.6.3)
     colored (1.2)
+    columnize (0.3.6)
+    debugger (1.6.2)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.3)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.3)
     devise (3.1.0)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -58,6 +65,9 @@ GEM
     factory_girl_rails (4.2.1)
       factory_girl (~> 4.2.0)
       railties (>= 3.0.0)
+    gon (4.1.1)
+      actionpack (>= 2.3.0)
+      json
     hike (1.2.3)
     i18n (0.6.5)
     journey (1.0.4)
@@ -161,8 +171,10 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
+  debugger
   devise
   factory_girl_rails
+  gon
   jquery-rails
   rails (= 3.2.14)
   rails_best_practices

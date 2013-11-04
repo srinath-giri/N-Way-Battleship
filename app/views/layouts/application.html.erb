@@ -2,13 +2,14 @@
 <html>
 <head>
   <title>RoR007</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
+<%= include_gon %>
+<%= stylesheet_link_tag    "application", media: "all" %>
+<%= javascript_include_tag "application" %>
+<%= csrf_meta_tag %>
 </head>
 <body>
 
-<%= yield %>
+  <%= yield %>
 
 </body>
 </html>

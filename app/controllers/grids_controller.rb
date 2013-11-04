@@ -4,21 +4,28 @@ class GridsController < ApplicationController
   def index
     # @grids = Grid.all
     # 
-    #     respond_to do |format|
-    #       format.html # index.html.erb
-    #       format.json { render json: @grids }
-    #end
+         respond_to do |format|
+           format.html # index.html.erb
+           format.json { render json: @grids }
+    end
   end
 
   # GET /grids/1
   # GET /grids/1.json
   def show
+    
     @grid = Grid.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @grid }
-    end
+    
+         respond_to do |format|
+           format.html # show.html.erb
+           format.json { render json: @grid }
+        end
+    #@move=Move.new
+    
+   @move=Move.new
+   gon.move=@move
+    
+    
   end
 
   # GET /grids/new
