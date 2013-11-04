@@ -2,7 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-
 # game variable: to save instance variables from the view
 game = {
   player_id: 0
@@ -28,6 +27,8 @@ refresh = ->
     success: (data, textStatus, jqXHR) ->
       display_turn(data['turn'])
       display_player_in_turn(data['player_in_turn'])
+
+
 
 
 

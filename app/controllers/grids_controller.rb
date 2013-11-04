@@ -55,7 +55,7 @@ class GridsController < ApplicationController
         format.html { redirect_to @grid, notice: 'Grid was successfully created.' }
         format.json { render json: @grid, status: :created, location: @grid }
       else
-        format.html { render action: "new" }
+        format.html { render 'new' }   # modified from render action: "new" to render 'new' as per rails best practices
         format.json { render json: @grid.errors, status: :unprocessable_entity }
       end
     end
@@ -71,7 +71,7 @@ class GridsController < ApplicationController
         format.html { redirect_to @grid, notice: 'Grid was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render 'edit' }  # modified from render action: "edit" to render 'edit' as per rails best practices
         format.json { render json: @grid.errors, status: :unprocessable_entity }
       end
     end

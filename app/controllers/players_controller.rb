@@ -5,8 +5,10 @@ class PlayersController < ApplicationController
     next_player = determine_next_player(players, current_player)
     if current_player # if it's not nil
       current_player.turn = false
+      current_player.save
     end
     next_player.turn = true
+    next_player.save
   end
 
   def self.find_player_with_token(players)

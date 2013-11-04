@@ -11,6 +11,7 @@ class Player < ActiveRecord::Base
   def assign_turn ()
     if @player.turn == false
       @player.turn == true
+      # TODO: save
     else
       return
     end
@@ -18,6 +19,7 @@ class Player < ActiveRecord::Base
   def remove_turn ()
     if @player.turn == true
       @player.turn == false
+      # TODO: save
     else
       return
     end

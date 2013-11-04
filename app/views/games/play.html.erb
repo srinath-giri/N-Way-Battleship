@@ -1,6 +1,6 @@
 
 <script type="text/javascript">
-  initialize_game(1)
+  initialize_game(<%= @player.id %>)
 </script>
 
 
@@ -15,8 +15,8 @@
 </div>
 
 
-<%= form_tag(:controller => "games", :action => "calculate_hits", :method => "post", remote: true) do %>
-  <%= hidden_field :player_id, :value => "??" %> 
+<%= form_tag(:controller => "games", :action => "take_turn", :method => "put", remote: true) do %>
+  <%= hidden_field :player_id, :value => @player.id %>
   <%= label_tag(:x, "Attack coordinates X:") %>
   <%= text_field_tag(:x) %>
   <%= label_tag(:y, "Attack coordinates Y:") %>

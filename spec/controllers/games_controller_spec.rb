@@ -10,16 +10,26 @@ describe GamesController do
   # that means the controller is called but after it returns the views are not rendered.
   # Controller tests will run faster, as they won't have to render the view, but you might miss bugs in the view."
 
-  describe "arrange ships" do
+  context "arrange ships" do
+
+    before do
+      @player = FactoryGirl.create(:player, id:1, name:"Player1", turn:true)
+    end
+
     it "renders the arrange_ships template" do
-      get :arrange_ships
+      get :arrange_ships, player_id: @player.id
       response.should contain(/[Aa]rrange/)
     end
   end
 
-  describe "play" do
+  context "play" do
+
+    before do
+      @player = FactoryGirl.create(:player, id:1, name:"Player1", turn:true)
+    end
+
     it "renders the play template" do
-      get :play
+      get :play, player_id: @player.id
       response.should render_template("play")
     end
   end
@@ -59,53 +69,123 @@ describe GamesController do
       @player1 = Player.create(name: 'grace', turn: true)
       @player2 = Player.create(name: 'ibrahim', turn: false)
       @player3 = Player.create(name: 'owen', turn: false)
+      @grid1 = FactoryGirl.create(:grid,player_id:@player1.id)
+      @grid2 = FactoryGirl.create(:grid,player_id:@player2.id)
+      @grid3 = FactoryGirl.create(:grid,player_id:@player3.id)
       @player1.ships.create(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
       @player2.ships.create(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
       @player3.ships.create(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
     end
 
     it 'can change ship hit status when the attack is within range' do
-      xhr :post, :calculate_hits, player_id: @player1.id, x: 1, y: 2
+      xhr :post, :take_turn, player_id: @player1.id, x: 1, y: 2
       @player2.ships.first.state[1].should == @player1.id    
     end
 
     it 'does not change ship hit status when the attack is out of range' do
-      xhr :post, :calculate_hits, player_id: @player1.id, x: 2, y: 2
+      xhr :post, :take_turn, player_id: @player1.id, x: 2, y: 2
       @player2.ships.first.state.should == nil
     end
 
     it 'does not change ships hit status of attacker' do
-      xhr :post, :calculate_hits, player_id: @player1.id, x: 1, y: 2
+      xhr :post, :take_turn, player_id: @player1.id, x: 1, y: 2
       @player1.ships.first.state.should == nil
     end
 
     it 'does not change ships hit status if the slot of ship has already been hit' do
-      xhr :post, :calculate_hits, player_id: @player1.id, x: 1, y: 2
-      xhr :post, :calculate_hits, player_id: @player3.id, x: 1, y: 2
+      xhr :post, :take_turn, player_id: @player1.id, x: 1, y: 2
+      xhr :post, :take_turn, player_id: @player3.id, x: 1, y: 2
       @player2.ships.first.state[1].should == @player1.id
     end
 
 
     it 'can change status of multiple ships if player hit more than one ship' do
-      xhr :post, :calculate_hits, player_id: @player1.id, x: 1, y: 2
+      xhr :post, :take_turn, player_id: @player1.id, x: 1, y: 2
       @player2.ships.first.state[1].should == @player1.id
       @player3.ships.first.state[1].should == @player1.id
-     end
+    end
 
+  end
+
+  context 'calculate_misses' do
+    before do
+      @player1 = Player.create(name: 'grace', turn: true)
+      @player2 = Player.create(name: 'ibrahim', turn: false)
+      @player3 = Player.create(name: 'owen', turn: false)
+      @grid1 = FactoryGirl.create(:grid,player_id:@player1.id)
+      @grid2 = FactoryGirl.create(:grid,player_id:@player2.id)
+      @grid3 = FactoryGirl.create(:grid,player_id:@player3.id)
+      @player1.ships.create(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
+      @player2.ships.create(name: "Destroyer", x_start: 1, x_end: 1, y_start: 1, y_end: 3, state: nil)
+      @player3.ships.create(name: "Destroyer", x_start: 2, x_end: 2, y_start: 1, y_end: 3, state: nil)
+    end
+
+    it 'can stores miss when the attack is outof range' do
+      xhr :post, :take_turn, player_id: @player1.id, x: 2, y: 2
+      Miss.first.player_id.should == @player2.id
+      Miss.first.x.should == 2
+      Miss.first.y.should == 2    
+    end
+
+    it 'does not store miss when the attack is in range' do
+      xhr :post, :take_turn, player_id: @player1.id, x: 2, y: 2
+      Miss.count.should == 1   
+    end
+
+    it 'does not store miss for the ship of attacker' do
+      xhr :post, :take_turn, player_id: @player1.id, x: 2, y: 2
+      Miss.count.should == 1  
+    end
+
+    it 'does not create duplicate miss records' do
+      xhr :post, :take_turn, player_id: @player1.id, x: 2, y: 2
+      xhr :post, :take_turn, player_id: @player3.id, x: 2, y: 2
+      Miss.count.should == 2  
+    end
+
+  end
+
+
+  context 'take turn' do
+
+    before do
+      @player1 = FactoryGirl.create(:player, id:1, name:"Player1", turn:true)
+      @player2 = FactoryGirl.create(:player, id:2, name:"Player2", turn:false)
+      @grid1 = FactoryGirl.create(:grid,player_id:1)
+      @grid2 = FactoryGirl.create(:grid,player_id:2)
+    end
+
+    it 'is not allowed for a player when it is not his turn' do
+      put :take_turn, player_id:@player2.id, x: @grid2.columns/2, y: @grid2.rows/2, format: :json
+      JSON.parse(response.body)['error'].should be_true
+      JSON.parse(response.body)['turn'].should be_false
+    end
+
+    it 'coordinates submitted outside battle grid are not accepted' do
+      put :take_turn, player_id:@player1.id, x: @grid1.columns+100, y: @grid1.rows+100, format: :json
+      JSON.parse(response.body)['error'].should be_true
+      JSON.parse(response.body)['turn'].should be_true
+
+      put :take_turn, player_id:@player1.id, x: -1, y: -1, format: :json
+      JSON.parse(response.body)['error'].should be_true
+      JSON.parse(response.body)['turn'].should be_true
 
     end
 
-
-
-  context 'my_turn validations' do
-
-    it 'turn coordinates submitted are inside battle grid' do
-      player = FactoryGirl.create(:player)
-      put :my_turn, player_id:player.id, x:3, y:3, format: :xml
-      response.should render_template :my_turn
+    it 'coordinates submitted inside battle grid are accepted' do
+      put :take_turn, player_id:@player1.id, x: @grid1.columns/2, y: @grid1.rows/2, format: :json
+      JSON.parse(response.body)['turn'].should be_false
     end
 
+    it 'passes turn to next player after taking a proper shot' do
+      put :take_turn, player_id:@player1.id, x: @grid1.columns/2, y: @grid1.rows/2, format: :json
+      Player.find(@player2.id).turn.should be_true
+    end
 
+    xit 'calculates hits' do
+      put :take_turn, player_id:@player1.id, x: @grid1.columns/2, y: @grid1.rows/2, format: :json
+      GamesController.should_receive(:calculate_hits).once
+    end
   end
 
 end
