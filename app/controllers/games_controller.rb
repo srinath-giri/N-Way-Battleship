@@ -13,21 +13,22 @@ class GamesController < ApplicationController
 
     @player_in_turn = PlayersController.find_player_with_token(Player.all)
 
+    @ships = Ship.all
+    @misses = Miss.all
 
     respond_to do |format|
-      format.json { render :json => { turn: @my_turn, player_in_turn: @player_in_turn } }
+      format.json { render :json => { turn: @my_turn, player_in_turn: @player_in_turn, ships: @ships, misses: @misses } }
 
     end
   end
 
   def take_turn
     @player = Player.find(params[:player_id])
-    @grid = Grid.find(params[:player_id])
     error = false
     x = Integer(params[:x])
     y = Integer(params[:y])
 
-    if(x.between?(1,@grid.columns) && y.between?(1,@grid.rows) && @player.turn)
+    if(x.between?(1, 10) && y.between?(1, 10) && @player.turn)
       PlayersController.pass_turn(Player.all)
     else
       error = true
