@@ -1,5 +1,5 @@
 class Grid < ActiveRecord::Base
-  attr_accessible :columns, :player_id, :rows
+  attr_accessible :columns, :player_id, :rows, :grid_type
   
   validates_presence_of(:columns)
   validates_numericality_of(:columns, :only_integer => true, :greater_than_or_equal_to => 1)
