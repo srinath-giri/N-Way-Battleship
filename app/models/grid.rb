@@ -12,8 +12,8 @@ class Grid < ActiveRecord::Base
   has_many :cells, dependent: :destroy
 
 
-  # validates_presence_of(:player_id)
-  # validates_numericality_of(:player_id, :only_integer => true, :greater_than_or_equal_to => 1)
+   validates_presence_of(:player_id)
+   validates_numericality_of(:player_id, :only_integer => true, :greater_than_or_equal_to => 1)
 
 
   def self.create_grid_for_player(grid_type, player)
@@ -253,16 +253,15 @@ class Grid < ActiveRecord::Base
     }
 
     # Delete existing records, if any
-    # grid.cells.destroy_all
-    # 
-    # 
-    #     ship_cells.each do |cell|
-    #       grid.cells.create(x: cell[:x], y: cell[:y], state: cell[:state])
-    #     end
+     grid.cells.destroy_all
+
+     ship_cells.each do |cell|
+       grid.cells.create(x: cell[:x], y: cell[:y], state: cell[:state])
+     end
     
   end
 
 
-  # validates_inclusion_of :grid_type, :in => %w( battlefield my_ships )
+  validates_inclusion_of :grid_type, :in => %w( battlefield my_ships )
 
 end

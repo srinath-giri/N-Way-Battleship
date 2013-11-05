@@ -20,14 +20,6 @@ class GamesController < ApplicationController
 
     @player_in_turn = PlayersController.find_player_with_token(Player.all)
 
-
-      respond_to do |format|
-        format.json { render :json => {
-            turn: @my_turn,
-            player_in_turn: @player_in_turn
-}
-          }
-end
     @battlefield_cell = @current_player.get_battlefield_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
     @my_ships_cell = @current_player.get_my_ships_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
 
