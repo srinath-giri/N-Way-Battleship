@@ -23,6 +23,7 @@ RoR007::Application.routes.draw do
   match '/play/:player_id' => 'games#play', as: 'play'
   match '/refresh/:player_id(.:format)' => 'games#refresh', as: 'refresh'
   match '/take_turn/:player_id(.:format)' => 'games#take_turn', as: 'take_turn'
+  match '/update/:player_id(.:format)' => 'games#update', as: 'update'
   match '/home' => 'grids#index'
 
   # The priority is based upon order of creation:
