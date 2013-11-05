@@ -255,5 +255,6 @@ class Grid < ActiveRecord::Base
   end
 
 
+  validates_inclusion_of :grid_type, :in => %w( battlefield my_ships )
 
 end
