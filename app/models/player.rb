@@ -2,10 +2,10 @@ class Player < ActiveRecord::Base
   has_many :grids
   attr_accessible :name, :turn
 
-  has_many :grids
+ 
 
-  validates :name, presence: true
-  validates :name, uniqueness: true
+  # validates :name, presence: true
+  # validates :name, uniqueness: true
 
   def get_battlefield_grid
     Grid.create_grid_for_player('battlefield', self)

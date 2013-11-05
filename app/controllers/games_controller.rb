@@ -5,13 +5,6 @@ class GamesController < ApplicationController
     end
 
 
-    def play
-      @player = Player.find(params[:player_id])
-    end
-
-    def refresh
-      #@my_turn = Player.find(params[:player_id]).turn
-      @my_turn = Player.find(1).turn
 
   def play
     @player = Player.find(params[:player_id])
@@ -25,20 +18,16 @@ class GamesController < ApplicationController
     @current_player = Player.find(params[:player_id])
     @my_turn = @current_player.turn
 
+    @player_in_turn = PlayersController.find_player_with_token(Player.all)
 
-      @player_in_turn = PlayersController.find_player_with_token(Player.all)
-
-
-      #@battlefield_cell = Cell.first #Last updated cell
-      #@my_ships_cell = Cell.first #Last updated cell
 
       respond_to do |format|
         format.json { render :json => {
             turn: @my_turn,
             player_in_turn: @player_in_turn
-
+}
           }
-
+end
     @battlefield_cell = @current_player.get_battlefield_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
     @my_ships_cell = @current_player.get_my_ships_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
 
@@ -50,7 +39,7 @@ class GamesController < ApplicationController
           my_ships_cell: @my_ships_cell
 
         }
-
+}
       end
     end
 
@@ -89,7 +78,8 @@ class GamesController < ApplicationController
           
         end
         
-        end
+  end
+end
 
-    end
+    
 
