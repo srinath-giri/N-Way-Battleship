@@ -27,7 +27,7 @@ class Cell < ActiveRecord::Base
     end
 
     if(@grid.grid_type == "my_ships")
-      if(state.has_key?("orientation") && state.has_key?("block") && state.has_key?("type") && state.has_key?("hit") )
+      if ( state.has_key?("orientation") || state.has_key?(:orientation) ) && (state.has_key?("block")  || state.has_key?(:block) ) && (state.has_key?("type")   || state.has_key?(:type) ) && (state.has_key?("hit")  || state.has_key?(:hit)  )
       else
         raise InvalidState, "Cell State does not have all the required details"
       end
