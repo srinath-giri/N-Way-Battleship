@@ -20,10 +20,7 @@ class GridsController < ApplicationController
            format.html # show.html.erb
            format.json { render json: @grid }
         end
-    #@move=Move.new
-    
-   @move=Move.new
-   gon.move=@move
+   
     
     
   end

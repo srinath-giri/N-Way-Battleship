@@ -1,8 +1,4 @@
 
-<script type="text/javascript">
-  initialize_game(<%= @player.id %>)
-</script>
-
 
 <h1>Play</h1>
 
@@ -15,14 +11,229 @@
 </div>
 
 
-<%= form_tag(:controller => "games", :action => "take_turn", :method => "put", remote: true) do %>
-  <%= hidden_field :player_id, :value => @player.id %>
-  <%= label_tag(:x, "Attack coordinates X:") %>
-  <%= text_field_tag(:x) %>
-  <%= label_tag(:y, "Attack coordinates Y:") %>
-  <%= text_field_tag(:y) %>
-  <%= submit_tag("Attack") %>
-<% end %>
+<SCRIPT LANGUAGE ="JavaScript">
+//universal battlefield view
+function coordinate(table) {
+
+    table.coordinates = [];
+
+    var tbody, c;
+    for (var n in table.childNodes) {
+        c = table.childNodes[n];
+        if (c.tagName && c.tagName.match(/^tbody$/i)) {
+            tbody = c;
+            break;
+        }
+    }
+
+    var x, y = -1;
+    var row, rn;
+    var col, cn;
+
+    for (rn in tbody.childNodes) {
+        row = tbody.childNodes[rn];
+        if (row.tagName && row.tagName.match(/^tr$/i)) {
+            x = -1;
+            ++y;
+            for (cn in row.childNodes) {
+                col = row.childNodes[cn];
+                if (col.tagName && col.tagName.match(/^t[dh]$/i)) {
+                    var colspan = col.getAttribute('colspan');
+                    if (! colspan) colspan = 1;
+                    while (colspan--) {
+                        ++x;
+                        if (! table.coordinates[x]) table.coordinates[x] = [];
+                        table.coordinates[x][y] = col;
+                        col.x = x;
+                        col.y = y;
+                    }
+                }
+            }
+        }
+    }
+
+    for (x=0; row=table.coordinates[x]; ++x) {
+        for (y=0; col=table.coordinates[x][y]; ++y) {
+
+            col.north = (y > 0) ?
+                table.coordinates[x][y-1] : undefined;
+
+            col.south = (table.coordinates[x][y+1]) ?
+                table.coordinates[x][y+1] : undefined;
+
+            col.west = (x > 0) ?
+                table.coordinates[x-1][y] : undefined;
+
+            col.east = (table.coordinates[x+1]) ?
+                table.coordinates[x+1][y] : undefined;
+
+        }
+    }
+
+}
+
+</SCRIPT>
+
+
+<table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3">
+	<tr>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+	</tr>
+	<tr>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+	</tr>
+	<tr>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+	</tr>
+	<tr>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+	</tr>
+	<tr>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+	</tr>
+	<tr>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+	</tr>
+	<tr>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+	</tr>
+	<tr>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+	</tr>
+	<tr>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+	</tr>
+	<tr>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+		<td>""</td>
+	</tr>
+</table>
+</br>
+</br>
+</br>
+</br>
+<%=render 'playerships'%>
+
+<SCRIPT LANGUAGE ="JavaScript">
+
+// The origin (0,0) is the top, leftmost cell
+var table = document.getElementsByTagName('table')[0];
+coordinate(table);
+//table.coordinates[3][2].innerHTML = '(3,2)';
+
+var cells = table.getElementsByTagName('td');
+for (var i=0,td; td=cells[i]; ++i)
+    td.onclick = function () {
+	table.coordinates[3][2].innerHTML = 'x coord is '+ this.x + ', y coord is '+ this.y;
+   
+	 $.ajax({
+		type: 'put',
+		dataType: 'script',
+		//url: '/games/calculate_hits/',
+		url: '/games/update',
+		//data: {'x': this.x, 'y': this.y, 'player_id': 1},
+		data: {x: this.x, y: this.y, player_id: 1},
+		success: function()
+		{
+			//table.coordinates[0][0].innerHTML='attack on cell ' + this.x + ' ,' + this.y
+		}
+		
+	});
+	
+table.coordinates[this.x][this.y].innerHTML='attack by:' + 1
+    };
+
+
+</SCRIPT>
 
 
 

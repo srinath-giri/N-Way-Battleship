@@ -1,7 +1,6 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
-
 # game variable: to save instance variables from the view
 game = {
   player_id: 0
@@ -29,9 +28,6 @@ refresh = ->
       display_player_in_turn(data['player_in_turn'])
 
 
-
-
-
 display_turn = (turn) ->
   if (turn == true)
     document.getElementById("turn_info").innerHTML = "It's your turn to take a shot"
@@ -44,6 +40,3 @@ display_player_in_turn = (player_in_turn) ->
     document.getElementById("player_in_turn_info").innerHTML = "Player moving: " + player_in_turn.name
   else
     document.getElementById("player_in_turn_info").innerHTML = ""
-
-
-
