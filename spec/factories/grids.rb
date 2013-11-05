@@ -3,5 +3,6 @@
 FactoryGirl.define do
   factory :grid do
     player_id 1
+    grid_type "battlefield"
   end
 end
