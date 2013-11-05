@@ -11,13 +11,9 @@ game = {
   game.player_id = player_id
 
 
-# start the refresh cycle
-setInterval ->
-  refresh()
-, 1000
 
 
-refresh = ->
+@refresh = ->
   $.ajax "/refresh/" + game.player_id + ".json",
     type: 'GET'
     dataType: 'json'
