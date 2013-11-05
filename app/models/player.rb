@@ -6,7 +6,13 @@ class Player < ActiveRecord::Base
   validates :name, presence: true
   validates :name, uniqueness: true
 
+  def get_battlefield_grid
+    Grid.create_grid_for_player('battlefield', self)
+  end
 
+  def get_my_ships_grid
+    Grid.create_grid_for_player('my_ships', self)
+  end
 
   def assign_turn ()
     if @player.turn == false

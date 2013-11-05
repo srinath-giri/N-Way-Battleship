@@ -37,10 +37,10 @@ describe GamesController do
   context '#refresh' do
 
     before do
-      @player = Player.create(name: 'test2', turn: true)
-    end
-    after do
-      @player.destroy # with create in before, it is not in a transaction, meaning it is not rolled back - destroy explicitly to clean up.
+      @player = Player.first
+      if @player == nil
+        @player = Player.create(name: 'test2', turn: true)
+      end
     end
 
     it 'returns the state variable: player_in_turn' do
@@ -62,12 +62,20 @@ describe GamesController do
       JSON.parse(response.body)['turn'].should be_false
     end
 
-    it 'returns the state variable: battlefield' do
-      @player.update_attributes(turn: true)
+    it 'returns the state variable: battlefield_cell' do
+      @battlefield_grid = @player.get_battlefield_grid
       get :refresh, player_id: @player.id, format: :json
-      JSON.parse(response.body)['player_in_turn']['turn'].should be_true
-      JSON.parse(response.body)['player_in_turn']['name'].should_not == ''
+      JSON.parse(response.body)['battlefield_cell']['x'].should equal 9 # coordinate of last added cell
+      JSON.parse(response.body)['battlefield_cell']['y'].should equal 9 # coordinate of last added cell
     end
+
+    it 'returns the state variable: battlefield_cell' do
+      @my_ships_grid = @player.get_my_ships_grid
+      get :refresh, player_id: @player.id, format: :json
+      JSON.parse(response.body)['my_ships_cell']['state']['orientation'].should_not be_nil
+      JSON.parse(response.body)['my_ships_cell']['state']['orientation'].should_not == ''
+    end
+
 
   end
 

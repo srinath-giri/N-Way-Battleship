@@ -10,8 +10,6 @@ describe Player do
     grace.should have(1).error_on(:name)
   end
 
-
-
   it "has a unique name" do
     grace = Player.create(name: "grace")
     maria = Player.create(name: "grace")
@@ -21,9 +19,23 @@ describe Player do
 
   end
 
+  context '#get_battlefield_grid' do
+    before do
+      @player = Player.first
+      if @player == nil
+        @player = Player.create(name: 'test2', turn: true)
+      end
+    end
 
-  xit "has 5 ships" do
+    it "returns a grid with grid_type 'battlefield'" do
+      @player.get_battlefield_grid.grid_type.should == 'battlefield'
+    end
+
+    it "returns a grid with grid_type 'my_ships'" do
+      @player.get_my_ships_grid.grid_type.should == 'my_ships'
+    end
 
   end
+
 
 end
