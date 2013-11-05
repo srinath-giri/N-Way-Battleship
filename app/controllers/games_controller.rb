@@ -4,7 +4,7 @@ class GamesController < ApplicationController
       @player = Player.find(params[:player_id])
     end
 
-<<<<<<< HEAD
+
     def play
       @player = Player.find(params[:player_id])
     end
@@ -12,7 +12,7 @@ class GamesController < ApplicationController
     def refresh
       #@my_turn = Player.find(params[:player_id]).turn
       @my_turn = Player.find(1).turn
-=======
+
   def play
     @player = Player.find(params[:player_id])
 
@@ -24,11 +24,11 @@ class GamesController < ApplicationController
   def refresh
     @current_player = Player.find(params[:player_id])
     @my_turn = @current_player.turn
->>>>>>> 7b5695a8034c100141eeb633326a50a27bb19ddd
+
 
       @player_in_turn = PlayersController.find_player_with_token(Player.all)
 
-<<<<<<< HEAD
+
       #@battlefield_cell = Cell.first #Last updated cell
       #@my_ships_cell = Cell.first #Last updated cell
 
@@ -38,7 +38,7 @@ class GamesController < ApplicationController
             player_in_turn: @player_in_turn
 
           }
-=======
+
     @battlefield_cell = @current_player.get_battlefield_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
     @my_ships_cell = @current_player.get_my_ships_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
 
@@ -48,7 +48,7 @@ class GamesController < ApplicationController
           player_in_turn: @player_in_turn,
           battlefield_cell: @battlefield_cell,
           my_ships_cell: @my_ships_cell
->>>>>>> 7b5695a8034c100141eeb633326a50a27bb19ddd
+
         }
 
       end
@@ -67,7 +67,6 @@ class GamesController < ApplicationController
         error = true
       end
 
-<<<<<<< HEAD
       respond_to do |format|
         format.json { render :json => { turn: Player.find(params[:player_id]).turn, error: error} }
       end
@@ -93,17 +92,4 @@ class GamesController < ApplicationController
         end
 
     end
-=======
-  def calculate_hits_and_misses
-    x = Integer(params[:x])
-    y = Integer(params[:y])
-    player_id = Integer(params[:player_id])
-    
->>>>>>> 7b5695a8034c100141eeb633326a50a27bb19ddd
 
-
-<<<<<<< HEAD
-
-=======
-end
->>>>>>> 7b5695a8034c100141eeb633326a50a27bb19ddd
