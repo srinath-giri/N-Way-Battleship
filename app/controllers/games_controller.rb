@@ -78,7 +78,7 @@ class GamesController < ApplicationController
         Grid.where("grid_type = 'battlefield'").each do |grid|
           if grid.player.id != opponent_player.id
             cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
-            cell.state[opponent_player.id] = "m"
+            cell.state[opponent_player.id.to_s] = "m"
             cell.save
           end
         end
@@ -91,7 +91,7 @@ class GamesController < ApplicationController
           Grid.where("grid_type = 'battlefield'").each do |grid|
             if grid.player.id != opponent_player.id
               cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
-              cell.state[opponent_player.id] = "h"
+              cell.state[opponent_player.id.to_s] = "h"
               cell.save
             end
           end
