@@ -20,14 +20,6 @@ class GamesController < ApplicationController
 
     @player_in_turn = PlayersController.find_player_with_token(Player.all)
 
-
-      respond_to do |format|
-        format.json { render :json => {
-            turn: @my_turn,
-            player_in_turn: @player_in_turn
-}
-          }
-end
     @battlefield_cell = @current_player.get_battlefield_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
     @my_ships_cell = @current_player.get_my_ships_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
 
@@ -62,21 +54,50 @@ end
 
     end
 
-    def calculate_hits_and_misses
+  def calculate_hits_and_misses
      
-      x = Integer(params[:x])
-          y = Integer(params[:y])
-          player_id = Integer(params[:player_id])
-          #create new move using x,y passed in play grid to test if attack coords are passed 
-          #through grid
-          @move=Move.new(x: x, y: y, player_id: player_id)
-          if @move.save
-            flash[:notice] = "Attack coords saved in move model"
+    x = Integer(params[:x])
+    y = Integer(params[:y])
+    player_id = Integer(params[:player_id])
+    #create new move using x,y passed in play grid to test if attack coords are passed 
+    #through grid
+    @move=Move.new(x: x, y: y, player_id: player_id)
+    if @move.save
+      flash[:notice] = "Attack coords saved in move model"
               
-        else
-          flash[:notice] = "Attacks coords not saved in move model"
+    else
+      flash[:notice] = "Attacks coords not saved in move model"
           
+    end
+
+    #calculation starts
+    Player.where("id != ?", player_id).each do |opponent_player|
+      player_cell = opponent_player.grids.where("grid_type = 'my_ships'")[0].cells.where("x = ? AND y = ?", x , y)
+      if player_cell.empty? 
+        #miss
+        Grid.where("grid_type = 'battlefield'").each do |grid|
+          if grid.player.id != opponent_player.id
+            cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
+            cell.state[opponent_player.id.to_s] = "m"
+            cell.save
+          end
         end
+      else
+        #has a ship there
+        if player_cell[0].state["hit"] == false
+          hitted_cell = player_cell[0]
+          hitted_cell.state["hit"] = true
+          hitted_cell.save
+          Grid.where("grid_type = 'battlefield'").each do |grid|
+            if grid.player.id != opponent_player.id
+              cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
+              cell.state[opponent_player.id.to_s] = "h"
+              cell.save
+            end
+          end
+        end
+      end
+    end
         
   end
 end

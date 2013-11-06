@@ -10,14 +10,7 @@ game = {
 @initialize_game = (player_id) ->
   game.player_id = player_id
 
-
-# start the refresh cycle
-setInterval ->
-  refresh()
-, 1000
-
-
-refresh = ->
+@refresh = ->
   $.ajax "/refresh/" + game.player_id + ".json",
     type: 'GET'
     dataType: 'json'
@@ -27,16 +20,30 @@ refresh = ->
       display_turn(data['turn'])
       display_player_in_turn(data['player_in_turn'])
 
-
 display_turn = (turn) ->
   if (turn == true)
     document.getElementById("turn_info").innerHTML = "It's your turn to take a shot"
   else
     document.getElementById("turn_info").innerHTML = ""
 
-
 display_player_in_turn = (player_in_turn) ->
   if (player_in_turn.id != game.player_id)
     document.getElementById("player_in_turn_info").innerHTML = "Player moving: " + player_in_turn.name
   else
     document.getElementById("player_in_turn_info").innerHTML = ""
+
+@attack_grid_point = (x, y) ->
+  $.ajax({
+    type: 'put',
+    dataType: 'script',
+    # url: '/games/calculate_hits/',
+    url: '/update/'  + game.player_id + '/' + x + '/' + y + '.json',
+    # data: {'x': this.x, 'y': this.y, 'player_id': 1},
+    data: {x: this.x, y: this.y, player_id: 1},
+    success: (data, textStatus, jqXHR) ->
+      attack_grid_point_success(data)
+
+  });
+
+attack_grid_point_success = (data) ->
+  1 # code goes here

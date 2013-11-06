@@ -79,7 +79,76 @@ describe GamesController do
 
   end
 
-  
+  context 'calculation for hits and misses' do
+    before do 
+      @player1 = Player.create(name: 'grace', turn: true)
+      @player2 = Player.create(name: 'ibrahim', turn: false)
+      @player3 = Player.create(name: 'owen', turn: false )
+
+      @grid_p1_bf = @player1.grids.create(grid_type: "battlefield" )
+      @grid_p1_ms = @player1.grids.create(grid_type: "my_ships")
+      @grid_p2_bf = @player2.grids.create(grid_type: "battlefield")
+      @grid_p2_ms = @player2.grids.create(grid_type: "my_ships")
+      @grid_p3_bf = @player3.grids.create(grid_type: "battlefield")
+      @grid_p3_ms = @player3.grids.create(grid_type: "my_ships")
+
+      @grid_p1_bf.cells.create(x: 0 , y: 0, state: {2=>"u",3=>"u"})
+      @grid_p1_bf.cells.create(x: 0 , y: 1, state: {2=>"u",3=>"u"})
+      @grid_p1_bf.cells.create(x: 1 , y: 0, state: {2=>"u",3=>"u"})
+      @grid_p1_bf.cells.create(x: 1 , y: 1, state: {2=>"u",3=>"u"})
+
+      @grid_p2_bf.cells.create(x: 0 , y: 0, state: {1=>"u",3=>"u"})
+      @grid_p2_bf.cells.create(x: 0 , y: 1, state: {1=>"u",3=>"u"})
+      @grid_p2_bf.cells.create(x: 1 , y: 0, state: {1=>"u",3=>"u"})
+      @grid_p2_bf.cells.create(x: 1 , y: 1, state: {1=>"u",3=>"u"})
+
+      @grid_p3_bf.cells.create(x: 0 , y: 0, state: {1=>"u",2=>"u"})
+      @grid_p3_bf.cells.create(x: 0 , y: 1, state: {1=>"u",2=>"u"})
+      @grid_p3_bf.cells.create(x: 1 , y: 0, state: {1=>"u",2=>"u"})
+      @grid_p3_bf.cells.create(x: 1 , y: 1, state: {1=>"u",2=>"u"})
+
+      @grid_p1_ms.cells.create(x: 0 , y: 0, state: {"orientation"=>"v","block"=>1,"type"=>"p","hit"=>false})
+      @grid_p1_ms.cells.create(x: 1 , y: 0, state: {"orientation"=>"v","block"=>1,"type"=>"p","hit"=>false})
+
+      @grid_p2_ms.cells.create(x: 0 , y: 0, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})
+      @grid_p2_ms.cells.create(x: 0 , y: 1, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})      
+
+
+    end
+
+    it 'can change others ship cell status if the attack is successful on an oponent' do
+      xhr :post, :update, player_id: @player1.id, x: 0, y: 0
+      @grid_p2_ms.cells.where("x = 0 AND y = 0")[0].state["hit"].should == true    
+    end
+
+    it 'does not change own ship cell status' do
+      xhr :post, :update, player_id: @player1.id, x: 0, y: 0
+      @grid_p1_ms.cells.where("x = 0 AND y = 0")[0].state["hit"].should == false    
+    end
+
+    it 'does not change any ship cell status when nothing was hit' do
+      xhr :post, :update, player_id: @player1.id, x: 1, y: 1
+      @grid_p1_ms.cells.where("x = 0 AND y = 0")[0].state["hit"].should == false
+      @grid_p1_ms.cells.where("x = 1 AND y = 0")[0].state["hit"].should == false
+      @grid_p2_ms.cells.where("x = 0 AND y = 0")[0].state["hit"].should == false 
+      @grid_p2_ms.cells.where("x = 0 AND y = 1")[0].state["hit"].should == false   
+    end
+
+    it 'changes every players battlefield cell for a certain hit' do
+      xhr :post, :update, player_id: @player1.id, x: 0, y: 0
+      @grid_p1_bf.cells.where("x = 0 AND y = 0")[0].state.should == {2 => "h", 3 => "m"}
+      @grid_p2_bf.cells.where("x = 0 AND y = 0")[0].state.should == {1 => "u", 3 => "m"}
+      @grid_p3_bf.cells.where("x = 0 AND y = 0")[0].state.should == {1 => "u", 2 => "h"}    
+    end
+
+    it 'changes every players battlefield cell for a certain miss' do
+      xhr :post, :update, player_id: @player1.id, x: 1, y: 1
+      @grid_p1_bf.cells.where("x = 1 AND y = 1")[0].state.should == {2 => "m", 3 => "m"}
+      @grid_p2_bf.cells.where("x = 1 AND y = 1")[0].state.should == {1 => "u", 3 => "m"}
+      @grid_p3_bf.cells.where("x = 1 AND y = 1")[0].state.should == {1 => "u", 2 => "m"}    
+    end
+
+  end
   
 
   context 'take turn' do
