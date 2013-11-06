@@ -1,7 +1,8 @@
 
 <script type="text/javascript">
-    initialize_game(<%= @player.id %>)
-    setInterval(refresh, 1000)
+  initialize_game(<%= @player.id %>)
+  // Refresh method is executed every second
+  setInterval(refresh, 1000)
 </script>
 
 <h1>Play</h1>
@@ -220,21 +221,9 @@ for (var i=0,td; td=cells[i]; ++i)
     td.onclick = function () {
 	table.coordinates[3][2].innerHTML = 'x coord is '+ this.x + ', y coord is '+ this.y;
    
-	 $.ajax({
-		type: 'put',
-		dataType: 'script',
-		//url: '/games/calculate_hits/',
-		url: '/games/update',
-		//data: {'x': this.x, 'y': this.y, 'player_id': 1},
-		data: {x: this.x, y: this.y, player_id: 1},
-		success: function()
-		{
-			//table.coordinates[0][0].innerHTML='attack on cell ' + this.x + ' ,' + this.y
-		}
-		
-	});
+	attack_grid_point(this.x, this.y);
 	
-table.coordinates[this.x][this.y].innerHTML='attack by:' + 1
+    table.coordinates[this.x][this.y].innerHTML='attack by:' + 1
     };
 
 
