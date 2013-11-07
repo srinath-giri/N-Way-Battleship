@@ -1,8 +1,9 @@
 
 <script type="text/javascript">
-  initialize_game(<%= @player.id %>)
+   initialize_game(<%= @player.id %>)
   // Refresh method is executed every second
   setInterval(refresh, 1000)
+
 </script>
 
 <h1>Play</h1>
@@ -81,7 +82,7 @@ function coordinate(table) {
 </SCRIPT>
 
 
-<table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3">
+<table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3" id="1">
 	<tr>
 		<td>""</td>
 		<td>""</td>
@@ -212,21 +213,23 @@ function coordinate(table) {
 <SCRIPT LANGUAGE ="JavaScript">
 
 // The origin (0,0) is the top, leftmost cell
-var table = document.getElementsByTagName('table')[0];
+var table = document.getElementById('1');
 coordinate(table);
-//table.coordinates[3][2].innerHTML = '(3,2)';
+
+load_battlefield;
+//window.onload = load;
+//function load() { load_battlefield(table); }
+//initBattleGrid();
+
+alert(JSON.stringify(gon.battlefield_attack_cell.state))
 
 var cells = table.getElementsByTagName('td');
+
 for (var i=0,td; td=cells[i]; ++i)
     td.onclick = function () {
-	table.coordinates[3][2].innerHTML = 'x coord is '+ this.x + ', y coord is '+ this.y;
-   
-	attack_grid_point(this.x, this.y);
+	attack_grid_point(this.x,this.y)
 	
-    table.coordinates[this.x][this.y].innerHTML='attack by:' + 1
     };
-
-
 </SCRIPT>
 
 

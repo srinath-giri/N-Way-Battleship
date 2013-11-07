@@ -2,6 +2,7 @@
 <SCRIPT LANGUAGE ="JavaScript">
 //individual ship arrangement view
 //use player_id to pull ships and place them on grid
+setInterval(refresh, 1000)
 function coordinate(table) {
 
     table.coordinates = [];
@@ -62,7 +63,7 @@ function coordinate(table) {
 }
 
 </SCRIPT>
-<table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3">
+<table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3" id="2">
 	<tr>
 		<td>""</td>
 		<td>""</td>
@@ -186,18 +187,21 @@ function coordinate(table) {
 </table>
 <SCRIPT LANGUAGE ="JavaScript">
 // The origin (0,0) is the top, leftmost cell
-var table = document.getElementsByTagName('table')[0];
+//var table = document.getElementsByTagName('table')[0];
+var table = document.getElementById('2');
 coordinate(table);
-table.coordinates[3][2].innerHTML = '(3,2)';
 
+//alert(JSON.stringify(gon.my_ships_grid_cells[0].state))
 var cells = table.getElementsByTagName('td');
+initShipsGrid;
 for (var i=0,td; td=cells[i]; ++i)
     td.onclick = function () {
-	table.coordinates[3][2].innerHTML = 'x coord is '+ this.x + ', y coord is '+ this.y;
+	
         
     };
 
 //methods to pull ship view for player_id
+//initialise grid with cells before game starts
 
 
 </SCRIPT>

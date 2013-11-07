@@ -11,7 +11,12 @@ class GamesController < ApplicationController
 
     # Create the two grids
     @battlefield_grid = @player.get_battlefield_grid
+    gon.battlefield_grid=@battlefield_grid.attributes
+    gon.battlefield_cells=@battlefield_grid.cells.map &:attributes
+    
     @my_ships_grid = @player.get_my_ships_grid
+    gon.my_ships_grid=@my_ships_grid.attributes
+    gon.my_ships_grid_cells=@my_ships_grid.cells.map &:attributes
   end
 
   def refresh
@@ -22,13 +27,16 @@ class GamesController < ApplicationController
 
     @battlefield_cell = @current_player.get_battlefield_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
     @my_ships_cell = @current_player.get_my_ships_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
+    gon.battlefield_attack_cell=@battlefield_cell.attributes
+    gon.my_ships_attack_cell=@my_ships_cell.attributes
+
 
     respond_to do |format|
       format.json { render :json => {
           turn: @my_turn,
           player_in_turn: @player_in_turn,
-          battlefield_cell: @battlefield_cell,
-          my_ships_cell: @my_ships_cell
+          battlefield_cell: gon.battlefield_attack_cell,
+          my_ships_cell: gon.my_ships_attack_cell
 
         }
 }
