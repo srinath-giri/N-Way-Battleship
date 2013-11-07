@@ -1,6 +1,67 @@
 
 <script type="text/javascript">
+var game = {
+   player_id: 0
+ }
+ 
+ // initialize the game variable with instance variables from the view
+ function initialize_game(player_id){
+   game.player_id = player_id
+}
    initialize_game(<%= @player.id %>)
+
+function refresh() {
+  $.ajax({ 
+	url: "/refresh/" + game.player_id + ".json",
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+      display_turn(data['turn'])
+      display_player_in_turn(data['player_in_turn'])
+	  display_battlefield_attacked_cell(data['battlefield_cell'])
+      display_ship_attacked_cell(data['my_ships_cell'])
+
+}
+});
+}
+
+function display_battlefield_attacked_cell(battlefield_cell){
+	
+	var table = document.getElementById('1');
+	coordinate(table);
+	init_battlefield();
+
+	var cells = table.getElementsByTagName('td');
+	for (i=0,td; td=cells[i]; ++i){
+		table.coordinates[battlefield_cell.x][battlefield_cell.y].innerHTML=JSON.stringify(battlefield_cell.state)
+	}
+}
+
+function display_ship_attacked_cell(my_ships_cell){
+	
+	var table = document.getElementById('2');
+	coordinate(table);
+	
+	var cells = table.getElementsByTagName('td');
+	for (i=0,td; td=cells[i]; ++i){
+		table.coordinates[my_ships_cell.x][my_ships_cell.y].innerHTML=JSON.stringify(my_ships_cell.state)
+	}
+}
+
+function display_turn(turn){
+  if (turn == true)
+    document.getElementById("turn_info").innerHTML = "It's your turn to take a shot"
+  else
+    document.getElementById("turn_info").innerHTML = ""
+}
+
+function display_player_in_turn(player_in_turn){
+  if (player_in_turn.id != game.player_id)
+    document.getElementById("player_in_turn_info").innerHTML = "Player moving: " + player_in_turn.name
+  else
+    document.getElementById("player_in_turn_info").innerHTML = ""
+}
+
   // Refresh method is executed every second
   setInterval(refresh, 1000)
 
@@ -18,7 +79,7 @@
 </div>
 
 
-<SCRIPT LANGUAGE ="JavaScript">
+<script type="text/javascript">
 //universal battlefield view
 function coordinate(table) {
 
@@ -210,26 +271,41 @@ function coordinate(table) {
 </br>
 <%=render 'playerships'%>
 
-<SCRIPT LANGUAGE ="JavaScript">
+<SCRIPT type="text/javascript">
 
 // The origin (0,0) is the top, leftmost cell
 var table = document.getElementById('1');
 coordinate(table);
 
-load_battlefield;
-//window.onload = load;
-//function load() { load_battlefield(table); }
-//initBattleGrid();
-
-alert(JSON.stringify(gon.battlefield_attack_cell.state))
-
 var cells = table.getElementsByTagName('td');
+
+
 
 for (var i=0,td; td=cells[i]; ++i)
     td.onclick = function () {
-	attack_grid_point(this.x,this.y)
+		$.ajax({
+		    type: 'put',
+		    dataType: 'script',
+		    // url: '/games/calculate_hits/',
+		    url: '/update/'  + game.player_id + '/' + this.x + '/' + this.y + '.json',
+		   // data: {'x': this.x, 'y': this.y, 'player_id': 1},
+		    data: {x: this.x, y: this.y, player_id: game.player_id},
+		    success: function(data){
+		      //attack_grid_point_success(data)
+		//refresh();
+}
+		  });
 	
     };
+
+function init_battlefield(){
+	for (i=0,td; td=cells[i]; ++i){
+		table.coordinates[cells[i].x][cells[i].y].innerHTML=JSON.stringify(gon.battlefield_cells[i].state)
+	}
+	
+}
+	
+
 </SCRIPT>
 
 
