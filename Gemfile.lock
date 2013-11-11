@@ -86,6 +86,7 @@ GEM
     nokogiri (1.6.0-x86-mingw32)
       mini_portile (~> 0.5.0)
     orm_adapter (0.4.0)
+    pg (0.17.0-x86-mingw32)
     polyglot (0.3.3)
     rack (1.4.5)
     rack-cache (1.2)
@@ -176,6 +177,7 @@ DEPENDENCIES
   factory_girl_rails
   gon
   jquery-rails
+  pg (= 0.17.0)
   rails (= 3.2.14)
   rails_best_practices
   rspec-rails
