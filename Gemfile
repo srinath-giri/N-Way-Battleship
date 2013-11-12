@@ -13,6 +13,7 @@ end
 
 group :production do
   gem 'pg','0.17.0'
+  gem 'rails_12factor'
 end
 
 
@@ -56,3 +57,6 @@ group :development do
 #  gem 'ruby-debug-base19x' 
 #  gem 'ruby-debug-ide' 
 end
+
+# Required by Heroku: specify ruby version: https://devcenter.heroku.com/articles/getting-started-with-rails3
+ruby '1.9.3'
