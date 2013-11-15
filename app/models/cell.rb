@@ -4,15 +4,15 @@ class Cell < ActiveRecord::Base
 
   belongs_to :grid
 
-  # validates_presence_of(:x)
-  #   validates_numericality_of(:x, :only_integer => true)
-  #   validates_inclusion_of(:x, :in => 0..9)
-  # 
-  #   validates_presence_of(:y)
-  #   validates_numericality_of(:y, :only_integer => true)
-  #   validates_inclusion_of(:y, :in => 0..9)
-  # 
-  #   before_create :validate_state!
+  validates_presence_of(:x)
+     validates_numericality_of(:x, :only_integer => true)
+     validates_inclusion_of(:x, :in => 0..9)
+
+     validates_presence_of(:y)
+     validates_numericality_of(:y, :only_integer => true)
+     validates_inclusion_of(:y, :in => 0..9)
+
+     before_create :validate_state!
 
   class InvalidState < ActiveRecord::RecordInvalid
   end
