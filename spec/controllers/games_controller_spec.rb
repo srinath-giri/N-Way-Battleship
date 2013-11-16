@@ -36,11 +36,8 @@ describe GamesController do
 
   context '#refresh' do
 
-    before do
-      @player = Player.first
-      if @player == nil
-        @player = Player.create(name: 'test2', turn: true)
-      end
+    before(:each) do
+      @player = Player.create(name: 'test1', turn: true)
     end
 
     it 'returns the state variable: player_in_turn' do

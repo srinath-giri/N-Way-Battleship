@@ -3,39 +3,57 @@ require 'spec_helper'
 
 describe Player do
 
-  it "validate an error is thrown when creating a player with empty name" do
-    grace = Player.new(name: "")
+  subject { FactoryGirl.build(:player) }
 
-    grace.should_not be_valid
-    grace.should have(1).error_on(:name)
+  context "attribute access check" do
+    it {should respond_to(:name) }
+    it {should respond_to(:turn) }
   end
 
-  it "has a unique name" do
-    grace = Player.create(name: "grace")
-    maria = Player.create(name: "grace")
+  context "attribute validations" do
 
-    maria.should_not be_valid
-    maria.should have(1).error_on(:name)
+    it "validates empty name" do
+      subject.name = ""
+      subject.should_not be_valid
+      subject.should have(1).error_on(:name)
+    end
 
+    it "has a unique name" do
+      subject.name = "grace"
+      subject.save
+      player2 = FactoryGirl.build(:player)
+      player2.name = "grace"
+      player2.save.should be_false
+      player2.should have(1).error_on(:name)
+    end
   end
 
-  context '#get_battlefield_grid' do
+  context "Player's grids" do
     before do
-      @player = Player.first
-      if @player == nil
-        @player = Player.create(name: 'test2', turn: true)
+      @grid = FactoryGirl.build(:grid)
+    end
+
+    context '#get_battlefield_grid' do
+      before do
+        @grid.grid_type = 'battlefield'
+        Grid.stub(:create_grid_for_player).with('battlefield', subject).and_return(@grid)
+      end
+
+      it "returns a grid with grid_type 'battlefield'" do
+        subject.get_battlefield_grid.grid_type.should == 'battlefield'
       end
     end
 
-    it "returns a grid with grid_type 'battlefield'" do
-      @player.get_battlefield_grid.grid_type.should == 'battlefield'
-    end
+    context '#get_my_ships_grid' do
+      before do
+        @grid.grid_type = 'my_ships'
+        Grid.stub(:create_grid_for_player).with('my_ships', subject).and_return(@grid)
+      end
 
-    it "returns a grid with grid_type 'my_ships'" do
-      @player.get_my_ships_grid.grid_type.should == 'my_ships'
+      it "returns a grid with grid_type 'my_ships'" do
+        subject.get_my_ships_grid.grid_type.should == 'my_ships'
+      end
     end
-
   end
-
 
 end

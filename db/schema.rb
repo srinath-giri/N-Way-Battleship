@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131105071638) do
+ActiveRecord::Schema.define(:version => 20131116024001) do
 
   create_table "cells", :force => true do |t|
     t.integer  "x"
@@ -54,13 +54,8 @@ ActiveRecord::Schema.define(:version => 20131105071638) do
 
   create_table "ships", :force => true do |t|
     t.string   "name"
-    t.integer  "x_start"
-    t.integer  "x_end"
-    t.integer  "y_start"
-    t.integer  "y_end"
-    t.text     "state",      :limit => 255
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.integer  "player_id"
   end
 
