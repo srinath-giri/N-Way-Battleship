@@ -602,12 +602,12 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 		}
 		
 	    $.ajax({ 
-	  	url: '/arrange_ships/' + game.player_id,
+	  	url: '/save_ships/' + game.player_id,
 	      type: 'POST',
-	      dataType: 'json',
+	      dataType: 'script',
 		  data: {player_id: game.player_id, xd:xd, yd:yd, od:od, xb:xb, yb:yb, ob:ob, xc:xc, yc:yc, oc:oc, xs:xs, ys:ys, os:os, xp:xp, yp:yp, op:op},
 	      success: function(data) {
-	        location.href = '/play/';
+	        //location.href = '/play/';
 
 	  }
 	  });

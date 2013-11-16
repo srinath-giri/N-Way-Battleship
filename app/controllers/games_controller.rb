@@ -12,6 +12,23 @@ class GamesController < ApplicationController
     end
 
     
+  def save_ships
+    @player = Player.find(params[:player_id])
+    
+    # create cell object from POST parameters
+    # @cell=Cell.Create...
+     respond_to do |format|
+#       if @cell.save
+         format.html { redirect_to play_path(player_id:@player.id), status: 302 }
+        format.json {  }
+#       else
+#         format.html { render 'arrange_ships' }   
+#         format.json { render json: @cell.errors, status: :unprocessable_entity }
+#       end
+     end
+    
+  end  
+    
 
   def play
     @player = Player.find(params[:player_id])

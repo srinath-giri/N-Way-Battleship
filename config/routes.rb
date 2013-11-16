@@ -14,7 +14,7 @@ RoR007::Application.routes.draw do
   get "grids/new"
   get "grids/edit"
   get "games/calculate_hits"
-  #get "games/show"
+  get "games/save_ships"
   match '/ships/new' => 'ships#new'
   
   
@@ -24,6 +24,7 @@ RoR007::Application.routes.draw do
   match '/refresh/:player_id(.:format)' => 'games#refresh', as: 'refresh'
   match '/take_turn/:player_id(.:format)' => 'games#take_turn', as: 'take_turn'
   match '/update/:player_id/:x/:y(.:format)' => 'games#update', as: 'update'
+  match '/save_ships/:player_id' => 'games#save_ships', as: 'save_ships'
   
   #match '/home' => 'grids#index'
 
