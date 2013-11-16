@@ -9,12 +9,12 @@ RoR007::Application.routes.draw do
   get "ships/help"
   
 
-  #root 'grids#index'
+  
   get "grids/index"
-  get "grids/new"
   get "grids/new"
   get "grids/edit"
   get "games/calculate_hits"
+  #get "games/show"
   match '/ships/new' => 'ships#new'
   
   
@@ -24,7 +24,8 @@ RoR007::Application.routes.draw do
   match '/refresh/:player_id(.:format)' => 'games#refresh', as: 'refresh'
   match '/take_turn/:player_id(.:format)' => 'games#take_turn', as: 'take_turn'
   match '/update/:player_id/:x/:y(.:format)' => 'games#update', as: 'update'
-  match '/home' => 'grids#index'
+  
+  #match '/home' => 'grids#index'
 
   # The priority is based upon order of creation:
    #first created -> highest priority.

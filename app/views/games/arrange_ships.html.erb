@@ -1,1 +1,631 @@
 <h1>Arrange your ships: Player <%= @player.id%></h1>
+<script type="text/javascript">
+var game = {
+   player_id: 0
+ }
+ 
+ // initialize the game variable with instance variables from the view
+ function initialize_game(player_id){
+   game.player_id = player_id
+}
+   initialize_game(<%= @player.id %>)
+</script>
+<body>
+
+
+<div class="ex">
+    <form id='4' name='shipsel' method='post' action=' '>   
+        <p><label>Select Ship Type</label></p><br/>
+        <select onchange=makeSelection(this) name='' id='10'>
+			<option selected="SelectedShip"></option>
+			<option value="Destroyer">Destroyer</option>
+			<option value="Battleship">Battleship</option>
+			<option value="Carrier">Carrier</option>
+			<option value="Submarine">Submarine</option>
+			<option value="PatrolBoat">PatrolBoat</option>
+            " . $options . "
+        </select>
+    </form>
+	
+    <form class="ey" id='5' name='orientsel' method='post' action=''> 
+        <p><label>Select Ship alignment</label></p><br/>
+        <select onchange=makeSelection(this) name='' id='20'>
+            <option selected="SelectedAlign"></option>
+			<option value="Vertical">Vertical</option>
+			<option value="Horizontal">Horizontal</option>
+        </select>
+    </form>
+</br>
+<button onclick="clearGrid()">Start over</button>
+</br>
+</br>
+<button onclick="submitShips()">Submit ships</button>
+</div>
+
+</body>
+
+
+</br>
+</br>
+</br>
+</br>
+<SCRIPT LANGUAGE ="JavaScript">
+
+function coordinate(table) {
+
+    table.coordinates = [];
+
+    var tbody, c;
+    for (var n in table.childNodes) {
+        c = table.childNodes[n];
+        if (c.tagName && c.tagName.match(/^tbody$/i)) {
+            tbody = c;
+            break;
+        }
+    }
+
+    var x, y = -1;
+    var row, rn;
+    var col, cn;
+
+    for (rn in tbody.childNodes) {
+        row = tbody.childNodes[rn];
+        if (row.tagName && row.tagName.match(/^tr$/i)) {
+            x = -1;
+            ++y;
+            for (cn in row.childNodes) {
+                col = row.childNodes[cn];
+                if (col.tagName && col.tagName.match(/^t[dh]$/i)) {
+                    var colspan = col.getAttribute('colspan');
+                    if (! colspan) colspan = 1;
+                    while (colspan--) {
+                        ++x;
+                        if (! table.coordinates[x]) table.coordinates[x] = [];
+                        table.coordinates[x][y] = col;
+                        col.x = x;
+                        col.y = y;
+                    }
+                }
+            }
+        }
+    }
+
+    for (x=0; row=table.coordinates[x]; ++x) {
+        for (y=0; col=table.coordinates[x][y]; ++y) {
+
+            col.north = (y > 0) ?
+                table.coordinates[x][y-1] : undefined;
+
+            col.south = (table.coordinates[x][y+1]) ?
+                table.coordinates[x][y+1] : undefined;
+
+            col.west = (x > 0) ?
+                table.coordinates[x-1][y] : undefined;
+
+            col.east = (table.coordinates[x+1]) ?
+                table.coordinates[x+1][y] : undefined;
+
+        }
+    }
+
+}
+
+</SCRIPT>
+
+<table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3" id="3">
+	<tr>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+	</tr>
+	<tr>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+	</tr>
+	<tr>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+	</tr>
+	<tr>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+	</tr>
+	<tr>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+	</tr>
+	<tr>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+	</tr>
+	<tr>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+	</tr>
+	<tr>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+	</tr>
+	<tr>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+	</tr>
+	<tr>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+	</tr>
+</table>
+
+<SCRIPT LANGUAGE ="JavaScript">
+//setInterval(refresh, 1000)
+// The origin (0,0) is the top, leftmost cell
+//var table = document.getElementsByTagName('table')[0];
+document.body.style.backgroundColor="#A8A8A8";
+var shipType = document.getElementById('10');
+var shipAlign = document.getElementById('20');
+// ctr for number of ships
+var shipCtr=0;
+// ctrs for each ship type
+var dCtr=0;
+var bCtr=0;
+var cCtr=0;
+var sCtr=0;
+var pCtr=0;
+//x,y coords and orientation info for each ship, to be sent as json to controller
+var xd=0;
+var yd=0;
+var od="";
+var xb=0;
+var yb=0;
+var ob="";
+var xc=0;
+var yc=0;
+var oc="";
+var xs=0;
+var ys=0;
+var os=0;
+var xp=0;
+var yp=0;
+var op=0;
+var destroyerSize=3;
+var battleshipSize=4;
+var carrierSize=5;
+var submarineSize=3;
+var patrolboatSize=2;
+var table = document.getElementById('3');
+coordinate(table);
+setbgcol();
+
+//alert(JSON.stringify(gon.my_ships_grid_cells[0].state))
+var cells = table.getElementsByTagName('td');
+
+function setbgcol() {
+//bg color of grid
+	for (var x=0;x<10;x++) {
+		for (var y=0;y<10;y++){
+			table.coordinates[x][y].style.backgroundColor="#00FFFF";
+			table.coordinates[x][y].innerHTML="";
+			
+		}
+}
+
+}
+
+for (var i=0,td; td=cells[i]; ++i)
+    td.onclick = function () {
+		if(shipType.value!="" && shipAlign.value!="") {
+			placeShips(shipType,shipAlign,this.x,this.y);
+		}
+		
+    };
+
+	
+function makeSelection(dropID) {
+
+	//alert(dropID.value);
+	
+	if(dropID==10){
+		shipType=document.getElementById(dropID);
+			
+	} else if(dropID==20) {
+	shipAlign=document.getElementById(dropID);
+
+}
+}
+
+function clearGrid() {
+	setbgcol();
+	shipCtr=0;
+	dCtr=0;
+	bCtr=0;
+	cCtr=0;
+	sCtr=0;
+	pCtr=0;
+	xd=0;
+	yd=0;
+	od="";
+	xb=0;
+	yb=0;
+	ob="";
+	xc=0;
+	yc=0;
+	oc="";
+	xs=0;
+	ys=0;
+	os=0;
+	xp=0;
+	yp=0;
+	op=0;
+
+}
+
+function placeShips(shipType,shipAlign, xcoord,ycoord) {
+	var x=xcoord;
+	var y=ycoord;
+	//check if a ship exists in cells already
+	if(table.coordinates[x][y].innerHTML!="") {
+		alert("Cannot overlap ships. Please try another cell")
+		return;
+		
+	} 
+	
+	if (shipAlign.value=="Vertical") {
+		//place Destroyer
+		
+		if(shipType.value=="Destroyer") {
+			var yEnd=(y+destroyerSize)-1;
+			
+			if (yEnd<=9) {
+				//color cells
+				for(var i=y;i<=yEnd;i++) {
+				
+				table.coordinates[x][i].style.backgroundColor="#0000ff";
+				table.coordinates[x][i].innerHTML="D";
+				
+			 
+			}
+			shipCtr++;
+			dCtr++;
+			xd=x;
+			yd=y;
+			od="V";
+			} else alert("Destroyer cannot fit. Please choose another cell to place ship")
+				
+			} 
+			
+			//place battleship
+			
+			if(shipType.value=="Battleship") {
+				var yEnd=(y+battleshipSize)-1;
+			
+				if (yEnd<=9) {
+					//color cells
+					for(var i=y;i<=yEnd;i++) {
+				
+					table.coordinates[x][i].style.backgroundColor="#FF0000";
+					table.coordinates[x][i].innerHTML="B";
+			 
+				}
+				shipCtr++;
+				bCtr++;
+				xb=x;
+				yb=y;
+				ob="V";
+				} else alert("Battleship cannot fit. Please choose another cell to place ship")
+				
+				} 
+			
+				//place carrier
+				
+				if(shipType.value=="Carrier") {
+					var yEnd=(y+carrierSize)-1;
+			
+					if (yEnd<=9) {
+						//color cells
+						for(var i=y;i<=yEnd;i++) {
+				
+						table.coordinates[x][i].style.backgroundColor="#CCFF66";
+						table.coordinates[x][i].innerHTML="C";
+			 
+					}
+					shipCtr++;
+					cCtr++;
+					xc=x;
+					yc=y;
+					oc="V";
+					} else alert("Carrier cannot fit. Please choose another cell to place ship")
+				
+					} 
+			
+					//place submarine
+				
+					if(shipType.value=="Submarine") {
+						var yEnd=(y+submarineSize)-1;
+			
+						if (yEnd<=9) {
+							//color cells
+							for(var i=y;i<=yEnd;i++) {
+				
+							table.coordinates[x][i].style.backgroundColor="#66FF33";
+							table.coordinates[x][i].innerHTML="S";
+			 
+						}
+						shipCtr++;
+						sCtr++;
+						xs=x;
+						ys=y;
+						os="V";
+						} else alert("Submarine cannot fit. Please choose another cell to place ship")
+				
+						} 
+						
+						//place patrol boat
+				
+						if(shipType.value=="PatrolBoat") {
+							var yEnd=(y+patrolboatSize)-1;
+			
+							if (yEnd<=9) {
+								//color cells
+								for(var i=y;i<=yEnd;i++) {
+				
+								table.coordinates[x][i].style.backgroundColor="#CC00FF";
+								table.coordinates[x][i].innerHTML="P";
+			 
+							}
+							shipCtr++;
+							pCtr++;
+							xp=x;
+							yp=y;
+							op="V";
+							} else alert("PatrolBoat cannot fit. Please choose another cell to place ship")
+				
+							} 
+			
+		} else if (shipAlign.value=="Horizontal") {
+	
+		//place ships horizontally
+		//place Destroyer
+		
+		if(shipType.value=="Destroyer") {
+			var xEnd=(x+destroyerSize)-1;
+			
+			if (xEnd<=9) {
+				//color cells
+				for(var i=x;i<=xEnd;i++) {
+				
+				table.coordinates[i][y].style.backgroundColor="#0000ff";
+				table.coordinates[i][y].innerHTML="D";
+			 
+			}
+			shipCtr++;
+			dCtr++;
+			xd=x;
+			yd=y;
+			od="H";
+			} else alert("Destroyer cannot fit. Please choose another cell to place ship")
+				
+			} 
+			
+			//place battleship
+			
+			if(shipType.value=="Battleship") {
+				var xEnd=(x+battleshipSize)-1;
+			
+				if (xEnd<=9) {
+					//color cells
+					for(var i=x;i<=xEnd;i++) {
+				
+					table.coordinates[i][y].style.backgroundColor="#FF0000";
+					table.coordinates[i][y].innerHTML="B";
+			 
+				}
+				shipCtr++;
+				bCtr++;
+				xb=x;
+				yb=y;
+				ob="H";
+				} else alert("Battleship cannot fit. Please choose another cell to place ship")
+				
+				} 
+			
+				//place carrier
+				
+				if(shipType.value=="Carrier") {
+					var xEnd=(x+carrierSize)-1;
+			
+					if (xEnd<=9) {
+						//color cells
+						for(var i=x;i<=xEnd;i++) {
+				
+						table.coordinates[i][y].style.backgroundColor="#CCFF66";
+						table.coordinates[i][y].innerHTML="C";
+			 
+					}
+					shipCtr++;
+					cCtr++;
+					xc=x;
+					yc=y;
+					oc="H";
+					} else alert("Carrier cannot fit. Please choose another cell to place ship")
+				
+					} 
+			
+					//place submarine
+				
+					if(shipType.value=="Submarine") {
+						var xEnd=(x+submarineSize)-1;
+			
+						if (xEnd<=9) {
+							//color cells
+							for(var i=x;i<=xEnd;i++) {
+				
+							table.coordinates[i][y].style.backgroundColor="#66FF33";
+							table.coordinates[i][y].innerHTML="S";
+			 
+						}
+						shipCtr++;
+						sCtr++;
+						xs=x;
+						ys=y;
+						os="H";
+						} else alert("Submarine cannot fit. Please choose another cell to place ship")
+				
+						} 
+						
+						//place patrol boat
+				
+						if(shipType.value=="PatrolBoat") {
+							var xEnd=(x+patrolboatSize)-1;
+			
+							if (xEnd<=9) {
+								//color cells
+								for(var i=x;i<=xEnd;i++) {
+				
+								table.coordinates[i][y].style.backgroundColor="#CC00FF";
+								table.coordinates[i][y].innerHTML="P";
+			 
+							}
+							shipCtr++;
+							pCtr++;
+							xp=x;
+							yp=y;
+							op="H";
+							} else alert("PatrolBoat cannot fit. Please choose another cell to place ship")
+				
+							} 
+	
+	}
+		
+	} 
+	
+	
+	
+	function submitShips() {
+		//check that only 5 ships are submitted
+		if (shipCtr>5) {
+			alert("Cannot place more than 5 ships. Starting over")
+			clearGrid();
+			return;
+		}
+		
+		//check that multiple ships of the same type cannot be submitted
+		if (dCtr>1 || bCtr>1 || cCtr>1 || sCtr>1 || pCtr>1) {
+			alert("Cannot place more than 1 ship of the same type. Starting over")
+			clearGrid();
+			return;
+		}
+		
+		if (shipCtr<5) {
+			alert("Cannot place less than 5 ships. Starting over")
+			clearGrid();
+			return;
+			
+		}
+		
+	    $.ajax({ 
+	  	url: '/arrange_ships/' + game.player_id,
+	      type: 'POST',
+	      dataType: 'json',
+		  data: {player_id: game.player_id, xd:xd, yd:yd, od:od, xb:xb, yb:yb, ob:ob, xc:xc, yc:yc, oc:oc, xs:xs, ys:ys, os:os, xp:xp, yp:yp, op:op},
+	      success: function(data) {
+	        location.href = '/play/';
+
+	  }
+	  });
+		
+		
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</SCRIPT>

@@ -2,9 +2,16 @@ class GamesController < ApplicationController
   respond_to :html, :js
   def arrange_ships
       @player = Player.find(params[:player_id])
+      
+      respond_to do |format|
+        format.html { }
+        format.json {   }
+        
+     end
+      
     end
 
-
+    
 
   def play
     @player = Player.find(params[:player_id])
