@@ -2,8 +2,5 @@ require 'spec_helper'
 
 describe "games/arrange_ships.html.erb" do
 
-  it "contains a submit button" do
-    pending
 
-  end
 end
