@@ -20,11 +20,5 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe GridsController do
-render_views 
-  describe "Show new grid" do
-    it "renders the grids/index template" do
-      get :index
-      response.should contain("Battleship")
-    end
-  end
+
 end

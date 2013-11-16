@@ -2,9 +2,8 @@
 
 FactoryGirl.define do
   factory :player do
-    name "Player1"
+    name "Player"
     turn true
-    id 1
   end
 
 end
