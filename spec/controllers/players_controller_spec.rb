@@ -3,11 +3,11 @@ require 'spec_helper'
 describe PlayersController do
 
   context '#pass_turn' do
-    before do
-      @player1 = Player.create(name: "Grace", turn: false)      # created with id 1
-      @player2 = Player.create(name: "Ibrahim", turn: false)    # created with id 2
-      @player3 = Player.create(name: "Owen", turn: false)       # created with id 3
-      @player4 = Player.create(name: "Srinath", turn: false)    # created with id 4
+    before(:each) do
+      @player1 = FactoryGirl.create(:player1, turn: false)
+      @player2 = FactoryGirl.create(:player2, turn: false)
+      @player3 = FactoryGirl.create(:player3, turn: false )
+      @player4 = FactoryGirl.create(:player4, turn: false )
 
       @players = [@player4, @player3, @player1, @player2]
     end

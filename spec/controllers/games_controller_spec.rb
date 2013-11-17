@@ -16,7 +16,12 @@ describe GamesController do
 
     before(:each) do
       @player = FactoryGirl.create(:player)
+
+      # Necessary because of Devise (the calculate hits and misses requires login)
+      @request.env["devise.mapping"] = Devise.mappings[:player]
+      sign_in @player
     end
+
 
     context "arrange ships" do
 
@@ -75,9 +80,16 @@ describe GamesController do
 
   context 'calculation for hits and misses' do
     before do
-      @player1 = FactoryGirl.create(:player, name: 'A1', turn: true)
-      @player2 = FactoryGirl.create(:player, name: 'B1', turn: false)
-      @player3 = FactoryGirl.create(:player, name: 'C1', turn: false )
+
+      @player1 = FactoryGirl.create(:player1, turn: true)
+      @player2 = FactoryGirl.create(:player2, turn: false)
+      @player3 = FactoryGirl.create(:player3, turn: false )
+
+      # Necessary because of Devise (the calculate hits and misses requires login)
+      @request.env["devise.mapping"] = Devise.mappings[:player]
+      sign_in @player1
+      sign_in @player2
+      sign_in @player3
 
       @grid_p1_bf = @player1.grids.create(grid_type: "battlefield" )
       @grid_p1_ms = @player1.grids.create(grid_type: "my_ships")

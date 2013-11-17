@@ -1,14 +1,5 @@
-Index!!
-
-<p>
-player_signed_in: <%= player_signed_in? %>
-</p>
 
 
-<p>
-current_player: <%= current_player %>
-</p>
-
-<p>
-player_session: <%= player_session %>
-</p>
+<% if current_player %>
+    <%=	link_to 'Arrange Ships', arrange_ships_path(current_player.id) %>
+<% end %>
