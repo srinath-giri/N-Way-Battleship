@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 
-player1 = Player.create(name: "A", turn: true )
-player2 = Player.create(name: "B", turn: false )
-player3 = Player.create(name: "C", turn: false )
-player4 = Player.create(name: "D", turn: false )
+player1 = Player.create(name: "A", turn: true, email:"a@email.com", password:"1234567890" )
+player2 = Player.create(name: "B", turn: false, email:"b@email.com", password:"1234567890")
+player3 = Player.create(name: "C", turn: false, email:"c@email.com", password:"1234567890" )
+player4 = Player.create(name: "D", turn: false, email:"d@email.com", password:"1234567890" )

@@ -1,5 +1,13 @@
 class GamesController < ApplicationController
+
   respond_to :html, :js
+
+  before_filter :authenticate_player!, :except  => :index
+
+  def index
+
+  end
+
   def arrange_ships
       @player = Player.find(params[:player_id])
       

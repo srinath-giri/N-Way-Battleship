@@ -1,5 +1,7 @@
 class PlayersController < ApplicationController
 
+  #before_filter :authenticate_player!, :except  => [:new, :create]
+
   def self.pass_turn(players)
     current_player = find_player_with_token(players)
     next_player = determine_next_player(players, current_player)
