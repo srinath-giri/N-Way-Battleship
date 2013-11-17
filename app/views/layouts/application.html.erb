@@ -2,13 +2,33 @@
 <html>
 <head>
   <title>RoR007</title>
-<%= include_gon %>
-<%= stylesheet_link_tag    "application", media: "all" %>
-<%= javascript_include_tag "application" %>
-<%= csrf_meta_tag %>
+    <%= include_gon %>
+    <%= stylesheet_link_tag    "application", media: "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tag %>
 </head>
+
 <body class="<%= "#{params[:games]}_#{params[:refresh]}" %>">
-<%= yield  %>
-  
+
+    <div class="page_title" >
+      <%= link_to "Battleship Game", root_path %>
+    </div>
+
+    <div id="login">
+      <%= link_to "Login", new_player_session_path unless player_signed_in? %>
+
+      <% if player_signed_in?%>
+          <%= "Hi, #{current_player.name}" %>   <br>
+          <%= link_to("Logout", destroy_player_session_path, :method => :delete) %>    <br>
+      <% end  %>
+    </div>
+
+    <div class="after_header">
+
+      <p class="notice"><%= notice %></p>
+    </div>
+
+    <%= yield  %>
+
 </body>
 </html>
