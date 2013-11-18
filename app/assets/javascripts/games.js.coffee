@@ -56,7 +56,15 @@ table = document.getElementById("1")
 coordinate(table)
 cells = table.getElementsByTagName("td")
 for (i=0,td; td=cells[i]; ++i)
-	table.coordinates[cells[i].x][cells[i].y].innerHTML=JSON.stringify(gon.battlefield_cells[i].state)
+{
+state  = JSON.stringify(gon.battlefield_cells[i].state);
+if(state.indexOf('h') != -1)
+table.coordinates[cells[i].x][cells[i].y].innerHTML="<p style='background-color: red'>&nbsp;</p>";
+else if(state.indexOf('u') != -1)
+table.coordinates[cells[i].x][cells[i].y].innerHTML="<p style='background-color: grey'>&nbsp;</p>";
+else if(state.indexOf('m') != -1)
+table.coordinates[cells[i].x][cells[i].y].innerHTML="<p style='background-color: green'>&nbsp;</p>";
+}
 	
 
 
@@ -71,6 +79,15 @@ cells = table.getElementsByTagName("td")
 
 for (i=0,td; td=cells[i]; ++i)
 	if(gon.my_ships_grid_cells[i]!=null)
-table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML=JSON.stringify(gon.my_ships_grid_cells[i].state)
+    {
+    state = JSON.stringify(gon.my_ships_grid_cells[i].state['hit'])
+
+    if(state.indexOf("true") != -1)
+      table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="<p style='background-color: red'>&nbsp;</p>";
+    else if(state.indexOf("false") != -1)
+      table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="<p style='background-color: green'>&nbsp;</p>";
+    else
+      table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="<p style='background-color: white'>&nbsp;</p>";
+    }
 
 

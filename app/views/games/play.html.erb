@@ -33,7 +33,13 @@ function display_battlefield_attacked_cell(battlefield_cell){
 
 	var cells = table.getElementsByTagName('td');
 	for (i=0,td; td=cells[i]; ++i){
-		table.coordinates[battlefield_cell.x][battlefield_cell.y].innerHTML=JSON.stringify(battlefield_cell.state)
+        state  = JSON.stringify(battlefield_cell.state); //state = "{2:'u',3:'h', 4:'m'}"
+        if(state.indexOf('h') != -1)t
+        table.coordinates[battlefield_cell.x][battlefield_cell.y].innerHTML="<p style='background-color: red'>&nbsp;</p>" ;
+        else if(state.indexOf('u') != -1)
+        table.coordinates[battlefield_cell.x][battlefield_cell.y].innerHTML="<p style='background-color: grey'>&nbsp;</p>" ;
+        else if(state.indexOf('m') != -1)
+        table.coordinates[battlefield_cell.x][battlefield_cell.y].innerHTML="<p style='background-color: green'>&nbsp;</p>" ;
 	}
 }
 
@@ -44,7 +50,13 @@ function display_ship_attacked_cell(my_ships_cell){
 	
 	var cells = table.getElementsByTagName('td');
 	for (i=0,td; td=cells[i]; ++i){
-		table.coordinates[my_ships_cell.x][my_ships_cell.y].innerHTML=JSON.stringify(my_ships_cell.state)
+        state = JSON.stringify(my_ships_cell.state['hit']);
+        if(state.indexOf("true") != -1)
+          table.coordinates[my_ships_cell.x][my_ships_cell.y].innerHTML="<p style='background-color: red'>&nbsp;</p>";
+        else if(state.indexOf("false") != -1)
+          table.coordinates[my_ships_cell.x][my_ships_cell.y].innerHTML="<p style='background-color: green'>&nbsp;</p>";
+        else
+          table.coordinates[my_ships_cell.x][my_ships_cell.y].innerHTML="<p style='background-color: white'>&nbsp;</p>";
 	}
 }
 
@@ -300,7 +312,7 @@ for (var i=0,td; td=cells[i]; ++i)
 
 function init_battlefield(){
 	for (i=0,td; td=cells[i]; ++i){
-		table.coordinates[cells[i].x][cells[i].y].innerHTML=JSON.stringify(gon.battlefield_cells[i].state)
+		table.coordinates[cells[i].x][cells[i].y].innerHTML="<p style='background-color: grey'>&nbsp;</p>";
 	}
 	
 }
