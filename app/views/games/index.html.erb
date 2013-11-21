@@ -1,5 +1,20 @@
 
 
 <% if current_player %>
+
+    <p>
     <%=	link_to 'Arrange Ships', arrange_ships_path(current_player.id) %>
+    </p>
+
+    <%= form_for :new_game, url: new_game_path(current_player.id) do |f| %>
+
+        <p>
+          <%= f.text_field :number_of_players %>
+        </p>
+
+
+        <%= f.submit :new_game %>
+
+
+    <% end %>
 <% end %>

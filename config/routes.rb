@@ -17,6 +17,7 @@ RoR007::Application.routes.draw do
   get "grids/index"
   get "grids/new"
   get "grids/edit"
+  match '/games/new/:player_id' => 'games#new', as: 'new_game'
   get "games/calculate_hits"
   get "games/save_ships"
   match '/ships/new' => 'ships#new'
