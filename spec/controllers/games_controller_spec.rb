@@ -80,16 +80,20 @@ describe GamesController do
 
   context 'calculation for hits and misses' do
     before do
+      @game1 = Game.create(number_of_players: 3, game_status: "in_game")
+      @game2 = Game.create(number_of_players: 3, game_status: "waiting")
 
-      @player1 = FactoryGirl.create(:player1, turn: true)
-      @player2 = FactoryGirl.create(:player2, turn: false)
-      @player3 = FactoryGirl.create(:player3, turn: false )
+      @player1 = FactoryGirl.create(:player1, game_id:1, turn: true)
+      @player2 = FactoryGirl.create(:player2, game_id:1, turn: false)
+      @player3 = FactoryGirl.create(:player3, game_id:1, turn: false )
+      @player4 = FactoryGirl.create(:player4, game_id:2, turn: false )
 
       # Necessary because of Devise (the calculate hits and misses requires login)
       @request.env["devise.mapping"] = Devise.mappings[:player]
       sign_in @player1
       sign_in @player2
       sign_in @player3
+      sign_in @player4
 
       @grid_p1_bf = @player1.grids.create(grid_type: "battlefield" )
       @grid_p1_ms = @player1.grids.create(grid_type: "my_ships")
@@ -97,6 +101,8 @@ describe GamesController do
       @grid_p2_ms = @player2.grids.create(grid_type: "my_ships")
       @grid_p3_bf = @player3.grids.create(grid_type: "battlefield")
       @grid_p3_ms = @player3.grids.create(grid_type: "my_ships")
+      @grid_p4_bf = @player4.grids.create(grid_type: "battlefield")
+      @grid_p4_ms = @player4.grids.create(grid_type: "my_ships")
 
       @grid_p1_bf.cells.create(x: 0 , y: 0, state: {"2"=>"u","3"=>"u"})
       @grid_p1_bf.cells.create(x: 0 , y: 1, state: {"2"=>"u","3"=>"u"})
@@ -117,7 +123,10 @@ describe GamesController do
       @grid_p1_ms.cells.create(x: 1 , y: 0, state: {"orientation"=>"v","block"=>1,"type"=>"p","hit"=>false})
 
       @grid_p2_ms.cells.create(x: 0 , y: 0, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})
-      @grid_p2_ms.cells.create(x: 0 , y: 1, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})      
+      @grid_p2_ms.cells.create(x: 0 , y: 1, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})
+
+      @grid_p4_ms.cells.create(x: 0 , y: 0, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})
+      @grid_p4_ms.cells.create(x: 0 , y: 1, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})      
     end
 
     after do
@@ -163,6 +172,12 @@ describe GamesController do
       @grid_p1_bf.cells.where("x = 1 AND y = 1")[0].state.should == {"2" => "m", "3" => "m"}
       @grid_p2_bf.cells.where("x = 1 AND y = 1")[0].state.should == {"1" => "u", "3" => "m"}
       @grid_p3_bf.cells.where("x = 1 AND y = 1")[0].state.should == {"1" => "u", "2" => "m"}
+    end
+
+    it 'does not change ship state from another game' do
+      xhr :post, :update, player_id: @player1.id, x: 0, y: 0
+      @grid_p4_ms.cells.where("x = 0 AND y = 0")[0].state["hit"].should == false
+
     end
 
   end

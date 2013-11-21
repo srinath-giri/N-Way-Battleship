@@ -186,6 +186,7 @@ class GamesController < ApplicationController
     x = Integer(params[:x])
     y = Integer(params[:y])
     player_id = Integer(params[:player_id])
+    game_id = Player.find(player_id).game_id
     #create new move using x,y passed in play grid to test if attack coords are passed 
     #through grid
     @move=Move.new(x: x, y: y, player_id: player_id)
@@ -198,16 +199,15 @@ class GamesController < ApplicationController
     end
 
     #calculation starts
-    Player.where("id != ?", player_id).each do |opponent_player|
+    Player.where("id != ? AND game_id = ?", player_id, game_id).each do |opponent_player|
       player_cell = opponent_player.grids.where("grid_type = 'my_ships'")[0].cells.where("x = ? AND y = ?", x , y)
       if player_cell.empty? 
         #miss
-        Grid.where("grid_type = 'battlefield'").each do |grid|
-          if grid.player.id != opponent_player.id
-            cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
-            cell.state[opponent_player.id.to_s] = "m"
-            cell.save
-          end
+        Player.where("id != ? AND game_id = ?", opponent_player.id, game_id).each do |each_player|
+          grid = each_player.grids.where("grid_type = 'battlefield'")[0]
+          cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
+          cell.state[opponent_player.id.to_s] = "m"
+          cell.save
         end
       else
         #has a ship there
@@ -215,13 +215,13 @@ class GamesController < ApplicationController
           hitted_cell = player_cell[0]
           hitted_cell.state["hit"] = true
           hitted_cell.save
-          Grid.where("grid_type = 'battlefield'").each do |grid|
-            if grid.player.id != opponent_player.id
-              cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
-              cell.state[opponent_player.id.to_s] = "h"
-              cell.save
-            end
+          Player.where("id != ? AND game_id = ?", opponent_player.id, game_id).each do |each_player|
+            grid = each_player.grids.where("grid_type = 'battlefield'")[0]
+            cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
+            cell.state[opponent_player.id.to_s] = "h"
+            cell.save
           end
+            
         end
       end
     end
