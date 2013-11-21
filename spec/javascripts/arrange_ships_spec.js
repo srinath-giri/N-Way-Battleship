@@ -1,7 +1,7 @@
 
 
 describe("@initialize_game function", function() {
-    it("returns a game variable with the current player_id", function() {
+    it("returns a game variable with the player_id", function() {
         game = initialize_game(9)
         expect(game.player_id).toEqual(9);
     });
