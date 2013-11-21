@@ -9,6 +9,7 @@
  # initialize the game variable with instance variables from the view
  @initialize_game = (player_id) ->
    game.player_id = player_id
+   game
 
 @refresh = ->
   $.ajax "/refresh/" + game.player_id + ".json",
