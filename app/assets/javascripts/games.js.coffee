@@ -5,7 +5,7 @@
  game = {
    player_id: 0
  }
- 
+
  # initialize the game variable with instance variables from the view
  @initialize_game = (player_id) ->
    game.player_id = player_id
@@ -47,7 +47,7 @@ display_player_in_turn = (player_in_turn) ->
   });
 
 attack_grid_point_success = (data) ->
-  
+
 
 
 @load_battlefield = ->
@@ -65,7 +65,7 @@ table.coordinates[cells[i].x][cells[i].y].innerHTML="<p style='background-color:
 else if(state.indexOf('m') != -1)
 table.coordinates[cells[i].x][cells[i].y].innerHTML="<p style='background-color: green'>&nbsp;</p>";
 }
-	
+
 
 
 
