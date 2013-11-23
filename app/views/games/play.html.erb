@@ -10,43 +10,54 @@ var game = {
 }
    initialize_game(<%= @player.id %>)
 
-function refresh() {
-  $.ajax({ 
-	url: "/refresh/" + game.player_id + ".json",
-    type: 'GET',
-    dataType: 'json',
-    success: function(data) {
-      display_turn(data['turn'])
-      display_player_in_turn(data['player_in_turn'])
-	  display_battlefield_attacked_cell(data['battlefield_cell'])
-      display_ship_attacked_cell(data['my_ships_cell'])
+   function refresh() {
+     $.ajax({
+           url: "/refresh/" + game.player_id + ".json",
+       type: 'GET',
+       dataType: 'json',
+       success: function(data) {
+         display_turn(data['turn'])
+         display_player_in_turn(data['player_in_turn'])
+         display_battlefield_attacked_cell(data['battlefield_cell'])
+         display_ship_attacked_cell(data['my_ships_cell'])
 
-}
-});
-}
+   }
+   });
+   }
 
-function display_battlefield_attacked_cell(battlefield_cell){
-	
-	var table = document.getElementById('1');
-	coordinate(table);
-	init_battlefield();
+   function display_battlefield_attacked_cell(battlefield_cell){
+	   var table = document.getElementById('1');
+	           coordinate(table);
+	          
 
-	var cells = table.getElementsByTagName('td');
-	for (i=0,td; td=cells[i]; ++i){
-		table.coordinates[battlefield_cell.x][battlefield_cell.y].innerHTML=JSON.stringify(battlefield_cell.state)
-	}
-}
+	           var cells = table.getElementsByTagName('td');
+	           for (i=0,td; td=cells[i]; ++i){
+	           state = JSON.stringify(battlefield_cell.state); //state = "{2:'u',3:'h', 4:'m'}"
+	           if(state.indexOf('h') != -1)
+	           table.coordinates[battlefield_cell.x][battlefield_cell.y].style.backgroundColor="#FA020E"; //hit red
+	           else if(state.indexOf('u') != -1)
+ 	           table.coordinates[battlefield_cell.x][battlefield_cell.y].style.backgroundColor="#FFFFFF"; //unknown white
+ 	           else if(state.indexOf('m') != -1)
+ 	           table.coordinates[battlefield_cell.x][battlefield_cell.y].style.backgroundColor="#00FFFF"; //miss blue
+			   
+	           }
+        
+   }
 
-function display_ship_attacked_cell(my_ships_cell){
-	
-	var table = document.getElementById('2');
-	coordinate(table);
-	
-	var cells = table.getElementsByTagName('td');
-	for (i=0,td; td=cells[i]; ++i){
-		table.coordinates[my_ships_cell.x][my_ships_cell.y].innerHTML=JSON.stringify(my_ships_cell.state)
-	}
-}
+   function display_ship_attacked_cell(my_ships_cell){
+        
+           var table = document.getElementById('2');
+           coordinate(table);
+        
+           var cells = table.getElementsByTagName('td');
+           for (i=0,td; td=cells[i]; ++i){
+           state = JSON.stringify(my_ships_cell.state['hit']);
+           if(state.indexOf("true") != -1)
+             table.coordinates[my_ships_cell.x][my_ships_cell.y].style.backgroundColor="#000501"; //black hit
+           
+           }
+   }
+
 
 function display_turn(turn){
   if (turn == true)
@@ -145,124 +156,124 @@ function coordinate(table) {
 
 <table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3" id="1">
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 </table>
 </br>
@@ -276,6 +287,7 @@ function coordinate(table) {
 // The origin (0,0) is the top, leftmost cell
 var table = document.getElementById('1');
 coordinate(table);
+setbgcol()
 
 var cells = table.getElementsByTagName('td');
 
@@ -286,23 +298,26 @@ for (var i=0,td; td=cells[i]; ++i)
 		$.ajax({
 		    type: 'put',
 		    dataType: 'script',
-		    // url: '/games/calculate_hits/',
 		    url: '/update/'  + game.player_id + '/' + this.x + '/' + this.y + '.json',
-		   // data: {'x': this.x, 'y': this.y, 'player_id': 1},
 		    data: {x: this.x, y: this.y, player_id: game.player_id},
 		    success: function(data){
-		      //attack_grid_point_success(data)
-		//refresh();
+		     
 }
 		  });
 	
     };
 
-function init_battlefield(){
-	for (i=0,td; td=cells[i]; ++i){
-		table.coordinates[cells[i].x][cells[i].y].innerHTML=JSON.stringify(gon.battlefield_cells[i].state)
-	}
-	
+
+function setbgcol() {
+//bg color of grid
+	for (var x=0;x<10;x++) {
+		for (var y=0;y<10;y++){
+			table.coordinates[x][y].style.backgroundColor="#00FFFF";
+			table.coordinates[x][y].innerHTML="";
+			
+		}
+}
+
 }
 	
 

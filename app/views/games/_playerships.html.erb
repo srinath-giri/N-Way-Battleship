@@ -1,41 +1,7 @@
 
 <SCRIPT LANGUAGE ="JavaScript">
 
-//individual ship arrangement view
-//use player_id to pull ships and place them on grid
-function refresh() {
-  $.ajax({ 
-	url: "/refresh/" + game.player_id + ".json",
-    type: 'GET',
-    dataType: 'json',
-    success: function(data) {
-      //display_turn(data['turn'])
-      //display_player_in_turn(data['player_in_turn'])
-      display_ship_attacked_cell(data['my_ships_cell'])
-      
-}
-});
-}
 
- 
-
-
-
-function display_turn(turn){
-  if (turn == true)
-    document.getElementById("turn_info").innerHTML = "It's your turn to take a shot"
-  else
-    document.getElementById("turn_info").innerHTML = ""
-}
-
-function display_player_in_turn(player_in_turn){
-  if (player_in_turn.id != game.player_id)
-    document.getElementById("player_in_turn_info").innerHTML = "Player moving: " + player_in_turn.name
-  else
-    document.getElementById("player_in_turn_info").innerHTML = ""
-}
-
-//setInterval(refresh, 1000)
 function coordinate(table) {
 
     table.coordinates = [];
@@ -98,132 +64,144 @@ function coordinate(table) {
 </SCRIPT>
 <table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3" id="2">
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 	<tr>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
-		<td>""</td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
+		<td style="height:10px"></td>
 	</tr>
 </table>
 <SCRIPT LANGUAGE ="JavaScript">
+document.body.style.backgroundColor="#A8A8A8";
 // The origin (0,0) is the top, leftmost cell
 //var table = document.getElementsByTagName('table')[0];
 var table = document.getElementById('2');
 coordinate(table);
+setbgcol();
+function setbgcol() {
+//bg color of grid
+	for (var x=0;x<10;x++) {
+		for (var y=0;y<10;y++){
+			table.coordinates[x][y].style.backgroundColor="#00FFFF";
+			table.coordinates[x][y].innerHTML="";
+			
+		}
+}
 
+}
 //alert(JSON.stringify(gon.my_ships_grid_cells[0].state))
 var cells = table.getElementsByTagName('td');
 loadShipsGrid();
@@ -236,9 +214,50 @@ for (var i=0,td; td=cells[i]; ++i)
 //methods to pull ship view for player_id
 //initialise grid with cells before game starts
 function loadShipsGrid(){
-	for (i=0,td; td=cells[i]; ++i){
+	//for (i=0,td; td=cells[i]; i++){
+		for (i=0,td; i<18; i++){
+		
 		if(gon.my_ships_grid_cells[i]!=null){
-	table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML=JSON.stringify(gon.my_ships_grid_cells[i].state)
+			//var jString=JSON.stringify(gon.my_ships_grid_cells[i].state);
+			//var jState=jString["type"];
+			 var jStateType=gon.my_ships_grid_cells[i].state["type"]
+			 var jStateHit=gon.my_ships_grid_cells[i].state["hit"]
+			 //alert(jStateHit)
+		
+			if(jStateType=="d") {
+			
+					table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].style.backgroundColor="#0000ff";
+					table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="D";
+				 
+			}
+			
+			if(jStateType=="b") {
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].style.backgroundColor="#FF0000";
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="B";
+				
+			}
+			
+			if(jStateType=="c") {
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].style.backgroundColor="#CCFF66";
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="C";
+				
+			}
+			
+			if(jStateType=="p") {
+				//alert(jString)
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].style.backgroundColor="#CC00FF";
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="P";
+					
+			}
+			
+			if(jStateType=="s") {
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].style.backgroundColor="#66FF33";
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="S";
+				
+			}
+			
+			
+	
 }
 }
 }

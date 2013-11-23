@@ -10,6 +10,8 @@ var game = {
 }
    initialize_game(<%= @player.id %>)
 </script>
+
+<div id="replace">
 <body>
 
 
@@ -39,14 +41,13 @@ var game = {
 <button onclick="clearGrid()">Start over</button>
 </br>
 </br>
-<button onclick="submitShips()">Submit ships</button>
+
+ <button onclick="submitShips()" >Submit ships</button>
+ <%= flash[:notice] %>
 </div>
 
 </body>
 
-
-</br>
-</br>
 </br>
 </br>
 <SCRIPT LANGUAGE ="JavaScript">
@@ -111,6 +112,7 @@ function coordinate(table) {
 }
 
 </SCRIPT>
+
 
 <table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3" id="3">
 	<tr>
@@ -234,6 +236,7 @@ function coordinate(table) {
 		<td style="height:10px"></td>
 	</tr>
 </table>
+</div>
 
 <SCRIPT LANGUAGE ="JavaScript">
 //setInterval(refresh, 1000)
@@ -301,8 +304,6 @@ for (var i=0,td; td=cells[i]; ++i)
 	
 function makeSelection(dropID) {
 
-	//alert(dropID.value);
-	
 	if(dropID==10){
 		shipType=document.getElementById(dropID);
 			
@@ -367,7 +368,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 			dCtr++;
 			xd=x;
 			yd=y;
-			od="V";
+			od="v";
 			} else alert("Destroyer cannot fit. Please choose another cell to place ship")
 				
 			} 
@@ -389,7 +390,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 				bCtr++;
 				xb=x;
 				yb=y;
-				ob="V";
+				ob="v";
 				} else alert("Battleship cannot fit. Please choose another cell to place ship")
 				
 				} 
@@ -411,7 +412,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 					cCtr++;
 					xc=x;
 					yc=y;
-					oc="V";
+					oc="v";
 					} else alert("Carrier cannot fit. Please choose another cell to place ship")
 				
 					} 
@@ -433,7 +434,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 						sCtr++;
 						xs=x;
 						ys=y;
-						os="V";
+						os="v";
 						} else alert("Submarine cannot fit. Please choose another cell to place ship")
 				
 						} 
@@ -455,7 +456,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 							pCtr++;
 							xp=x;
 							yp=y;
-							op="V";
+							op="v";
 							} else alert("PatrolBoat cannot fit. Please choose another cell to place ship")
 				
 							} 
@@ -480,7 +481,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 			dCtr++;
 			xd=x;
 			yd=y;
-			od="H";
+			od="h";
 			} else alert("Destroyer cannot fit. Please choose another cell to place ship")
 				
 			} 
@@ -502,7 +503,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 				bCtr++;
 				xb=x;
 				yb=y;
-				ob="H";
+				ob="h";
 				} else alert("Battleship cannot fit. Please choose another cell to place ship")
 				
 				} 
@@ -524,7 +525,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 					cCtr++;
 					xc=x;
 					yc=y;
-					oc="H";
+					oc="h";
 					} else alert("Carrier cannot fit. Please choose another cell to place ship")
 				
 					} 
@@ -546,7 +547,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 						sCtr++;
 						xs=x;
 						ys=y;
-						os="H";
+						os="h";
 						} else alert("Submarine cannot fit. Please choose another cell to place ship")
 				
 						} 
@@ -568,7 +569,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 							pCtr++;
 							xp=x;
 							yp=y;
-							op="H";
+							op="h";
 							} else alert("PatrolBoat cannot fit. Please choose another cell to place ship")
 				
 							} 
@@ -601,16 +602,21 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 			
 		}
 		
+		
 	    $.ajax({ 
-	  	url: '/save_ships/' + game.player_id,
+	  	url: '/save_ships/',
 	      type: 'POST',
 	      dataType: 'script',
 		  data: {player_id: game.player_id, xd:xd, yd:yd, od:od, xb:xb, yb:yb, ob:ob, xc:xc, yc:yc, oc:oc, xs:xs, ys:ys, os:os, xp:xp, yp:yp, op:op},
-	      success: function(data) {
-	        //location.href = '/play/';
-
+	      success: function(result) {
+	       
+	  },
+	  failure: function() {
+	  	alert("no success")
+		
 	  }
 	  });
+	  return;
 		
 		
 	}
