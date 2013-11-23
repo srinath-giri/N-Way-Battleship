@@ -1,26 +1,6 @@
 
 <SCRIPT LANGUAGE ="JavaScript">
 
-//individual ship arrangement view
-//use player_id to pull ships and place them on grid
-function refresh() {
-  $.ajax({ 
-	url: "/refresh/" + game.player_id + ".json",
-    type: 'GET',
-    dataType: 'json',
-    success: function(data) {
-      //display_turn(data['turn'])
-      //display_player_in_turn(data['player_in_turn'])
-      display_ship_attacked_cell(data['my_ships_cell'])
-      
-}
-});
-}
-
- 
-
-
-
 function display_turn(turn){
   if (turn == true)
     document.getElementById("turn_info").innerHTML = "It's your turn to take a shot"
@@ -238,7 +218,48 @@ for (var i=0,td; td=cells[i]; ++i)
 function loadShipsGrid(){
 	for (i=0,td; td=cells[i]; ++i){
 		if(gon.my_ships_grid_cells[i]!=null){
-	table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML=JSON.stringify(gon.my_ships_grid_cells[i].state)
+
+			//var jString=JSON.stringify(gon.my_ships_grid_cells[i].state);
+			//var jState=jString["type"];
+			 var jStateType=gon.my_ships_grid_cells[i].state["type"]
+			 //var jStateHit=gon.my_ships_grid_cells[i].state["hit"]
+			 //alert(jStateHit)
+		
+			if(jStateType=="d") {
+			
+					table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].style.backgroundColor="#0000ff";
+					table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="D";
+				 
+			}
+			
+			if(jStateType=="b") {
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].style.backgroundColor="#FF0000";
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="B";
+				
+			}
+			
+			if(jStateType=="c") {
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].style.backgroundColor="#CCFF66";
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="C";
+				
+			}
+			
+			if(jStateType=="p") {
+				//alert(jString)
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].style.backgroundColor="#CC00FF";
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="P";
+					
+			}
+			
+			if(jStateType=="s") {
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].style.backgroundColor="#66FF33";
+				table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="S";
+				
+			}
+			
+			
+
+
 }
 }
 }
