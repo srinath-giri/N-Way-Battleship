@@ -10,6 +10,16 @@ describe Player do
     it {should respond_to(:turn) }
   end
 
+  context "associations check" do
+    it {should respond_to(:game) }
+
+    it "can be linked to a game" do
+      expect { subject.create_game(FactoryGirl.attributes_for(:game)) }.to_not raise_error
+      subject.game.should_not be_nil
+    end
+
+  end
+
   context "attribute validations" do
 
     it "validates empty name" do

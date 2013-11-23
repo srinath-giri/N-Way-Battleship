@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131116024001) do
+ActiveRecord::Schema.define(:version => 20131117205219) do
 
   create_table "cells", :force => true do |t|
     t.integer  "x"
@@ -20,6 +20,13 @@ ActiveRecord::Schema.define(:version => 20131116024001) do
     t.integer  "grid_id"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
+  end
+
+  create_table "games", :force => true do |t|
+    t.integer  "number_of_players"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "game_status"
   end
 
   create_table "grids", :force => true do |t|
@@ -48,9 +55,23 @@ ActiveRecord::Schema.define(:version => 20131116024001) do
   create_table "players", :force => true do |t|
     t.string   "name"
     t.boolean  "turn"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.string   "email",                  :default => "", :null => false
+    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          :default => 0,  :null => false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.integer  "game_id"
   end
+
+  add_index "players", ["email"], :name => "index_players_on_email", :unique => true
+  add_index "players", ["reset_password_token"], :name => "index_players_on_reset_password_token", :unique => true
 
   create_table "ships", :force => true do |t|
     t.string   "name"

@@ -1,11 +1,18 @@
 class Player < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :name, :turn, :email, :password, :password_confirmation, :remember_me
+
   has_many :grids
-  attr_accessible :name, :turn
+  belongs_to :game
 
- 
 
-   validates :name, presence: true
-   validates :name, uniqueness: true
+  validates :name, presence: true
+  validates :name, uniqueness: true
 
   def get_battlefield_grid
     Grid.create_grid_for_player('battlefield', self)

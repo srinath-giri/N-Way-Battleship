@@ -11,3 +11,46 @@
  *= require_self
  *= require_tree .
  */
+
+
+body {
+    width: 75%;
+    margin: auto;
+    padding: 25px 0 25px 0;
+}
+
+.page_title {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 5px 0 5px 0;
+    height: 50px;
+    width: 70%;
+    float: left;
+}
+
+.page_title a, .page_title a:visited{
+    text-decoration: none;
+    background-color: transparent;
+    color: black;
+}
+
+.page_title a:hover, .page_title a:visited:hover{
+    text-decoration: none;
+    background-color: transparent;
+    color: gray;
+}
+
+#login {
+  float: right;
+  text-align: right;
+}
+
+.after_header {
+    clear: both;
+}
+
+.notice {
+    width: 100%;
+    text-align: center;
+    color: #3d9bc8;
+}

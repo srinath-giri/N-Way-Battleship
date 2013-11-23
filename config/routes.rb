@@ -1,5 +1,9 @@
 RoR007::Application.routes.draw do
 
+  root to: "games#index"
+
+  devise_for :players
+
   resources :grids
   resources :ships
   resources :players

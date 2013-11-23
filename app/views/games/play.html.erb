@@ -58,6 +58,47 @@ var game = {
            }
    }
 
+<<<<<<< HEAD
+=======
+}
+});
+}
+
+function display_battlefield_attacked_cell(battlefield_cell){
+	
+	var table = document.getElementById('1');
+	coordinate(table);
+	init_battlefield();
+
+	var cells = table.getElementsByTagName('td');
+	for (i=0,td; td=cells[i]; ++i){
+        state  = JSON.stringify(battlefield_cell.state); //state = "{2:'u',3:'h', 4:'m'}"
+        if(state.indexOf('h') != -1)t
+        table.coordinates[battlefield_cell.x][battlefield_cell.y].innerHTML="<p style='background-color: red'>&nbsp;</p>" ;
+        else if(state.indexOf('u') != -1)
+        table.coordinates[battlefield_cell.x][battlefield_cell.y].innerHTML="<p style='background-color: grey'>&nbsp;</p>" ;
+        else if(state.indexOf('m') != -1)
+        table.coordinates[battlefield_cell.x][battlefield_cell.y].innerHTML="<p style='background-color: green'>&nbsp;</p>" ;
+	}
+}
+
+function display_ship_attacked_cell(my_ships_cell){
+	
+	var table = document.getElementById('2');
+	coordinate(table);
+	
+	var cells = table.getElementsByTagName('td');
+	for (i=0,td; td=cells[i]; ++i){
+        state = JSON.stringify(my_ships_cell.state['hit']);
+        if(state.indexOf("true") != -1)
+          table.coordinates[my_ships_cell.x][my_ships_cell.y].innerHTML="<p style='background-color: red'>&nbsp;</p>";
+        else if(state.indexOf("false") != -1)
+          table.coordinates[my_ships_cell.x][my_ships_cell.y].innerHTML="<p style='background-color: green'>&nbsp;</p>";
+        else
+          table.coordinates[my_ships_cell.x][my_ships_cell.y].innerHTML="<p style='background-color: white'>&nbsp;</p>";
+	}
+}
+>>>>>>> a0430f444b6431d34d2bb5b844919bf63b24cea8
 
 function display_turn(turn){
   if (turn == true)
@@ -307,6 +348,7 @@ for (var i=0,td; td=cells[i]; ++i)
 	
     };
 
+<<<<<<< HEAD
 
 function setbgcol() {
 //bg color of grid
@@ -318,6 +360,13 @@ function setbgcol() {
 		}
 }
 
+=======
+function init_battlefield(){
+	for (i=0,td; td=cells[i]; ++i){
+		table.coordinates[cells[i].x][cells[i].y].innerHTML="<p style='background-color: grey'>&nbsp;</p>";
+	}
+	
+>>>>>>> a0430f444b6431d34d2bb5b844919bf63b24cea8
 }
 	
 
