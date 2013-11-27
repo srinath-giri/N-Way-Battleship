@@ -57,7 +57,7 @@
       to see more useful Rails Best Practices.
     </p>
     <p>
-        Found 18 warnings.
+        Found 25 warnings.
     </p>
     <table>
           <tr>
@@ -117,7 +117,7 @@
             <td class='filename'>
                 db/schema.rb
             </td>
-            <td class='line'>25</td>
+            <td class='line'>32</td>
             <td class='message'>
               <a href='http://rails-bestpractices.com/posts/21-always-add-db-index' target='_blank'>always add db index (grids => [player_id])</a>
             </td>
@@ -126,7 +126,7 @@
             <td class='filename'>
                 db/schema.rb
             </td>
-            <td class='line'>32</td>
+            <td class='line'>39</td>
             <td class='message'>
               <a href='http://rails-bestpractices.com/posts/21-always-add-db-index' target='_blank'>always add db index (misses => [player_id])</a>
             </td>
@@ -135,16 +135,61 @@
             <td class='filename'>
                 db/schema.rb
             </td>
-            <td class='line'>40</td>
+            <td class='line'>47</td>
             <td class='message'>
               <a href='http://rails-bestpractices.com/posts/21-always-add-db-index' target='_blank'>always add db index (moves => [player_id])</a>
+            </td>
+          </tr>
+          <tr class="AlwaysAddDbIndexReview">
+            <td class='filename'>
+                db/schema.rb
+            </td>
+            <td class='line'>55</td>
+            <td class='message'>
+              <a href='http://rails-bestpractices.com/posts/21-always-add-db-index' target='_blank'>always add db index (players => [game_id])</a>
             </td>
           </tr>
           <tr class="MoveModelLogicIntoModelReview">
             <td class='filename'>
                 app/controllers/games_controller.rb
             </td>
-            <td class='line'>65</td>
+            <td class='line'>18</td>
+            <td class='message'>
+              <a href='http://rails-bestpractices.com/posts/7-move-model-logic-into-the-model' target='_blank'>move model logic into model (@player use_count > 4)</a>
+            </td>
+          </tr>
+          <tr class="MoveModelLogicIntoModelReview">
+            <td class='filename'>
+                app/controllers/games_controller.rb
+            </td>
+            <td class='line'>18</td>
+            <td class='message'>
+              <a href='http://rails-bestpractices.com/posts/7-move-model-logic-into-the-model' target='_blank'>move model logic into model (@my_ships_grid use_count > 4)</a>
+            </td>
+          </tr>
+          <tr class="MoveModelLogicIntoModelReview">
+            <td class='filename'>
+                app/controllers/games_controller.rb
+            </td>
+            <td class='line'>18</td>
+            <td class='message'>
+              <a href='http://rails-bestpractices.com/posts/7-move-model-logic-into-the-model' target='_blank'>move model logic into model (state use_count > 4)</a>
+            </td>
+          </tr>
+          <tr class="MoveModelLogicIntoModelReview">
+            <td class='filename'>
+                app/controllers/games_controller.rb
+            </td>
+            <td class='line'>18</td>
+            <td class='message'>
+              <a href='http://rails-bestpractices.com/posts/7-move-model-logic-into-the-model' target='_blank'>move model logic into model (Hash use_count > 4)</a>
+            </td>
+          </tr>
+          <tr class="MoveModelLogicIntoModelReview">
+            <td class='filename'>
+                app/controllers/games_controller.rb
+            </td>
+            <td class='line'>18</td>
             <td class='message'>
               <a href='http://rails-bestpractices.com/posts/7-move-model-logic-into-the-model' target='_blank'>move model logic into model ( use_count > 4)</a>
             </td>
@@ -153,7 +198,16 @@
             <td class='filename'>
                 app/controllers/games_controller.rb
             </td>
-            <td class='line'>65</td>
+            <td class='line'>179</td>
+            <td class='message'>
+              <a href='http://rails-bestpractices.com/posts/7-move-model-logic-into-the-model' target='_blank'>move model logic into model ( use_count > 4)</a>
+            </td>
+          </tr>
+          <tr class="MoveModelLogicIntoModelReview">
+            <td class='filename'>
+                app/controllers/games_controller.rb
+            </td>
+            <td class='line'>179</td>
             <td class='message'>
               <a href='http://rails-bestpractices.com/posts/7-move-model-logic-into-the-model' target='_blank'>move model logic into model (opponent_player use_count > 4)</a>
             </td>
@@ -162,7 +216,7 @@
             <td class='filename'>
                 app/controllers/games_controller.rb
             </td>
-            <td class='line'>65</td>
+            <td class='line'>179</td>
             <td class='message'>
               <a href='http://rails-bestpractices.com/posts/7-move-model-logic-into-the-model' target='_blank'>move model logic into model (cell use_count > 4)</a>
             </td>
@@ -205,6 +259,24 @@
           </tr>
           <tr class="RemoveUnusedMethodsInControllersReview">
             <td class='filename'>
+                app/controllers/application_controller.rb
+            </td>
+            <td class='line'>4</td>
+            <td class='message'>
+              <a href='' target='_blank'>remove unused methods (ApplicationController#after_sign_in_path_for)</a>
+            </td>
+          </tr>
+          <tr class="RemoveUnusedMethodsInControllersReview">
+            <td class='filename'>
+                app/controllers/application_controller.rb
+            </td>
+            <td class='line'>8</td>
+            <td class='message'>
+              <a href='' target='_blank'>remove unused methods (ApplicationController#after_sign_out_path_for)</a>
+            </td>
+          </tr>
+          <tr class="RemoveUnusedMethodsInControllersReview">
+            <td class='filename'>
                 app/controllers/ships_controller.rb
             </td>
             <td class='line'>27</td>
@@ -214,18 +286,9 @@
           </tr>
           <tr class="RemoveUnusedMethodsInModelsReview">
             <td class='filename'>
-                app/models/cell.rb
-            </td>
-            <td class='line'>20</td>
-            <td class='message'>
-              <a href='' target='_blank'>remove unused methods (InvalidState#validate_state!)</a>
-            </td>
-          </tr>
-          <tr class="RemoveUnusedMethodsInModelsReview">
-            <td class='filename'>
                 app/models/player.rb
             </td>
-            <td class='line'>18</td>
+            <td class='line'>25</td>
             <td class='message'>
               <a href='' target='_blank'>remove unused methods (Player#assign_turn)</a>
             </td>
@@ -234,7 +297,7 @@
             <td class='filename'>
                 app/models/player.rb
             </td>
-            <td class='line'>26</td>
+            <td class='line'>33</td>
             <td class='message'>
               <a href='' target='_blank'>remove unused methods (Player#remove_turn)</a>
             </td>
@@ -243,7 +306,7 @@
             <td class='filename'>
                 config/routes.rb
             </td>
-            <td class='line'>4</td>
+            <td class='line'>8</td>
             <td class='message'>
               <a href='http://rails-bestpractices.com/posts/86-restrict-auto-generated-routes' target='_blank'>restrict auto-generated routes ships (only: [:new, :create])</a>
             </td>
@@ -252,7 +315,7 @@
             <td class='filename'>
                 config/routes.rb
             </td>
-            <td class='line'>5</td>
+            <td class='line'>9</td>
             <td class='message'>
               <a href='http://rails-bestpractices.com/posts/86-restrict-auto-generated-routes' target='_blank'>restrict auto-generated routes players (only: [])</a>
             </td>
@@ -261,9 +324,9 @@
             <td class='filename'>
                 config/routes.rb
             </td>
-            <td class='line'>6</td>
+            <td class='line'>10</td>
             <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/86-restrict-auto-generated-routes' target='_blank'>restrict auto-generated routes games (only: [:update])</a>
+              <a href='http://rails-bestpractices.com/posts/86-restrict-auto-generated-routes' target='_blank'>restrict auto-generated routes games (only: [:update, :index])</a>
             </td>
           </tr>
       </tbody>

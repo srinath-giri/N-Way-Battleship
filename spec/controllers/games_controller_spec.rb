@@ -148,7 +148,7 @@ describe GamesController do
       @game2.destroy
     end
 
-    it 'can change others ship cell status if the attack is successful on an oponent' do
+    it 'can change others ship cell status if the attack is successful on an opponent' do
       xhr :post, :update, player_id: @player1.id, x: 0, y: 0
       @grid_p2_ms.cells.where("x = 0 AND y = 0")[0].state["hit"].should == true    
     end
