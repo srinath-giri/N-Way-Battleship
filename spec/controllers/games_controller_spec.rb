@@ -83,10 +83,10 @@ describe GamesController do
       @game1 = Game.create(number_of_players: 3, game_status: "in_game")
       @game2 = Game.create(number_of_players: 3, game_status: "waiting")
 
-      @player1 = FactoryGirl.create(:player1, game_id:1, turn: true)
-      @player2 = FactoryGirl.create(:player2, game_id:1, turn: false)
-      @player3 = FactoryGirl.create(:player3, game_id:1, turn: false )
-      @player4 = FactoryGirl.create(:player4, game_id:2, turn: false )
+      @player1 = FactoryGirl.create(:player1, game_id:1, turn: true, status: "in_game")
+      @player2 = FactoryGirl.create(:player2, game_id:1, turn: false, status: "in_game" )
+      @player3 = FactoryGirl.create(:player3, game_id:1, turn: false, status: "in_game" )
+      @player4 = FactoryGirl.create(:player4, game_id:2, turn: false, status: "in_game" )
 
       # Necessary because of Devise (the calculate hits and misses requires login)
       @request.env["devise.mapping"] = Devise.mappings[:player]
@@ -183,7 +183,14 @@ describe GamesController do
     it 'does not change ship state from another game' do
       xhr :post, :update, player_id: @player1.id, x: 0, y: 0
       @grid_p4_ms.cells.where("x = 0 AND y = 0")[0].state["hit"].should == false
+    end
 
+    it 'change a player status into game_over when all his ships have benn hit' do
+      cell = @grid_p2_ms.cells.where("x = 0 AND y = 0 ")[0]
+      cell.state["hit"] = true
+      cell.save      
+      xhr :post, :update, player_id: @player1.id, x: 0, y: 1   
+      Player.find(@player2.id).status.should == "game_over"
     end
 
   end

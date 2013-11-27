@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131117205219) do
+ActiveRecord::Schema.define(:version => 20131127153341) do
 
   create_table "cells", :force => true do |t|
     t.integer  "x"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20131117205219) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.integer  "game_id"
+    t.string   "status"
   end
 
   add_index "players", ["email"], :name => "index_players_on_email", :unique => true
