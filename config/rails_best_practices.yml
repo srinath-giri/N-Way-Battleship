@@ -2,7 +2,7 @@ AddModelVirtualAttributeCheck: { }
 AlwaysAddDbIndexCheck: { }
 #CheckSaveReturnValueCheck: { }
 DefaultScopeIsEvilCheck: { }
-DryBundlerInCapistranoCheck: { }
+#DryBundlerInCapistranoCheck: { }
 #HashSyntaxCheck: { }
 IsolateSeedDataCheck: { }
 KeepFindersOnTheirOwnModelCheck: { }

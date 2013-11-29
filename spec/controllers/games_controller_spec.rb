@@ -80,16 +80,20 @@ describe GamesController do
 
   context 'calculation for hits and misses' do
     before do
+      @game1 = Game.create(number_of_players: 3, game_status: "in_game")
+      @game2 = Game.create(number_of_players: 3, game_status: "waiting")
 
-      @player1 = FactoryGirl.create(:player1, turn: true)
-      @player2 = FactoryGirl.create(:player2, turn: false)
-      @player3 = FactoryGirl.create(:player3, turn: false )
+      @player1 = FactoryGirl.create(:player1, game_id:1, turn: true, status: "in_game")
+      @player2 = FactoryGirl.create(:player2, game_id:1, turn: false, status: "in_game" )
+      @player3 = FactoryGirl.create(:player3, game_id:1, turn: false, status: "in_game" )
+      @player4 = FactoryGirl.create(:player4, game_id:2, turn: false, status: "in_game" )
 
       # Necessary because of Devise (the calculate hits and misses requires login)
       @request.env["devise.mapping"] = Devise.mappings[:player]
       sign_in @player1
       sign_in @player2
       sign_in @player3
+      sign_in @player4
 
       @grid_p1_bf = @player1.grids.create(grid_type: "battlefield" )
       @grid_p1_ms = @player1.grids.create(grid_type: "my_ships")
@@ -97,6 +101,8 @@ describe GamesController do
       @grid_p2_ms = @player2.grids.create(grid_type: "my_ships")
       @grid_p3_bf = @player3.grids.create(grid_type: "battlefield")
       @grid_p3_ms = @player3.grids.create(grid_type: "my_ships")
+      @grid_p4_bf = @player4.grids.create(grid_type: "battlefield")
+      @grid_p4_ms = @player4.grids.create(grid_type: "my_ships")
 
       @grid_p1_bf.cells.create(x: 0 , y: 0, state: {"2"=>"u","3"=>"u"})
       @grid_p1_bf.cells.create(x: 0 , y: 1, state: {"2"=>"u","3"=>"u"})
@@ -117,13 +123,17 @@ describe GamesController do
       @grid_p1_ms.cells.create(x: 1 , y: 0, state: {"orientation"=>"v","block"=>1,"type"=>"p","hit"=>false})
 
       @grid_p2_ms.cells.create(x: 0 , y: 0, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})
-      @grid_p2_ms.cells.create(x: 0 , y: 1, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})      
+      @grid_p2_ms.cells.create(x: 0 , y: 1, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})
+
+      @grid_p4_ms.cells.create(x: 0 , y: 0, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})
+      @grid_p4_ms.cells.create(x: 0 , y: 1, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})      
     end
 
     after do
       @player1.destroy
       @player2.destroy
       @player3.destroy
+      @player4.destroy
 
       @grid_p1_bf.destroy
       @grid_p1_ms.destroy
@@ -131,9 +141,14 @@ describe GamesController do
       @grid_p2_ms.destroy
       @grid_p3_bf.destroy
       @grid_p3_ms.destroy
+      @grid_p4_bf.destroy
+      @grid_p4_ms.destroy
+
+      @game1.destroy
+      @game2.destroy
     end
 
-    it 'can change others ship cell status if the attack is successful on an oponent' do
+    it 'can change others ship cell status if the attack is successful on an opponent' do
       xhr :post, :update, player_id: @player1.id, x: 0, y: 0
       @grid_p2_ms.cells.where("x = 0 AND y = 0")[0].state["hit"].should == true    
     end
@@ -165,6 +180,19 @@ describe GamesController do
       @grid_p3_bf.cells.where("x = 1 AND y = 1")[0].state.should == {"1" => "u", "2" => "m"}
     end
 
+    it 'does not change ship state from another game' do
+      xhr :post, :update, player_id: @player1.id, x: 0, y: 0
+      @grid_p4_ms.cells.where("x = 0 AND y = 0")[0].state["hit"].should == false
+    end
+
+    it 'change a player status into game_over when all his ships have benn hit' do
+      cell = @grid_p2_ms.cells.where("x = 0 AND y = 0 ")[0]
+      cell.state["hit"] = true
+      cell.save      
+      xhr :post, :update, player_id: @player1.id, x: 0, y: 1   
+      Player.find(@player2.id).status.should == "game_over"
+    end
+
   end
 
   context 'Store ships arrangement' do
@@ -174,6 +202,10 @@ describe GamesController do
       sign_in @player1
     end
 
+    after do
+      @player1.destroy      
+    end
+
     it 'stores 17 ship cells for a player' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"v", xb:"2", yb:"2", ob:"v", xc:"3", yc:"3", oc:"v", xs:"4", ys:"4", os:"v", xp:"5" ,yp:"5", op:"v"
       Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.count.should == 17
@@ -181,76 +213,76 @@ describe GamesController do
 
     it 'correctly stores vertical carrier cells' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"v", xb:"2", yb:"2", ob:"v", xc:"3", yc:"3", oc:"v", xs:"4", ys:"4", os:"v", xp:"5" ,yp:"5", op:"v"
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 3")[0].state.should == {"orientation" => "v", "block" => 1, "type" => "c", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 4")[0].state.should == {"orientation" => "v", "block" => 2, "type" => "c", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 5")[0].state.should == {"orientation" => "v", "block" => 3, "type" => "c", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 6")[0].state.should == {"orientation" => "v", "block" => 4, "type" => "c", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 7")[0].state.should == {"orientation" => "v", "block" => 5, "type" => "c", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 3")[0].state.should == {"orientation" => "v", "block" => "1", "type" => "c", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 4")[0].state.should == {"orientation" => "v", "block" => "2", "type" => "c", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 5")[0].state.should == {"orientation" => "v", "block" => "3", "type" => "c", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 6")[0].state.should == {"orientation" => "v", "block" => "4", "type" => "c", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 7")[0].state.should == {"orientation" => "v", "block" => "5", "type" => "c", "hit" => false}
     end
 
     it 'correctly stores horizontal carrier cells' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"h", xb:"2", yb:"2", ob:"h", xc:"3", yc:"3", oc:"h", xs:"4", ys:"4", os:"h", xp:"5" ,yp:"5", op:"h"
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 3")[0].state.should == {"orientation" => "h", "block" => 1, "type" => "c", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 3")[0].state.should == {"orientation" => "h", "block" => 2, "type" => "c", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 3")[0].state.should == {"orientation" => "h", "block" => 3, "type" => "c", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 6 AND y = 3")[0].state.should == {"orientation" => "h", "block" => 4, "type" => "c", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 7 AND y = 3")[0].state.should == {"orientation" => "h", "block" => 5, "type" => "c", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 3")[0].state.should == {"orientation" => "h", "block" => "1", "type" => "c", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 3")[0].state.should == {"orientation" => "h", "block" => "2", "type" => "c", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 3")[0].state.should == {"orientation" => "h", "block" => "3", "type" => "c", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 6 AND y = 3")[0].state.should == {"orientation" => "h", "block" => "4", "type" => "c", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 7 AND y = 3")[0].state.should == {"orientation" => "h", "block" => "5", "type" => "c", "hit" => false}
     end
 
     it 'correctly stores vertical battleship cells' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"v", xb:"2", yb:"2", ob:"v", xc:"3", yc:"3", oc:"v", xs:"4", ys:"4", os:"v", xp:"5" ,yp:"5", op:"v"
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 2")[0].state.should == {"orientation" => "v", "block" => 1, "type" => "b", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 3")[0].state.should == {"orientation" => "v", "block" => 2, "type" => "b", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 4")[0].state.should == {"orientation" => "v", "block" => 3, "type" => "b", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 5")[0].state.should == {"orientation" => "v", "block" => 4, "type" => "b", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 2")[0].state.should == {"orientation" => "v", "block" => "1", "type" => "b", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 3")[0].state.should == {"orientation" => "v", "block" => "2", "type" => "b", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 4")[0].state.should == {"orientation" => "v", "block" => "3", "type" => "b", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 5")[0].state.should == {"orientation" => "v", "block" => "4", "type" => "b", "hit" => false}
     end
 
     it 'correctly stores horizontal battleship cells' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"h", xb:"2", yb:"2", ob:"h", xc:"3", yc:"3", oc:"h", xs:"4", ys:"4", os:"h", xp:"5" ,yp:"5", op:"h"
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 2")[0].state.should == {"orientation" => "h", "block" => 1, "type" => "b", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 2")[0].state.should == {"orientation" => "h", "block" => 2, "type" => "b", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 2")[0].state.should == {"orientation" => "h", "block" => 3, "type" => "b", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 2")[0].state.should == {"orientation" => "h", "block" => 4, "type" => "b", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 2")[0].state.should == {"orientation" => "h", "block" => "1", "type" => "b", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 2")[0].state.should == {"orientation" => "h", "block" => "2", "type" => "b", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 2")[0].state.should == {"orientation" => "h", "block" => "3", "type" => "b", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 2")[0].state.should == {"orientation" => "h", "block" => "4", "type" => "b", "hit" => false}
     end
 
     it 'correctly stores vertical destroyer cells' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"v", xb:"2", yb:"2", ob:"v", xc:"3", yc:"3", oc:"v", xs:"4", ys:"4", os:"v", xp:"5" ,yp:"5", op:"v"
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 1 AND y = 1")[0].state.should == {"orientation" => "v", "block" => 1, "type" => "d", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 1 AND y = 2")[0].state.should == {"orientation" => "v", "block" => 2, "type" => "d", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 1 AND y = 3")[0].state.should == {"orientation" => "v", "block" => 3, "type" => "d", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 1 AND y = 1")[0].state.should == {"orientation" => "v", "block" => "1", "type" => "d", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 1 AND y = 2")[0].state.should == {"orientation" => "v", "block" => "2", "type" => "d", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 1 AND y = 3")[0].state.should == {"orientation" => "v", "block" => "3", "type" => "d", "hit" => false}
     end
 
     it 'correctly stores horizontal destroyer cells' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"h", xb:"2", yb:"2", ob:"h", xc:"3", yc:"3", oc:"h", xs:"4", ys:"4", os:"h", xp:"5" ,yp:"5", op:"h"
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 1 AND y = 1")[0].state.should == {"orientation" => "h", "block" => 1, "type" => "d", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 1")[0].state.should == {"orientation" => "h", "block" => 2, "type" => "d", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 1")[0].state.should == {"orientation" => "h", "block" => 3, "type" => "d", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 1 AND y = 1")[0].state.should == {"orientation" => "h", "block" => "1", "type" => "d", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 2 AND y = 1")[0].state.should == {"orientation" => "h", "block" => "2", "type" => "d", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 3 AND y = 1")[0].state.should == {"orientation" => "h", "block" => "3", "type" => "d", "hit" => false}
     end
 
     it 'correctly stores vertical submarine cells' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"v", xb:"2", yb:"2", ob:"v", xc:"3", yc:"3", oc:"v", xs:"4", ys:"4", os:"v", xp:"5" ,yp:"5", op:"v"
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 4")[0].state.should == {"orientation" => "v", "block" => 1, "type" => "s", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 5")[0].state.should == {"orientation" => "v", "block" => 2, "type" => "s", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 6")[0].state.should == {"orientation" => "v", "block" => 3, "type" => "s", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 4")[0].state.should == {"orientation" => "v", "block" => "1", "type" => "s", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 5")[0].state.should == {"orientation" => "v", "block" => "2", "type" => "s", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 6")[0].state.should == {"orientation" => "v", "block" => "3", "type" => "s", "hit" => false}
     end
 
     it 'correctly stores horizontal submarine cells' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"h", xb:"2", yb:"2", ob:"h", xc:"3", yc:"3", oc:"h", xs:"4", ys:"4", os:"h", xp:"5" ,yp:"5", op:"h"
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 4")[0].state.should == {"orientation" => "h", "block" => 1, "type" => "s", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 4")[0].state.should == {"orientation" => "h", "block" => 2, "type" => "s", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 6 AND y = 4")[0].state.should == {"orientation" => "h", "block" => 3, "type" => "s", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 4 AND y = 4")[0].state.should == {"orientation" => "h", "block" => "1", "type" => "s", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 4")[0].state.should == {"orientation" => "h", "block" => "2", "type" => "s", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 6 AND y = 4")[0].state.should == {"orientation" => "h", "block" => "3", "type" => "s", "hit" => false}
     end
 
     it 'correctly stores vertical patrol boat cells' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"v", xb:"2", yb:"2", ob:"v", xc:"3", yc:"3", oc:"v", xs:"4", ys:"4", os:"v", xp:"5" ,yp:"5", op:"v"
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 5")[0].state.should == {"orientation" => "v", "block" => 1, "type" => "p", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 6")[0].state.should == {"orientation" => "v", "block" => 2, "type" => "p", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 5")[0].state.should == {"orientation" => "v", "block" => "1", "type" => "p", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 6")[0].state.should == {"orientation" => "v", "block" => "2", "type" => "p", "hit" => false}
     end
 
     it 'correctly stores horizontal patrol boat cells' do
       xhr :post, :save_ships, player_id: @player1.id, xd:"1", yd:"1", od:"h", xb:"2", yb:"2", ob:"h", xc:"3", yc:"3", oc:"h", xs:"4", ys:"4", os:"h", xp:"5" ,yp:"5", op:"h"
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 5")[0].state.should == {"orientation" => "h", "block" => 1, "type" => "p", "hit" => false}
-      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 6 AND y = 5")[0].state.should == {"orientation" => "h", "block" => 2, "type" => "p", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 5 AND y = 5")[0].state.should == {"orientation" => "h", "block" => "1", "type" => "p", "hit" => false}
+      Grid.where("player_id = ? AND grid_type = 'my_ships'", @player1.id)[0].cells.where("x = 6 AND y = 5")[0].state.should == {"orientation" => "h", "block" => "2", "type" => "p", "hit" => false}
     end
 
   end

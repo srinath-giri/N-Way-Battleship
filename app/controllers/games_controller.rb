@@ -11,11 +11,6 @@ class GamesController < ApplicationController
   def arrange_ships
       @player = Player.find(params[:player_id])
       
-      respond_to do |format|
-        format.html { }
-        format.json {   }
-        
-     end
       
     end
 
@@ -39,13 +34,13 @@ class GamesController < ApplicationController
     if @player_input_data["oc"] == "h"
       for i in 0..4
         state = Hash.new
-        state = { "orientation" => "h", "block" => i+1, "type" => "c", "hit" => false }
+        state = { "orientation" => "h", "block" => (i+1).to_s, "type" => "c", "hit" => false }
         @my_ships_grid.cells.create(x: @player_input_data["xc"].to_i + i, y: @player_input_data["yc"].to_i, state: state )
       end
     elsif @player_input_data["oc"] == "v"
       for i in 0..4
         state = Hash.new
-        state = { "orientation" => "v", "block" => i+1, "type" => "c", "hit" => false }
+        state = { "orientation" => "v", "block" => (i+1).to_s, "type" => "c", "hit" => false }
         @my_ships_grid.cells.create(x: @player_input_data["xc"].to_i, y: @player_input_data["yc"].to_i + i , state: state )
       end
     end
@@ -54,13 +49,13 @@ class GamesController < ApplicationController
     if @player_input_data["ob"] == "h"
       for i in 0..3
         state = Hash.new
-        state = { "orientation" => "h", "block" => i+1, "type" => "b", "hit" => false }
+        state = { "orientation" => "h", "block" => (i+1).to_s, "type" => "b", "hit" => false }
         @my_ships_grid.cells.create(x: @player_input_data["xb"].to_i + i, y: @player_input_data["yb"].to_i, state: state )
       end
     elsif @player_input_data["ob"] == "v"
       for i in 0..3
         state = Hash.new
-        state = { "orientation" => "v", "block" => i+1, "type" => "b", "hit" => false }
+        state = { "orientation" => "v", "block" => (i+1).to_s, "type" => "b", "hit" => false }
         @my_ships_grid.cells.create(x: @player_input_data["xb"].to_i, y: @player_input_data["yb"].to_i + i , state: state )
       end
     end
@@ -69,13 +64,13 @@ class GamesController < ApplicationController
     if @player_input_data["od"] == "h"
       for i in 0..2
         state = Hash.new
-        state = { "orientation" => "h", "block" => i+1, "type" => "d", "hit" => false }
+        state = { "orientation" => "h", "block" => (i+1).to_s, "type" => "d", "hit" => false }
         @my_ships_grid.cells.create(x: @player_input_data["xd"].to_i + i, y: @player_input_data["yd"].to_i, state: state )
       end
     elsif @player_input_data["od"] == "v"
       for i in 0..2
         state = Hash.new
-        state = { "orientation" => "v", "block" => i+1, "type" => "d", "hit" => false }
+        state = { "orientation" => "v", "block" => (i+1).to_s, "type" => "d", "hit" => false }
         @my_ships_grid.cells.create(x: @player_input_data["xd"].to_i, y: @player_input_data["yd"].to_i + i , state: state )
       end
     end
@@ -84,13 +79,13 @@ class GamesController < ApplicationController
     if @player_input_data["os"] == "h"
       for i in 0..2
         state = Hash.new
-        state = { "orientation" => "h", "block" => i+1, "type" => "s", "hit" => false }
+        state = { "orientation" => "h", "block" => (i+1).to_s, "type" => "s", "hit" => false }
         @my_ships_grid.cells.create(x: @player_input_data["xs"].to_i + i, y: @player_input_data["ys"].to_i, state: state )
       end
     elsif @player_input_data["os"] == "v"
       for i in 0..2
         state = Hash.new
-        state = { "orientation" => "v", "block" => i+1, "type" => "s", "hit" => false }
+        state = { "orientation" => "v", "block" => (i+1).to_s, "type" => "s", "hit" => false }
         @my_ships_grid.cells.create(x: @player_input_data["xs"].to_i, y: @player_input_data["ys"].to_i + i , state: state )
       end
     end
@@ -99,13 +94,13 @@ class GamesController < ApplicationController
     if @player_input_data["op"] == "h"
       for i in 0..1
         state = Hash.new
-        state = { "orientation" => "h", "block" => i+1, "type" => "p", "hit" => false }
+        state = { "orientation" => "h", "block" => (i+1).to_s, "type" => "p", "hit" => false }
         @my_ships_grid.cells.create(x: @player_input_data["xp"].to_i + i, y: @player_input_data["yp"].to_i, state: state )
       end
     elsif @player_input_data["op"] == "v"
       for i in 0..1
         state = Hash.new
-        state = { "orientation" => "v", "block" => i+1, "type" => "p", "hit" => false }
+        state = { "orientation" => "v", "block" => (i+1).to_s, "type" => "p", "hit" => false }
         @my_ships_grid.cells.create(x: @player_input_data["xp"].to_i, y: @player_input_data["yp"].to_i + i , state: state )
       end
     end
@@ -186,6 +181,7 @@ class GamesController < ApplicationController
     x = Integer(params[:x])
     y = Integer(params[:y])
     player_id = Integer(params[:player_id])
+    game_id = Player.find(player_id).game_id
     #create new move using x,y passed in play grid to test if attack coords are passed 
     #through grid
     @move=Move.new(x: x, y: y, player_id: player_id)
@@ -198,16 +194,15 @@ class GamesController < ApplicationController
     end
 
     #calculation starts
-    Player.where("id != ?", player_id).each do |opponent_player|
+    Player.where("id != ? AND game_id = ?", player_id, game_id).each do |opponent_player|
       player_cell = opponent_player.grids.where("grid_type = 'my_ships'")[0].cells.where("x = ? AND y = ?", x , y)
       if player_cell.empty? 
         #miss
-        Grid.where("grid_type = 'battlefield'").each do |grid|
-          if grid.player.id != opponent_player.id
-            cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
-            cell.state[opponent_player.id.to_s] = "m"
-            cell.save
-          end
+        Player.where("id != ? AND game_id = ?", opponent_player.id, game_id).each do |each_player|
+          grid = each_player.grids.where("grid_type = 'battlefield'")[0]
+          cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
+          cell.state[opponent_player.id.to_s] = "m"
+          cell.save
         end
       else
         #has a ship there
@@ -215,13 +210,28 @@ class GamesController < ApplicationController
           hitted_cell = player_cell[0]
           hitted_cell.state["hit"] = true
           hitted_cell.save
-          Grid.where("grid_type = 'battlefield'").each do |grid|
-            if grid.player.id != opponent_player.id
-              cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
-              cell.state[opponent_player.id.to_s] = "h"
-              cell.save
-            end
+          Player.where("id != ? AND game_id = ?", opponent_player.id, game_id).each do |each_player|
+            grid = each_player.grids.where("grid_type = 'battlefield'")[0]
+            cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
+            cell.state[opponent_player.id.to_s] = "h"
+            cell.save
           end
+
+          #check if the player's all ships are sunk
+          number_of_cells = 0
+          number_of_hitted_cells = 0
+          #all_hit = true   
+          opponent_player.grids.where("grid_type = 'my_ships'")[0].cells.each do |each_cell|
+            number_of_cells = number_of_cells + 1
+            if each_cell.state["hit"] == true 
+              number_of_hitted_cells = number_of_hitted_cells + 1
+            end                      
+          end           
+          if number_of_hitted_cells == number_of_cells
+            opponent_player.update_attribute(:status, "game_over") 
+          end
+
+            
         end
       end
     end
@@ -230,4 +240,3 @@ class GamesController < ApplicationController
 end
 
     
-
