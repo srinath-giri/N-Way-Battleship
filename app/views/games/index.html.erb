@@ -3,18 +3,33 @@
 <% if player_signed_in? %>
 
     <% if current_player.game.nil? %>
-        <% #if the player doesn't belong to a game, then he can create one with the following form %>
+        <% #if the player doesn't belong to a game, then he can create a game or join an existing one%>
+
+        You can create a new game
+        <br/>
         <%= form_for :new_game, url: new_game_path(current_player.id) do |f| %>
-           <p>
-              <%= f.text_field :number_of_players %>
-           </p>
-           <%= f.submit :new_game %>
+
+            <%= f.text_field :number_of_players %>
+            <br/>
+            <%= f.submit :new_game %>
         <% end %>
+
+
+        <% if @existing_games.size > 0 %>
+            <p>
+            You can join one of the following existing games:
+            </p>
+            <% @existing_games.each do |game| %>
+                <br/>
+                <%=	link_to "#{game.creator}'s game", join_game_path(game.id) %>
+            <% end %>
+        <% end %>
+
     <% else %>
         <% #if the player belongs to a game, depending on the status of the game: %>
         <% if current_player.game.game_status == "waiting"%>
             <p>
-              <%=	link_to 'Wait for other players to join my game', waiting_path(current_player.id) %>
+              <%=	link_to 'Wait for other players to join my game', waiting_path %>
             </p>
 
         <% elsif current_player.game.game_status == "arrange_ships"%>

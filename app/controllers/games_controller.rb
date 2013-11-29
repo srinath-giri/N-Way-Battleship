@@ -5,13 +5,14 @@ class GamesController < ApplicationController
   before_filter :authenticate_player!, :except  => :index
 
   def index
-
+     @existing_games = Game.where("game_status == ?", "waiting")
   end
 
   def new
     player = current_player
     @game = player.build_game(params[:new_game])
     @game.game_status = "waiting"
+    @game.creator = player.name
 
     respond_to do |format|
       if @game.save
@@ -28,6 +29,17 @@ class GamesController < ApplicationController
   def waiting
     @number_of_players = current_player.game.number_of_players
     @player = current_player
+  end
+
+  def join_game
+    current_player.game_id = params[:game_id]
+    respond_to do |format|
+      if current_player.save
+        format.html { redirect_to waiting_path, notice: 'You have successfully joined the game.' }
+      else
+        format.html { redirect_to root_path, notice: @game.errors.full_messages.to_sentence }
+      end
+    end
   end
 
   def arrange_ships

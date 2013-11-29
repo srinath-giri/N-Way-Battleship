@@ -53,7 +53,8 @@ display_player_in_turn = (player_in_turn) ->
 
 
 display_players_joining_game = (players_who_joined) ->
-  document.getElementById("players_joining_game").innerHTML = player.name + "<br>" for player in players_who_joined
+  document.getElementById("players_joining_game").innerHTML = ""
+  document.getElementById("players_joining_game").innerHTML += player.name + "<br>" for player in players_who_joined
 
 
 update_waiting_notice = (players_who_joined) ->

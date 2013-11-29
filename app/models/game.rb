@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  attr_accessible :number_of_players, :game_status
+  attr_accessible :number_of_players, :game_status, :creator
 
   has_many :players
 
