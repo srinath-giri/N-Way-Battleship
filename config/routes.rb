@@ -24,6 +24,7 @@ RoR007::Application.routes.draw do
 
 
   match '/waiting/:player_id' => 'games#waiting', as: 'waiting'
+  match '/refresh_waiting_view/' => 'games#refresh_waiting_view', as: 'refresh_waiting_view'
   match '/arrange_ships/:player_id' => 'games#arrange_ships', as: 'arrange_ships'
   match '/play/:player_id' => 'games#play', as: 'play'
   match '/refresh/:player_id(.:format)' => 'games#refresh', as: 'refresh'

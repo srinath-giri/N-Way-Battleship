@@ -1,14 +1,18 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+
 # game variable: to save instance variables from the view
- game = {
-   player_id: 0
- }
+game = {}
  
- # initialize the game variable with instance variables from the view
- @initialize_game = (player_id) ->
-   game.player_id = player_id
+# initialize the game variable with instance variables from the view
+@initialize_game = (object) ->
+  if (object.player_id)
+    game.player_id = object.player_id
+  if (object.game_id)
+    game.game_id =  object.game_id
+  if (object.number_of_players)
+    game.number_of_players = object.number_of_players
 
 @refresh = ->
   $.ajax "/refresh/" + game.player_id + ".json",
@@ -27,67 +31,30 @@ display_turn = (turn) ->
   else
     document.getElementById("turn_info").innerHTML = ""
 
+
 display_player_in_turn = (player_in_turn) ->
   if (player_in_turn.id != game.player_id)
     document.getElementById("player_in_turn_info").innerHTML = "Player moving: " + player_in_turn.name
   else
     document.getElementById("player_in_turn_info").innerHTML = ""
 
-@attack_grid_point = (x, y) ->
-  $.ajax({
-    type: 'put',
-    dataType: 'script',
-    # url: '/games/calculate_hits/',
-    url: '/update/'  + game.player_id + '/' + x + '/' + y + '.json',
-    # data: {'x': this.x, 'y': this.y, 'player_id': 1},
-    data: {x: this.x, y: this.y, player_id: game.player_id},
+
+@refresh_waiting_view = ->
+  $.ajax
+    type: "GET"
+    dataType: "json"
+    url: "/refresh_waiting_view/",
+    data: {game_id: game.game_id},
+    error: (jqXHR, textStatus, errorThrown) ->
+      $('body').append "AJAX Error: #{textStatus}"
     success: (data, textStatus, jqXHR) ->
-      attack_grid_point_success(data)
-
-  });
-
-attack_grid_point_success = (data) ->
-  
+      display_players_joining_game(data['players_who_joined'])
+      update_waiting_notice(data['players_who_joined'].length)
 
 
-@load_battlefield = ->
-alert gon.battlefield_cells[0].state[:1]
-table = document.getElementById("1")
-coordinate(table)
-cells = table.getElementsByTagName("td")
-for (i=0,td; td=cells[i]; ++i)
-{
-state  = JSON.stringify(gon.battlefield_cells[i].state);
-if(state.indexOf('h') != -1)
-table.coordinates[cells[i].x][cells[i].y].innerHTML="<p style='background-color: red'>&nbsp;</p>";
-else if(state.indexOf('u') != -1)
-table.coordinates[cells[i].x][cells[i].y].innerHTML="<p style='background-color: grey'>&nbsp;</p>";
-else if(state.indexOf('m') != -1)
-table.coordinates[cells[i].x][cells[i].y].innerHTML="<p style='background-color: green'>&nbsp;</p>";
-}
-	
+display_players_joining_game = (players_who_joined) ->
+  document.getElementById("players_joining_game").innerHTML = player.name + "<br>" for player in players_who_joined
 
 
-
-
-
-@initShipsGrid = ->
-alert gon.battlefield_cells[0].state[:1]
-table = document.getElementById("2")
-coordinate(table)
-cells = table.getElementsByTagName("td")
-
-for (i=0,td; td=cells[i]; ++i)
-	if(gon.my_ships_grid_cells[i]!=null)
-    {
-    state = JSON.stringify(gon.my_ships_grid_cells[i].state['hit'])
-
-    if(state.indexOf("true") != -1)
-      table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="<p style='background-color: red'>&nbsp;</p>";
-    else if(state.indexOf("false") != -1)
-      table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="<p style='background-color: green'>&nbsp;</p>";
-    else
-      table.coordinates[gon.my_ships_grid_cells[i].x][gon.my_ships_grid_cells[i].y].innerHTML="<p style='background-color: white'>&nbsp;</p>";
-    }
-
-
+update_waiting_notice = (players_who_joined) ->
+  document.getElementById("waiting_notice").innerHTML = "Waiting for " + (game.number_of_players - players_who_joined) + " players to join the game..."

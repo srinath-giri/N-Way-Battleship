@@ -2,9 +2,6 @@
 
 <% if player_signed_in? %>
 
-
-
-
     <% if current_player.game.nil? %>
         <% #if the player doesn't belong to a game, then he can create one with the following form %>
         <%= form_for :new_game, url: new_game_path(current_player.id) do |f| %>

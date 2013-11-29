@@ -27,7 +27,7 @@ class GamesController < ApplicationController
 
   def waiting
     @number_of_players = current_player.game.number_of_players
-
+    @player = current_player
   end
 
   def arrange_ships
@@ -249,6 +249,14 @@ class GamesController < ApplicationController
     end
         
   end
+
+  def refresh_waiting_view
+    @players_who_joined = Player.select("name").where("game_id == ?", params[:game_id])
+    respond_to do |format|
+      format.json { render :json => { players_who_joined: @players_who_joined } }
+    end
+  end
+
 end
 
     
