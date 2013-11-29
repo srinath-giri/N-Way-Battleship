@@ -9,19 +9,24 @@ class GamesController < ApplicationController
   end
 
   def new
-    player = Player.find(params[:player_id])
-    @game = player.create_game(params[:new_game])
-    player.game_id = @game.id
+    player = current_player
+    @game = player.build_game(params[:new_game])
     @game.game_status = "waiting"
-    @number_of_players = params[:new_game][:number_of_players]
 
     respond_to do |format|
       if @game.save
-        format.html { render "waiting", notice: 'The game was successfully created.' }
+        player.game_id = @game.id
+        player.save
+        format.html { redirect_to waiting_path, notice: 'The game was successfully created.' }
       else
-        format.html { redirect_to root_path, notice: @game.errors.full_messages.to_sentence } #.join("&lt;br /&gt;") }
+        format.html { redirect_to root_path, notice: @game.errors.full_messages.to_sentence }
       end
     end
+
+  end
+
+  def waiting
+    @number_of_players = current_player.game.number_of_players
 
   end
 

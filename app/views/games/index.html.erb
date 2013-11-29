@@ -1,20 +1,37 @@
 
 
-<% if current_player %>
-
-    <p>
-    <%=	link_to 'Arrange Ships', arrange_ships_path(current_player.id) %>
-    </p>
-
-    <%= form_for :new_game, url: new_game_path(current_player.id) do |f| %>
-
-        <p>
-          <%= f.text_field :number_of_players %>
-        </p>
+<% if player_signed_in? %>
 
 
-        <%= f.submit :new_game %>
+
+
+    <% if current_player.game.nil? %>
+        <% #if the player doesn't belong to a game, then he can create one with the following form %>
+        <%= form_for :new_game, url: new_game_path(current_player.id) do |f| %>
+           <p>
+              <%= f.text_field :number_of_players %>
+           </p>
+           <%= f.submit :new_game %>
+        <% end %>
+    <% else %>
+        <% #if the player belongs to a game, depending on the status of the game: %>
+        <% if current_player.game.game_status == "waiting"%>
+            <p>
+              <%=	link_to 'Wait for other players to join my game', waiting_path(current_player.id) %>
+            </p>
+
+        <% elsif current_player.game.game_status == "arrange_ships"%>
+            <p>
+              <%=	link_to 'Arrange Ships', arrange_ships_path(current_player.id) %>
+            </p>
+        <% elsif current_player.game.game_status == "in_game"%>
+            <p>
+              <%=	link_to 'Play!', play_path(current_player.id) %>
+            </p>
+        <% end %>
 
 
     <% end %>
+
+
 <% end %>

@@ -21,9 +21,9 @@ RoR007::Application.routes.draw do
   get "games/calculate_hits"
   get "games/save_ships"
   match '/ships/new' => 'ships#new'
-  
-  
 
+
+  match '/waiting/:player_id' => 'games#waiting', as: 'waiting'
   match '/arrange_ships/:player_id' => 'games#arrange_ships', as: 'arrange_ships'
   match '/play/:player_id' => 'games#play', as: 'play'
   match '/refresh/:player_id(.:format)' => 'games#refresh', as: 'refresh'
