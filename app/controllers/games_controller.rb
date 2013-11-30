@@ -5,7 +5,7 @@ class GamesController < ApplicationController
   before_filter :authenticate_player!, :except  => :index
 
   def index
-     @existing_games = Game.where("game_status == ?", "waiting")
+     @existing_games = Game.where("game_status = ?", "waiting")
   end
 
   def new
@@ -193,7 +193,7 @@ class GamesController < ApplicationController
     @current_player = Player.find(params[:player_id])
     @my_turn = @current_player.turn
 
-    players = Player.where("game_id == ?", @current_player.game_id)
+    players = Player.where("game_id = ?", @current_player.game_id)
     @player_in_turn = PlayersController.find_player_with_token(players)
 
     @battlefield_cell = @current_player.get_battlefield_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
@@ -221,7 +221,7 @@ class GamesController < ApplicationController
       y = Integer(params[:y])
 
       if x.between?(0, 9) && y.between?(0, 9) && @player.turn
-        players = Player.where("game_id == ?", @player.game_id)
+        players = Player.where("game_id = ?", @player.game_id)
         PlayersController.pass_turn(players)
         calculate_hits_and_misses
       else
