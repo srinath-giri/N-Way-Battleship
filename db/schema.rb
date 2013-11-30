@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131129222512) do
+ActiveRecord::Schema.define(:version => 20131130053102) do
 
   create_table "cells", :force => true do |t|
     t.integer  "x"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(:version => 20131129222512) do
   end
 
   add_index "players", ["email"], :name => "index_players_on_email", :unique => true
+  add_index "players", ["game_id"], :name => "index_players_on_game_id"
   add_index "players", ["reset_password_token"], :name => "index_players_on_reset_password_token", :unique => true
 
   create_table "ships", :force => true do |t|
