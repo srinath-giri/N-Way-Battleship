@@ -29,6 +29,9 @@ class GamesController < ApplicationController
   def waiting
     @number_of_players = current_player.game.number_of_players
     @player = current_player
+
+    @player.status = "waiting"
+    @player.save
   end
 
   def join_game
@@ -44,14 +47,17 @@ class GamesController < ApplicationController
 
   def arrange_ships
       @player = Player.find(params[:player_id])
-      
-      
+
+      @player.game.update_attributes(game_status: "arrange_ships")
+      @player.status = "arrange_ships"
+      @player.save
+
   end
 
     
   def save_ships
     @player = Player.find(params[:player_id])
-    
+
     # create cell object from POST parameters
     # @cell=Cell.Create...
     # Delete the cells and the my_ship grid if there are data in the database
@@ -141,6 +147,8 @@ class GamesController < ApplicationController
 
 
 
+
+
     respond_to do |format|
 
       format.js {render :js => "window.location.href = ('#{play_path(@player.id)}');"}
@@ -152,6 +160,24 @@ class GamesController < ApplicationController
 
   def play
     @player = Player.find(params[:player_id])
+
+    # update the player status
+    @player.status = "in_game"
+    @player.save
+
+    #update the game status
+    @players = @player.game.players
+    players_in_game = 0
+
+    @players.each do |player|
+      if player.status == "in_game"
+        players_in_game += 1
+      end
+    end
+
+    if players_in_game == @players.size
+      @player.game.update_attributes(game_status: "in_game")
+    end
 
     # Create the two grids
     @battlefield_grid = @player.get_battlefield_grid
@@ -271,7 +297,9 @@ class GamesController < ApplicationController
   end
 
   def refresh_waiting_view
-    @players_who_joined = Player.select("name").where("game_id == ?", params[:game_id])
+    game = Game.find(params[:game_id])
+    @players_who_joined = game.players
+
     respond_to do |format|
       format.json { render :json => { players_who_joined: @players_who_joined } }
     end

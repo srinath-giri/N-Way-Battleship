@@ -155,6 +155,9 @@ coordinate = (table) ->
     success: (data, textStatus, jqXHR) ->
       display_players_joining_game(data['players_who_joined'])
       update_waiting_notice(data['players_who_joined'].length)
+      if game_is_full(data['players_who_joined'].length)
+        move_to("/arrange_ships/" + game.player_id)
+
 
 
 display_players_joining_game = (players_who_joined) ->
@@ -165,5 +168,11 @@ display_players_joining_game = (players_who_joined) ->
 update_waiting_notice = (players_who_joined) ->
   document.getElementById("waiting_notice").innerHTML = "Waiting for " + (game.number_of_players - players_who_joined) + " players to join the game..."
 
+game_is_full = (players_who_joined) ->
+  if  (game.number_of_players - players_who_joined) == 0
+    true
+  else
+    false
 
-
+move_to = (view_url) ->
+  window.location.href = view_url
