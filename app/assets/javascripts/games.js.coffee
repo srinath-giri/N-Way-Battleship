@@ -16,6 +16,24 @@ game = {}
     game.number_of_players = object.number_of_players
 
 
+@init_cell_events = (table) ->
+  cells = table.getElementsByTagName('td');
+  for td in  cells
+    $(td).click ->
+      $.ajax
+        url: '/update/'  + game.player_id + '/' + this.x + '/' + this.y + '.json',
+        type: 'put',
+        dataType: 'script',
+        data: {x: this.x, y: this.y, player_id: game.player_id},
+        success: (data, textStatus, jqXHR) ->
+          display_battlefield_attacked_cell(data['battlefield_cell'])
+
+
+
+
+# /play/:player_id
+# Update the game state
+#
 @refresh = ->
   $.ajax
     url: "/refresh/" + game.player_id + ".json",
@@ -49,8 +67,6 @@ display_battlefield_attacked_cell = (battlefield_cell) ->
   state = JSON.stringify(battlefield_cell.state); #state = "{2:'u',3:'h', 4:'m'}"
   if(state.indexOf('h') != -1)
     table.coordinates[battlefield_cell.x][battlefield_cell.y].style.backgroundColor="#FA020E" #hit red
-  else if(state.indexOf('u') != -1)
-    table.coordinates[battlefield_cell.x][battlefield_cell.y].style.backgroundColor="#FFFFFF" #unknown white
   else if(state.indexOf('m') != -1)
     table.coordinates[battlefield_cell.x][battlefield_cell.y].style.backgroundColor="#00FFFF" #miss blue
 
@@ -69,6 +85,63 @@ display_ship_attacked_cell = (my_ships_cell) ->
 
 paint_cell = (cell) ->
   cell.style.backgroundColor = "grey"; #black hit
+
+
+
+# universal battlefield view
+# Creates coordinates for the cells of the specified table
+#
+coordinate = (table) ->
+  table.coordinates = [];
+  tbody = undefined
+  c = undefined
+
+  # Find table body and assign it to tbody
+  for n in table.childNodes
+    c = table.childNodes[n]
+    if (c.tagName && c.tagName.match(/^tbody$/i))
+      tbody = c;
+      break;
+
+  x = -1
+  y = -1
+
+  # Go through each cell to:
+  # - Assign each table.coordinates[x][y] = cell
+  # - Assign the coordinates of each cell: cell.x = x; cell.y = y
+  for rn in tbody.childNodes
+    row = tbody.childNodes[rn];
+    if (row.tagName && row.tagName.match(/^tr$/i))
+      x = -1
+      ++y
+      for cn in row.childNodes
+        col = row.childNodes[cn]
+        if (col.tagName && col.tagName.match(/^t[dh]$/i))
+          colspan = col.getAttribute('colspan');
+          if (! colspan)
+            colspan = 1
+          while (colspan--)
+            ++x
+            if (! table.coordinates[x])
+              table.coordinates[x] = []
+            table.coordinates[x][y] = col
+            col.x = x
+            col.y = y
+
+  x = 0
+  y = 0
+  # Go through each cell to:
+  # - Assign the cell to the north, south, west and east
+  while table.coordinates[x]?
+    while table.coordinates[x][y]?
+      col=table.coordinates[x][y]
+      col.north = if (y > 0) then table.coordinates[x][y-1] else undefined
+      col.south = if (table.coordinates[x][y+1]) then table.coordinates[x][y+1] else undefined
+      col.west = if (x > 0) then table.coordinates[x-1][y] else undefined;
+      col.east = if (table.coordinates[x+1]) then table.coordinates[x+1][y] else undefined;
+      y++
+    x++
+
 
 
 @refresh_waiting_view = ->

@@ -205,7 +205,7 @@ class GamesController < ApplicationController
       end
 
       respond_to do |format|
-        format.json { render :json => { turn: Player.find(params[:player_id]).turn, error: error} }
+        format.json { render :json => { error: error} }
       end
 
     end

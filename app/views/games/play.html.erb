@@ -1,113 +1,20 @@
 
 <script type="text/javascript">
 
-  initialize_game( {player_id: <%= @player.id %>} );
-
-  // Refresh method is executed every second
-  setInterval(refresh, 1000)
-
   window.onload = function() {
 
-      //Probar si moviendo esto al coffee se ejecuta desps del onload
+    initialize_game( {player_id: <%= @player.id %>} );
 
-      // The origin (0,0) is the top, leftmost cell
-      var table = document.getElementById('1');
-      coordinate(table);
-      init_battlefield();
-      var cells = table.getElementsByTagName('td');
+    // Refresh method is executed every second
+    setInterval(refresh, 1000);
 
+    // The origin (0,0) is the top, leftmost cell
+    var table = document.getElementById('1');
+    coordinate(table);
+    init_cell_events(table);
+    init_battlefield();
 
-
-      for (var i=0,td; td=cells[i]; ++i)
-          td.onclick = function () {
-              $.ajax({
-                  type: 'put',
-                  dataType: 'script',
-                  // url: '/games/calculate_hits/',
-                  url: '/update/'  + game.player_id + '/' + this.x + '/' + this.y + '.json',
-                  // data: {'x': this.x, 'y': this.y, 'player_id': 1},
-                  data: {x: this.x, y: this.y, player_id: game.player_id},
-                  success: function(data){
-                      //attack_grid_point_success(data)
-                      //refresh();
-                  }
-              });
-
-          };
   };
-
-  //universal battlefield view
-  function coordinate(table) {
-
-      table.coordinates = [];
-
-      var tbody, c;
-
-      // Find table body and assign it to tbody
-      for (var n in table.childNodes) {
-          c = table.childNodes[n];
-          if (c.tagName && c.tagName.match(/^tbody$/i)) {
-              tbody = c;
-              break;
-          }
-      }
-
-      var x, y = -1;
-      var row, rn;
-      var col, cn;
-
-      // Go through each cell to:
-      // - Assign each table.coordinates[x][y] = cell
-      // - Assign the coordinates of each cell: cell.x = x; cell.y = y
-      for (rn in tbody.childNodes) {
-          row = tbody.childNodes[rn];
-          if (row.tagName && row.tagName.match(/^tr$/i)) {
-              x = -1;
-              ++y;
-              for (cn in row.childNodes) {
-                  col = row.childNodes[cn];
-                  if (col.tagName && col.tagName.match(/^t[dh]$/i)) {
-                      var colspan = col.getAttribute('colspan');
-                      if (! colspan) colspan = 1;
-                      while (colspan--) {
-                          ++x;
-                          if (! table.coordinates[x]) table.coordinates[x] = [];
-                          table.coordinates[x][y] = col;
-                          col.x = x;
-                          col.y = y;
-                      }
-                  }
-              }
-          }
-      }
-
-      // Go through each cell to:
-      // - Assign the cell to the north, south, west and east
-      for (x=0; row=table.coordinates[x]; ++x) {
-          for (y=0; col=table.coordinates[x][y]; ++y) {
-
-              col.north = (y > 0) ?
-                      table.coordinates[x][y-1] : undefined;
-
-              col.south = (table.coordinates[x][y+1]) ?
-                      table.coordinates[x][y+1] : undefined;
-
-              col.west = (x > 0) ?
-                      table.coordinates[x-1][y] : undefined;
-
-              col.east = (table.coordinates[x+1]) ?
-                      table.coordinates[x+1][y] : undefined;
-
-          }
-      }
-
-  }
-
-
-
-
-
-
 
 </script>
 
