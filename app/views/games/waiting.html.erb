@@ -1,0 +1,25 @@
+
+<script type="text/javascript">
+
+    initialize_game( { player_id: <%= @player.id %>,
+                       game_id: <%= @player.game_id %>,
+                       number_of_players: <%= @number_of_players %>
+                     } );
+
+    // Refresh method is executed every second
+    setInterval(refresh_waiting_view, 1000);
+
+</script>
+
+<div id="waiting_notice">
+  Waiting for <%= @number_of_players %> players to join the game...
+</div>
+
+
+<div>
+  Players joining the game:
+</div>
+
+<div id="players_joining_game">
+
+</div>

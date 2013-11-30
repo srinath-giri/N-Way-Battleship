@@ -6,10 +6,10 @@ var game = {
  }
  
 // initialize the game variable with instance variables from the view
-function initialize_game(player_id){
+function initialize_game( player_id){
    game.player_id = player_id
 }
-   initialize_game(<%= @player.id %>)
+   initialize_game( {player_id: <%= @player.id %>} );
 
 function refresh() {
   $.ajax({ 

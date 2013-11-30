@@ -17,12 +17,15 @@ RoR007::Application.routes.draw do
   get "grids/index"
   get "grids/new"
   get "grids/edit"
+  match '/games/new/:player_id' => 'games#new', as: 'new_game'
   get "games/calculate_hits"
   get "games/save_ships"
   match '/ships/new' => 'ships#new'
-  
-  
 
+
+  match '/waiting/' => 'games#waiting', as: 'waiting'
+  match '/join/:game_id' => 'games#join_game', as: 'join_game'
+  match '/refresh_waiting_view/' => 'games#refresh_waiting_view', as: 'refresh_waiting_view'
   match '/arrange_ships/:player_id' => 'games#arrange_ships', as: 'arrange_ships'
   match '/play/:player_id' => 'games#play', as: 'play'
   match '/refresh/:player_id(.:format)' => 'games#refresh', as: 'refresh'
