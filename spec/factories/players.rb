@@ -7,6 +7,7 @@ FactoryGirl.define do
     email "player@email.com"
     password "1234567890"
     game_id 1
+    status "out_of_game"
   end
 
   factory :player1, class: Player do
@@ -15,6 +16,7 @@ FactoryGirl.define do
     email "player1@email.com"
     password "1234567890"
     game_id 1
+    status "out_of_game"
   end
 
   factory :player2, class: Player do
@@ -23,6 +25,7 @@ FactoryGirl.define do
     email "player2@email.com"
     password "1234567890"
     game_id 1
+    status "out_of_game"
   end
 
   factory :player3, class: Player do
@@ -31,6 +34,7 @@ FactoryGirl.define do
     email "player3@email.com"
     password "1234567890"
     game_id 1
+    status "out_of_game"
   end
 
   factory :player4, class: Player do
@@ -39,6 +43,7 @@ FactoryGirl.define do
     email "player4@email.com"
     password "1234567890"
     game_id 1
+    status "out_of_game"
   end
 
 end

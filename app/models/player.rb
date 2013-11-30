@@ -13,7 +13,7 @@ class Player < ActiveRecord::Base
 
   validates :name, presence: true
   validates :name, uniqueness: true
-  validates_inclusion_of :status, :in => %w( waiting arrange_ships in_game game_over )
+  validates_inclusion_of :status, :in => %w( out_of_game waiting arrange_ships in_game game_over )
 
   def get_battlefield_grid
     Grid.create_grid_for_player('battlefield', self)

@@ -16,6 +16,8 @@ describe GamesController do
 
     before(:each) do
       @player = FactoryGirl.create(:player)
+      @game = FactoryGirl.create(:game)
+
 
       # Necessary because of Devise (the calculate hits and misses requires login)
       @request.env["devise.mapping"] = Devise.mappings[:player]
