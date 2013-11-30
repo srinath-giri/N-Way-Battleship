@@ -141,15 +141,11 @@ class GamesController < ApplicationController
 
 
 
-     respond_to do |format|
-#       if @cell.save
-         format.html { redirect_to play_path(player_id:@player.id), status: 302 }
-        format.json {  }
-#       else
-#         format.html { render 'arrange_ships' }   
-#         format.json { render json: @cell.errors, status: :unprocessable_entity }
-#       end
-     end
+    respond_to do |format|
+
+      format.js {render :js => "window.location.href = ('#{play_path(@player.id)}');"}
+
+    end
     
   end  
     
