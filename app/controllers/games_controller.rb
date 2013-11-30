@@ -17,6 +17,7 @@ class GamesController < ApplicationController
     respond_to do |format|
       if @game.save
         player.game_id = @game.id
+        player.turn = false
         player.save
         format.html { redirect_to waiting_path, notice: 'The game was successfully created.' }
       else
@@ -36,6 +37,7 @@ class GamesController < ApplicationController
 
   def join_game
     current_player.game_id = params[:game_id]
+    current_player.turn = false
     respond_to do |format|
       if current_player.save
         format.html { redirect_to waiting_path, notice: 'You have successfully joined the game.' }
@@ -177,6 +179,8 @@ class GamesController < ApplicationController
 
     if players_in_game == @players.size
       @player.game.update_attributes(game_status: "in_game")
+      # Pass the turn to assign the turn to the first player
+      PlayersController.pass_turn(@players)
     end
 
     # Create the two grids
