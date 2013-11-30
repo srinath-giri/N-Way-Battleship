@@ -40,7 +40,7 @@ class GamesController < ApplicationController
       if current_player.save
         format.html { redirect_to waiting_path, notice: 'You have successfully joined the game.' }
       else
-        format.html { redirect_to root_path, notice: @game.errors.full_messages.to_sentence }
+        format.html { redirect_to root_path, notice: current_player.errors.full_messages.to_sentence }
       end
     end
   end

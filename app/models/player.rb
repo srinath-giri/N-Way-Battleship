@@ -6,6 +6,7 @@ class Player < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :turn, :email, :password, :password_confirmation, :remember_me, :status
+  # possible status: out_of_game waiting arrange_ships in_game game_over
 
   has_many :grids
   belongs_to :game
@@ -13,7 +14,6 @@ class Player < ActiveRecord::Base
 
   validates :name, presence: true
   validates :name, uniqueness: true
-  validates_inclusion_of :status, :in => %w( out_of_game waiting arrange_ships in_game game_over )
 
   def get_battlefield_grid
     Grid.create_grid_for_player('battlefield', self)
