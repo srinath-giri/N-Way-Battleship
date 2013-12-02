@@ -281,8 +281,7 @@ class GamesController < ApplicationController
 
           #check if the player's all ships are sunk
           number_of_cells = 0
-          number_of_hitted_cells = 0
-          #all_hit = true   
+          number_of_hitted_cells = 0 
           opponent_player.grids.where("grid_type = 'my_ships'")[0].cells.each do |each_cell|
             number_of_cells = number_of_cells + 1
             if each_cell.state["hit"] == true 
@@ -290,7 +289,8 @@ class GamesController < ApplicationController
             end                      
           end           
           if number_of_hitted_cells == number_of_cells
-            opponent_player.update_attribute(:status, "game_over") 
+            opponent_player.status = "game_over"  
+            opponent_player.save
           end
 
             
