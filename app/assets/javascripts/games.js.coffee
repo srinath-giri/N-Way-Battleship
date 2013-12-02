@@ -61,6 +61,11 @@ display_player_in_turn = (player_in_turn) ->
   else
     document.getElementById("player_in_turn_info").innerHTML = ""
 
+display_battlefield_cell_status = (display,status) ->
+  if (display == true)
+    document.getElementById("cell_status").innerHTML = status
+  else
+    document.getElementById("cell_status").innerHTML = "Cell Status"
 
 display_battlefield_attacked_cell = (battlefield_cell) ->
   table = document.getElementById('1')
@@ -70,6 +75,14 @@ display_battlefield_attacked_cell = (battlefield_cell) ->
   else if(state.indexOf('m') != -1)
     table.coordinates[battlefield_cell.x][battlefield_cell.y].style.backgroundColor="#00FFFF" #miss blue
 
+  state = state.replace(/"/g,"")
+  state = state.replace(/:/g,"-")
+  state = state.replace(/,/g," ")
+  state = state.replace(/{/,"")
+  state = state.replace(/}/,"")
+  state = state.toUpperCase()
+  table.coordinates[battlefield_cell.x][battlefield_cell.y].onmouseover = () -> display_battlefield_cell_status(true,state)
+  table.coordinates[battlefield_cell.x][battlefield_cell.y].onmouseout = () -> display_battlefield_cell_status(false,state)
 
 display_ship_attacked_cell = (my_ships_cell) ->
   table = document.getElementById('2');
