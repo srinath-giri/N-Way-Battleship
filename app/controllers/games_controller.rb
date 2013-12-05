@@ -202,8 +202,8 @@ class GamesController < ApplicationController
 
     @battlefield_cell = @current_player.get_battlefield_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
     @my_ships_cell = @current_player.get_my_ships_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
-    gon.battlefield_attack_cell=@battlefield_cell.attributes
-    gon.my_ships_attack_cell=@my_ships_cell.attributes
+    gon.battlefield_attack_cell = @battlefield_cell.attributes
+    gon.my_ships_attack_cell = @my_ships_cell.attributes
 
 
     respond_to do |format|
@@ -225,9 +225,9 @@ class GamesController < ApplicationController
       y = Integer(params[:y])
 
       if x.between?(0, 9) && y.between?(0, 9) && @player.turn
-        players = Player.where("game_id = ?", @player.game_id)
-        PlayersController.pass_turn(players)
         calculate_hits_and_misses
+        players = Player.where("game_id = ? AND status = ?", @player.game_id, "in_game")
+        PlayersController.pass_turn(players)
       else
         error = true
       end
@@ -257,10 +257,11 @@ class GamesController < ApplicationController
 
     #calculation starts
     Player.where("id != ? AND game_id = ?", player_id, game_id).each do |opponent_player|
+    #####Player.where("game_id = ?", game_id).each do |opponent_player|
       player_cell = opponent_player.grids.where("grid_type = 'my_ships'")[0].cells.where("x = ? AND y = ?", x , y)
       if player_cell.empty? 
         #miss
-        Player.where("id != ? AND game_id = ?", opponent_player.id, game_id).each do |each_player|
+        Player.where("game_id = ?", game_id).each do |each_player|
           grid = each_player.grids.where("grid_type = 'battlefield'")[0]
           cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
           cell.state[opponent_player.id.to_s] = "m"
@@ -272,7 +273,7 @@ class GamesController < ApplicationController
           hitted_cell = player_cell[0]
           hitted_cell.state["hit"] = true
           hitted_cell.save
-          Player.where("id != ? AND game_id = ?", opponent_player.id, game_id).each do |each_player|
+          Player.where("game_id = ?", game_id).each do |each_player|
             grid = each_player.grids.where("grid_type = 'battlefield'")[0]
             cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
             cell.state[opponent_player.id.to_s] = "h"
@@ -281,8 +282,7 @@ class GamesController < ApplicationController
 
           #check if the player's all ships are sunk
           number_of_cells = 0
-          number_of_hitted_cells = 0
-          #all_hit = true   
+          number_of_hitted_cells = 0 
           opponent_player.grids.where("grid_type = 'my_ships'")[0].cells.each do |each_cell|
             number_of_cells = number_of_cells + 1
             if each_cell.state["hit"] == true 
@@ -290,7 +290,8 @@ class GamesController < ApplicationController
             end                      
           end           
           if number_of_hitted_cells == number_of_cells
-            opponent_player.update_attribute(:status, "game_over") 
+            opponent_player.status = "game_over"  
+            opponent_player.save
           end
 
             
