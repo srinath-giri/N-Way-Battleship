@@ -35,7 +35,8 @@ class Grid < ActiveRecord::Base
     state = {}
 
     # initialize "state" => other players' have the 'unknown' state
-    other_players = Player.select(:id).where("id <> ?", grid.player_id)
+    #other_players = Player.select(:id).where("id <> ?", grid.player_id)
+    other_players = Player.select(:id).where("game_id = ?", grid.player.game_id)
 
     other_players.each do |player|
       state[player.id.to_s] = 'u'

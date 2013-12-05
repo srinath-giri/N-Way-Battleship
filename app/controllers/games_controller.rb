@@ -202,8 +202,8 @@ class GamesController < ApplicationController
 
     @battlefield_cell = @current_player.get_battlefield_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
     @my_ships_cell = @current_player.get_my_ships_grid.cells.select("x, y, state").order("updated_at DESC").first #Last updated cell
-    gon.battlefield_attack_cell=@battlefield_cell.attributes
-    gon.my_ships_attack_cell=@my_ships_cell.attributes
+    gon.battlefield_attack_cell = @battlefield_cell.attributes
+    gon.my_ships_attack_cell = @my_ships_cell.attributes
 
 
     respond_to do |format|
@@ -257,10 +257,11 @@ class GamesController < ApplicationController
 
     #calculation starts
     Player.where("id != ? AND game_id = ?", player_id, game_id).each do |opponent_player|
+    #####Player.where("game_id = ?", game_id).each do |opponent_player|
       player_cell = opponent_player.grids.where("grid_type = 'my_ships'")[0].cells.where("x = ? AND y = ?", x , y)
       if player_cell.empty? 
         #miss
-        Player.where("id != ? AND game_id = ?", opponent_player.id, game_id).each do |each_player|
+        Player.where("game_id = ?", game_id).each do |each_player|
           grid = each_player.grids.where("grid_type = 'battlefield'")[0]
           cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
           cell.state[opponent_player.id.to_s] = "m"
@@ -272,7 +273,7 @@ class GamesController < ApplicationController
           hitted_cell = player_cell[0]
           hitted_cell.state["hit"] = true
           hitted_cell.save
-          Player.where("id != ? AND game_id = ?", opponent_player.id, game_id).each do |each_player|
+          Player.where("game_id = ?", game_id).each do |each_player|
             grid = each_player.grids.where("grid_type = 'battlefield'")[0]
             cell = grid.cells.where("x = ? AND y = ? ", x , y)[0]
             cell.state[opponent_player.id.to_s] = "h"
