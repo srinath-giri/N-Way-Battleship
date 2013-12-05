@@ -225,9 +225,9 @@ class GamesController < ApplicationController
       y = Integer(params[:y])
 
       if x.between?(0, 9) && y.between?(0, 9) && @player.turn
-        players = Player.where("game_id = ?", @player.game_id)
-        PlayersController.pass_turn(players)
         calculate_hits_and_misses
+        players = Player.where("game_id = ? AND status = ?", @player.game_id, "in_game")
+        PlayersController.pass_turn(players)
       else
         error = true
       end
