@@ -3,7 +3,15 @@
 
   window.onload = function() {
 
-    initialize_game( {player_id: <%= @player.id %>} );
+    initialize_game( { player_id: <%= @player.id %>, players: {
+
+            <% @player_names.each_pair do |key, value| %>
+                "<%=key%>":"<%=value%>",
+
+            <% end %>
+            "0":"nothing"
+        }
+    } );
 
     // Refresh method is executed every second
     setInterval(refresh, 1000);

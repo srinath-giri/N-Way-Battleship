@@ -191,6 +191,13 @@ class GamesController < ApplicationController
     @my_ships_grid = @player.get_my_ships_grid
     gon.my_ships_grid=@my_ships_grid.attributes
     gon.my_ships_grid_cells=@my_ships_grid.cells.map &:attributes
+
+    # pass players to view
+    @player_names = {}
+    @players.each do |player|
+      @player_names["#{player.id}"] = player.name
+    end
+
   end
 
   def refresh
