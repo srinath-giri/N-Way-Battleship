@@ -106,20 +106,20 @@ describe GamesController do
       @grid_p4_bf = @player4.grids.create(grid_type: "battlefield")
       @grid_p4_ms = @player4.grids.create(grid_type: "my_ships")
 
-      @grid_p1_bf.cells.create(x: 0 , y: 0, state: {"2"=>"u","3"=>"u"})
-      @grid_p1_bf.cells.create(x: 0 , y: 1, state: {"2"=>"u","3"=>"u"})
-      @grid_p1_bf.cells.create(x: 1 , y: 0, state: {"2"=>"u","3"=>"u"})
-      @grid_p1_bf.cells.create(x: 1 , y: 1, state: {"2"=>"u","3"=>"u"})
+      @grid_p1_bf.cells.create(x: 0 , y: 0, state: {"1"=>"u","2"=>"u","3"=>"u"})
+      @grid_p1_bf.cells.create(x: 0 , y: 1, state: {"1"=>"u","2"=>"u","3"=>"u"})
+      @grid_p1_bf.cells.create(x: 1 , y: 0, state: {"1"=>"u","2"=>"u","3"=>"u"})
+      @grid_p1_bf.cells.create(x: 1 , y: 1, state: {"1"=>"u","2"=>"u","3"=>"u"})
 
-      @grid_p2_bf.cells.create(x: 0 , y: 0, state: {"1"=>"u","3"=>"u"})
-      @grid_p2_bf.cells.create(x: 0 , y: 1, state: {"1"=>"u","3"=>"u"})
-      @grid_p2_bf.cells.create(x: 1 , y: 0, state: {"1"=>"u","3"=>"u"})
-      @grid_p2_bf.cells.create(x: 1 , y: 1, state: {"1"=>"u","3"=>"u"})
+      @grid_p2_bf.cells.create(x: 0 , y: 0, state: {"1"=>"u","2"=>"u","3"=>"u"})
+      @grid_p2_bf.cells.create(x: 0 , y: 1, state: {"1"=>"u","2"=>"u","3"=>"u"})
+      @grid_p2_bf.cells.create(x: 1 , y: 0, state: {"1"=>"u","2"=>"u","3"=>"u"})
+      @grid_p2_bf.cells.create(x: 1 , y: 1, state: {"1"=>"u","2"=>"u","3"=>"u"})
 
-      @grid_p3_bf.cells.create(x: 0 , y: 0, state: {"1"=>"u","2"=>"u"})
-      @grid_p3_bf.cells.create(x: 0 , y: 1, state: {"1"=>"u","2"=>"u"})
-      @grid_p3_bf.cells.create(x: 1 , y: 0, state: {"1"=>"u","2"=>"u"})
-      @grid_p3_bf.cells.create(x: 1 , y: 1, state: {"1"=>"u","2"=>"u"})
+      @grid_p3_bf.cells.create(x: 0 , y: 0, state: {"1"=>"u","2"=>"u","3"=>"u"})
+      @grid_p3_bf.cells.create(x: 0 , y: 1, state: {"1"=>"u","2"=>"u","3"=>"u"})
+      @grid_p3_bf.cells.create(x: 1 , y: 0, state: {"1"=>"u","2"=>"u","3"=>"u"})
+      @grid_p3_bf.cells.create(x: 1 , y: 1, state: {"1"=>"u","2"=>"u","3"=>"u"})
 
       @grid_p1_ms.cells.create(x: 0 , y: 0, state: {"orientation"=>"v","block"=>1,"type"=>"p","hit"=>false})
       @grid_p1_ms.cells.create(x: 1 , y: 0, state: {"orientation"=>"v","block"=>1,"type"=>"p","hit"=>false})
@@ -128,7 +128,7 @@ describe GamesController do
       @grid_p2_ms.cells.create(x: 0 , y: 1, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})
 
       @grid_p4_ms.cells.create(x: 0 , y: 0, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})
-      @grid_p4_ms.cells.create(x: 0 , y: 1, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})      
+      @grid_p4_ms.cells.create(x: 0 , y: 1, state: {"orientation"=>"h","block"=>1,"type"=>"p","hit"=>false})
     end
 
     after do
@@ -170,16 +170,16 @@ describe GamesController do
 
     it 'changes every players battlefield cell for a certain hit' do
       xhr :post, :update, player_id: @player1.id, x: 0, y: 0
-      @grid_p1_bf.cells.where("x = 0 AND y = 0")[0].state.should == {"2" => "h", "3" => "m"}
-      @grid_p2_bf.cells.where("x = 0 AND y = 0")[0].state.should == {"1" => "u", "3" => "m"}
-      @grid_p3_bf.cells.where("x = 0 AND y = 0")[0].state.should == {"1" => "u", "2" => "h"}
+      @grid_p1_bf.cells.where("x = 0 AND y = 0")[0].state.should == {"1" => "u", "2" => "h", "3" => "m"}
+      @grid_p2_bf.cells.where("x = 0 AND y = 0")[0].state.should == {"1" => "u", "2" => "h", "3" => "m"}
+      @grid_p3_bf.cells.where("x = 0 AND y = 0")[0].state.should == {"1" => "u", "2" => "h", "3" => "m"}
     end
 
     it 'changes every players battlefield cell for a certain miss' do
       xhr :post, :update, player_id: @player1.id, x: 1, y: 1
-      @grid_p1_bf.cells.where("x = 1 AND y = 1")[0].state.should == {"2" => "m", "3" => "m"}
-      @grid_p2_bf.cells.where("x = 1 AND y = 1")[0].state.should == {"1" => "u", "3" => "m"}
-      @grid_p3_bf.cells.where("x = 1 AND y = 1")[0].state.should == {"1" => "u", "2" => "m"}
+      @grid_p1_bf.cells.where("x = 1 AND y = 1")[0].state.should == {"1" => "u", "2" => "m", "3" => "m"}
+      @grid_p2_bf.cells.where("x = 1 AND y = 1")[0].state.should == {"1" => "u", "2" => "m", "3" => "m"}
+      @grid_p3_bf.cells.where("x = 1 AND y = 1")[0].state.should == {"1" => "u", "2" => "m", "3" => "m"}
     end
 
     it 'does not change ship state from another game' do
