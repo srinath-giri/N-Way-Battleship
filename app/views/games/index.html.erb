@@ -5,25 +5,33 @@
     <% if current_player.game.nil? %>
         <% #if the player doesn't belong to a game, then he can create a game or join an existing one%>
 
-        You can create a new game
-        <br/>
-        <%= form_for :new_game, url: new_game_path(current_player.id) do |f| %>
+        <ol>
+          <li>Create a new game for your friends to join. Or</li>
+          <li>Join a game that has already been created by one of your friends.</li>
+        </ol>
 
-            <%= f.text_field :number_of_players %>
-            <br/>
-            <%= f.submit :new_game %>
-        <% end %>
+        <div class = "index_option">
+            <h2>Create a new game:</h2>
+            <%= form_for :new_game, url: new_game_path(current_player.id) do |f| %>
 
+                <label class = 'index_option_control'>Number of players</label>
+                <%= f.text_field :number_of_players, :class => 'index_option_control' %>
+
+                <%= f.submit "Create game", :class => 'index_option_control' %>
+            <% end %>
+        </div>
 
         <% if @existing_games.size > 0 %>
-            <p>
-            You can join one of the following existing games:
-            </p>
-            <% @existing_games.each do |game| %>
-                <br/>
-                <%=	link_to "#{game.creator}'s game", join_game_path(game.id) %>
-            <% end %>
+            <div class = "index_option">
+                <h2>Join an existing game:</h2>
+                <ol>
+                    <% @existing_games.each do |game| %>
+                        <li><%=	link_to "#{game.creator}'s game", join_game_path(game.id) %></li>
+                    <% end %>
+                </ol>
+            </div>
         <% end %>
+
 
     <% else %>
         <% #if the player belongs to a game, depending on the status of the game: %>
@@ -45,5 +53,12 @@
 
     <% end %>
 
+<% else %>
+
+    <ol>
+      <li>Login.</li>
+      <li>Create or join a game.</li>
+      <li>Start playing!</li>
+    </ol>
 
 <% end %>
