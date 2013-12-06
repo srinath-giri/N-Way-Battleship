@@ -71,9 +71,9 @@ display_battlefield_attacked_cell = (battlefield_cell) ->
   table = document.getElementById('1')
   state = JSON.stringify(battlefield_cell.state); #state = "{2:'u',3:'h', 4:'m'}"
   if(state.indexOf('h') != -1)
-    table.coordinates[battlefield_cell.x][battlefield_cell.y].style.backgroundColor="#FA020E" #hit red
+    table.coordinates[battlefield_cell.x][battlefield_cell.y].className = "cell_hit"
   else if(state.indexOf('m') != -1)
-    table.coordinates[battlefield_cell.x][battlefield_cell.y].style.backgroundColor="#00FFFF" #miss blue
+    table.coordinates[battlefield_cell.x][battlefield_cell.y].className = "cell_miss"
 
   state = state.replace(/"/g,"")
   state = state.replace(/:/g,"-")
@@ -88,7 +88,7 @@ display_ship_attacked_cell = (my_ships_cell) ->
   table = document.getElementById('2');
   state = JSON.stringify(my_ships_cell.state['hit']);
   if(state.indexOf("true") != -1)
-    table.coordinates[my_ships_cell.x][my_ships_cell.y].style.backgroundColor="#000501"; #black hit
+    table.coordinates[my_ships_cell.x][my_ships_cell.y].className = "cell_destroyed"
 
 
 @init_battlefield = ->
@@ -97,7 +97,7 @@ display_ship_attacked_cell = (my_ships_cell) ->
   paint_cell cell for cell in cells
 
 paint_cell = (cell) ->
-  cell.style.backgroundColor = "grey"; #black hit
+  cell.className = "cell";
 
 
 
@@ -145,9 +145,11 @@ coordinate = (table) ->
   y = 0
   # Go through each cell to:
   # - Assign the cell to the north, south, west and east
+  # - Assign css class
   while table.coordinates[x]?
     while table.coordinates[x][y]?
       col=table.coordinates[x][y]
+      col.className = "cell"
       col.north = if (y > 0) then table.coordinates[x][y-1] else undefined
       col.south = if (table.coordinates[x][y+1]) then table.coordinates[x][y+1] else undefined
       col.west = if (x > 0) then table.coordinates[x-1][y] else undefined;

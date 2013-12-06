@@ -33,7 +33,16 @@ label {
   background-color: #4257a0;
   width: 30px;
   height: 30px;
+  text-align: center;
 }
+
+.cell_my_ships {
+  background-color: #708bd8;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
 
 .cell_destroyer {
   background-color: #ffa7af;
@@ -70,8 +79,29 @@ label {
   text-align: center;
 }
 
+// hit in the battlefield
+.cell_hit {
+  background-color: #FA020E;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
 
+// miss in the battlefield
+.cell_miss {
+  background-color: #00FFFF;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
 
+// hit in my_ships
+.cell_destroyed {
+  background-color: #000501;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
 
 
 
