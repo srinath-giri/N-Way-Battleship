@@ -20,6 +20,15 @@ label {
   width: 150px;
 }
 
+.index_option{
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.index_option_control {
+  margin-right: 30px;
+}
+
 .arrange_ships_table {
   //border-width: 1px;
   //border-color: #FFCC00;
@@ -81,7 +90,7 @@ label {
 
 // hit in the battlefield
 .cell_hit {
-  background-color: #FA020E;
+  background-color: #b7354c;
   width: 30px;
   height: 30px;
   text-align: center;
@@ -89,7 +98,7 @@ label {
 
 // miss in the battlefield
 .cell_miss {
-  background-color: #00FFFF;
+  background-color: #71878e;
   width: 30px;
   height: 30px;
   text-align: center;

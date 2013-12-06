@@ -176,8 +176,10 @@ coordinate = (table) ->
 
 
 display_players_joining_game = (players_who_joined) ->
-  document.getElementById("players_joining_game").innerHTML = ""
-  document.getElementById("players_joining_game").innerHTML += player.name + "<br>" for player in players_who_joined
+  list = "<ol>"
+  list += "<li>" + player.name + "</li>" for player in players_who_joined
+  list += "</ol>"
+  document.getElementById("players_joining_game").innerHTML = list
 
 
 update_waiting_notice = (players_who_joined) ->
