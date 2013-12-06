@@ -1,15 +1,121 @@
 // Place all the styles related to the Games controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-body
- 
+label {
+  font-weight: bold;
+}
+
 .ey
  {
   display:inline-block;
- } 
-form{
-    display:inline-block;
-	padding: 50px;
+ }
+
+.arrangement_option {
+  display:inline-block;
+  padding-right: 30px;
+  padding-bottom: 30px;
 }
+
+.arrangement_option_control {
+  width: 150px;
+}
+
+.index_option{
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.index_option_control {
+  margin-right: 30px;
+}
+
+.arrange_ships_table {
+  //border-width: 1px;
+  //border-color: #FFCC00;
+  //background-color: #FFFFCC;
+  //width: 50%;
+  //padding: 3px;
+  //margin: 3px;
+}
+
+.cell {
+  background-color: #4257a0;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+.cell_my_ships {
+  background-color: #708bd8;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+
+.cell_destroyer {
+  background-color: #ffa7af;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+.cell_battleship {
+  background-color: #a3c688;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+.cell_carrier {
+  background-color: #cb9b89;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+.cell_submarine {
+  background-color: #83b0b9;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+.cell_patrol_boat {
+  background-color: #a080b2;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+// hit in the battlefield
+.cell_hit {
+  background-color: #b7354c;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+// miss in the battlefield
+.cell_miss {
+  background-color: #71878e;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+// hit in my_ships
+.cell_destroyed {
+  background-color: #524745;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+
+
+
+
+
 
 

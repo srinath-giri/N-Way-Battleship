@@ -1,4 +1,12 @@
-<h1>Arrange your ships: Player <%= @player.id%></h1>
+<h1><%= @player.name%>, now you have to arrange your ships </h1>
+
+<ol>
+  <li>Select the ship type.</li>
+  <li>Select the ship alignment for that ship.</li>
+  <li>Click on a cell in the grid below to place that ship.</li>
+  <li>Repeat steps 1 through 3 to place all the ships.</li>
+</ol>
+
 <script type="text/javascript">
 var game = {
    player_id: 0
@@ -10,45 +18,48 @@ var game = {
 }
    initialize_game(<%= @player.id %>)
 </script>
-<body>
 
 
-<div class="ex">
-    <form id='4' name='shipsel' method='post' action=' '>   
-        <p><label>Select Ship Type</label></p><br/>
-        <select onchange=makeSelection(this) name='' id='10'>
-			<option selected="SelectedShip"></option>
-			<option value="Destroyer">Destroyer</option>
-			<option value="Battleship">Battleship</option>
-			<option value="Carrier">Carrier</option>
-			<option value="Submarine">Submarine</option>
-			<option value="PatrolBoat">PatrolBoat</option>
+<div>
+  <div class = "arrangement_option">
+
+        <p><label>Select Ship Type</label></p>
+        <select onchange=makeSelection(this) name='' id='10' class = "arrangement_option_control">
+			<option selected="SelectedShip">--Select--</option>
+			<option value="Destroyer">Destroyer (3 blocks)</option>
+			<option value="Battleship">Battleship (4 blocks)</option>
+			<option value="Carrier">Carrier (5 blocks)</option>
+			<option value="Submarine">Submarine (3 blocks)</option>
+			<option value="PatrolBoat">PatrolBoat (2 blocks)</option>
             " . $options . "
         </select>
-    </form>
-	
-    <form class="ey" id='5' name='orientsel' method='post' action=''> 
-        <p><label>Select Ship alignment</label></p><br/>
-        <select onchange=makeSelection(this) name='' id='20'>
-            <option selected="SelectedAlign"></option>
+
+  </div>
+
+  <div class = "arrangement_option">
+
+        <p><label>Select Ship alignment</label></p>
+        <select onchange=makeSelection(this) name='' id='20' class = "arrangement_option_control">
+            <option selected="SelectedAlign">--Select--</option>
 			<option value="Vertical">Vertical</option>
 			<option value="Horizontal">Horizontal</option>
         </select>
-    </form>
-</br>
-<button onclick="clearGrid()">Start over</button>
-</br>
-</br>
-<button onclick="submitShips()">Submit ships</button>
+  </div>
+
+  <div class = "arrangement_option">
+    <button onclick="clearGrid()" class = "arrangement_option_control">Start over</button>
+  </div>
+
 </div>
 
-</body>
+<div>
 
 
-</br>
-</br>
-</br>
-</br>
+  <div class = "arrangement_option">
+    <button onclick="submitShips()" class = "arrangement_option_control">Submit ships</button>
+  </div>
+</div>
+
 <SCRIPT LANGUAGE ="JavaScript">
 
 function coordinate(table) {
@@ -112,126 +123,126 @@ function coordinate(table) {
 
 </SCRIPT>
 
-<table border="1" bordercolor="FFCC00" style="background-color:FFFFCC" width="50%" cellpadding="3" cellspacing="3" id="3">
+<table class="arrange_ships_table" id="3">
 	<tr>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
 	</tr>
 	<tr>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
 	</tr>
 	<tr>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
 	</tr>
 	<tr>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
 	</tr>
 	<tr>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
 	</tr>
 	<tr>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
 	</tr>
 	<tr>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
 	</tr>
 	<tr>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
 	</tr>
 	<tr>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
 	</tr>
 	<tr>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
-		<td style="height:10px"></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
+		<td ></td>
 	</tr>
 </table>
 
@@ -239,7 +250,7 @@ function coordinate(table) {
 //setInterval(refresh, 1000)
 // The origin (0,0) is the top, leftmost cell
 //var table = document.getElementsByTagName('table')[0];
-document.body.style.backgroundColor="#A8A8A8";
+
 var shipType = document.getElementById('10');
 var shipAlign = document.getElementById('20');
 // ctr for number of ships
@@ -282,7 +293,7 @@ function setbgcol() {
 //bg color of grid
 	for (var x=0;x<10;x++) {
 		for (var y=0;y<10;y++){
-			table.coordinates[x][y].style.backgroundColor="#00FFFF";
+			table.coordinates[x][y].className = "cell";
 			table.coordinates[x][y].innerHTML="";
 			
 		}
@@ -358,7 +369,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 				//color cells
 				for(var i=y;i<=yEnd;i++) {
 				
-				table.coordinates[x][i].style.backgroundColor="#0000ff";
+				table.coordinates[x][i].className = "cell_destroyer";
 				table.coordinates[x][i].innerHTML="D";
 				
 			 
@@ -381,7 +392,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 					//color cells
 					for(var i=y;i<=yEnd;i++) {
 				
-					table.coordinates[x][i].style.backgroundColor="#FF0000";
+					table.coordinates[x][i].className ="cell_battleship";
 					table.coordinates[x][i].innerHTML="B";
 			 
 				}
@@ -403,7 +414,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 						//color cells
 						for(var i=y;i<=yEnd;i++) {
 				
-						table.coordinates[x][i].style.backgroundColor="#CCFF66";
+						table.coordinates[x][i].className="cell_carrier";
 						table.coordinates[x][i].innerHTML="C";
 			 
 					}
@@ -425,7 +436,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 							//color cells
 							for(var i=y;i<=yEnd;i++) {
 				
-							table.coordinates[x][i].style.backgroundColor="#66FF33";
+							table.coordinates[x][i].className="cell_submarine";
 							table.coordinates[x][i].innerHTML="S";
 			 
 						}
@@ -447,7 +458,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 								//color cells
 								for(var i=y;i<=yEnd;i++) {
 				
-								table.coordinates[x][i].style.backgroundColor="#CC00FF";
+								table.coordinates[x][i].className="cell_patrol_boat";
 								table.coordinates[x][i].innerHTML="P";
 			 
 							}
@@ -472,7 +483,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 				//color cells
 				for(var i=x;i<=xEnd;i++) {
 				
-				table.coordinates[i][y].style.backgroundColor="#0000ff";
+				table.coordinates[i][y].className="cell_destroyer";
 				table.coordinates[i][y].innerHTML="D";
 			 
 			}
@@ -494,7 +505,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 					//color cells
 					for(var i=x;i<=xEnd;i++) {
 				
-					table.coordinates[i][y].style.backgroundColor="#FF0000";
+					table.coordinates[i][y].className="cell_battleship";
 					table.coordinates[i][y].innerHTML="B";
 			 
 				}
@@ -516,7 +527,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 						//color cells
 						for(var i=x;i<=xEnd;i++) {
 				
-						table.coordinates[i][y].style.backgroundColor="#CCFF66";
+						table.coordinates[i][y].className="cell_carrier";
 						table.coordinates[i][y].innerHTML="C";
 			 
 					}
@@ -538,7 +549,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 							//color cells
 							for(var i=x;i<=xEnd;i++) {
 				
-							table.coordinates[i][y].style.backgroundColor="#66FF33";
+							table.coordinates[i][y].className="cell_submarine";
 							table.coordinates[i][y].innerHTML="S";
 			 
 						}
@@ -560,7 +571,7 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 								//color cells
 								for(var i=x;i<=xEnd;i++) {
 				
-								table.coordinates[i][y].style.backgroundColor="#CC00FF";
+								table.coordinates[i][y].className="cell_patrol_boat";
 								table.coordinates[i][y].innerHTML="P";
 			 
 							}
@@ -629,3 +640,5 @@ function placeShips(shipType,shipAlign, xcoord,ycoord) {
 
 
 </SCRIPT>
+
+

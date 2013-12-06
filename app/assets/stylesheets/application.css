@@ -17,6 +17,36 @@ body {
     width: 75%;
     margin: auto;
     padding: 25px 0 25px 0;
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+}
+
+p, ol, ul, td {
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+}
+
+pre {
+    background-color: #eee;
+    padding: 10px;
+    font-size: 11px;
+}
+
+a,  a:visited{
+    text-decoration: none;
+    background-color: transparent;
+    /*color: #08298A;*/
+    color: #4257a0;
+}
+
+a:hover, a:visited:hover{
+    text-decoration: none;
+    background-color: transparent;
+    /*color: #819FF7;*/
+    /*color: #5470cd;*/
+    color: #708bd8;
 }
 
 .page_title {
@@ -31,13 +61,13 @@ body {
 .page_title a, .page_title a:visited{
     text-decoration: none;
     background-color: transparent;
-    color: black;
+    /*color: black;*/
 }
 
 .page_title a:hover, .page_title a:visited:hover{
     text-decoration: none;
     background-color: transparent;
-    color: gray;
+    /*color: gray;*/
 }
 
 #login {
