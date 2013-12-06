@@ -26,7 +26,7 @@ game = {}
         dataType: 'script',
         data: {x: this.x, y: this.y, player_id: game.player_id},
         success: (data, textStatus, jqXHR) ->
-          display_battlefield_attacked_cell(data['battlefield_cell'])
+          display_battlefield_attacked_cell(data['battlefield_cell'],data['other_players'])
 
 
 
@@ -44,7 +44,7 @@ game = {}
     success: (data, textStatus, jqXHR) ->
       display_turn(data['turn'])
       display_player_in_turn(data['player_in_turn'])
-      display_battlefield_attacked_cell(data['battlefield_cell'])
+      display_battlefield_attacked_cell(data['battlefield_cell'],data['other_players'])
       display_ship_attacked_cell(data['my_ships_cell'])
 
 
@@ -67,7 +67,7 @@ display_battlefield_cell_status = (display,status) ->
   else
     document.getElementById("cell_status").innerHTML = "Cell Status"
 
-display_battlefield_attacked_cell = (battlefield_cell) ->
+display_battlefield_attacked_cell = (battlefield_cell,other_players) ->
   table = document.getElementById('1')
   state = JSON.stringify(battlefield_cell.state); #state = "{2:'u',3:'h', 4:'m'}"
   if(state.indexOf('h') != -1)
@@ -77,10 +77,20 @@ display_battlefield_attacked_cell = (battlefield_cell) ->
 
   state = state.replace(/"/g,"")
   state = state.replace(/:/g,"-")
-  state = state.replace(/,/g," ")
+  state = state.replace(/,/g,"<br/>")
   state = state.replace(/{/,"")
   state = state.replace(/}/,"")
+  state = state.replace(/h/,"Hit")
+  state = state.replace(/m/,"Miss")
+  state = state.replace(/u/,"Unknown")
+
+  for player in other_players
+    id = player.id
+    name = player.name
+    state = state.replace(id, name)
+
   state = state.toUpperCase()
+
   table.coordinates[battlefield_cell.x][battlefield_cell.y].onmouseover = () -> display_battlefield_cell_status(true,state)
   table.coordinates[battlefield_cell.x][battlefield_cell.y].onmouseout = () -> display_battlefield_cell_status(false,state)
 

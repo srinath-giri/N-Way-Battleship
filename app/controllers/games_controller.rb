@@ -205,14 +205,15 @@ class GamesController < ApplicationController
     gon.battlefield_attack_cell=@battlefield_cell.attributes
     gon.my_ships_attack_cell=@my_ships_cell.attributes
 
+    @other_players = Player.select("id,name").where("id <> ?", @current_player.id)
 
     respond_to do |format|
       format.json { render :json => {
           turn: @my_turn,
           player_in_turn: @player_in_turn,
           battlefield_cell: gon.battlefield_attack_cell,
-          my_ships_cell: gon.my_ships_attack_cell
-
+          my_ships_cell: gon.my_ships_attack_cell,
+          other_players: @other_players
         }
 }
       end
