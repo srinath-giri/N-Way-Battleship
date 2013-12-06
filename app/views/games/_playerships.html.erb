@@ -5,14 +5,14 @@ function display_turn(turn){
   if (turn == true)
     document.getElementById("turn_info").innerHTML = "It's your turn to take a shot"
   else
-    document.getElementById("turn_info").innerHTML = ""
+    document.getElementById("turn_info").innerHTML = "&nbsp;"
 }
 
 function display_player_in_turn(player_in_turn){
   if (player_in_turn.id != game.player_id)
     document.getElementById("player_in_turn_info").innerHTML = "Player moving: " + player_in_turn.name
   else
-    document.getElementById("player_in_turn_info").innerHTML = ""
+    document.getElementById("player_in_turn_info").innerHTML = "&nbsp;"
 }
 
 //setInterval(refresh, 1000)
@@ -77,7 +77,7 @@ function coordinate(table) {
 
 </SCRIPT>
 
-<table  id="2">
+<table  id="2" style="margin:auto;">
 	<tr>
 		<td></td>
 		<td></td>

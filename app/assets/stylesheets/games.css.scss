@@ -104,6 +104,14 @@ label {
   text-align: center;
 }
 
+// unknown in the battlefield
+.cell_unknown {
+  background-color: #a3c688;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
 // hit in my_ships
 .cell_destroyed {
   background-color: #524745;
@@ -112,6 +120,11 @@ label {
   text-align: center;
 }
 
+div#cell_status {
+  text-align: right;
+  margin-left: 50%;
+  margin-right: 10%
+}
 
 
 

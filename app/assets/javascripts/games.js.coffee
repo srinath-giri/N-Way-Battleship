@@ -52,20 +52,20 @@ display_turn = (turn) ->
   if (turn == true)
     document.getElementById("turn_info").innerHTML = "It's your turn to take a shot"
   else
-    document.getElementById("turn_info").innerHTML = ""
+    document.getElementById("turn_info").innerHTML = "&nbsp;"
 
 
 display_player_in_turn = (player_in_turn) ->
   if (player_in_turn.id != game.player_id)
     document.getElementById("player_in_turn_info").innerHTML = "Player moving: " + player_in_turn.name
   else
-    document.getElementById("player_in_turn_info").innerHTML = ""
+    document.getElementById("player_in_turn_info").innerHTML = "&nbsp;"
 
 display_battlefield_cell_status = (display,status) ->
   if (display == true)
     document.getElementById("cell_status").innerHTML = status
   else
-    document.getElementById("cell_status").innerHTML = "Cell Status"
+    document.getElementById("cell_status").innerHTML = "&nbsp;"
 
 display_battlefield_attacked_cell = (battlefield_cell,other_players) ->
   table = document.getElementById('1')
@@ -76,20 +76,21 @@ display_battlefield_attacked_cell = (battlefield_cell,other_players) ->
     table.coordinates[battlefield_cell.x][battlefield_cell.y].className = "cell_miss"
 
   state = state.replace(/"/g,"")
-  state = state.replace(/:/g,"-")
-  state = state.replace(/,/g,"<br/>")
-  state = state.replace(/{/,"")
-  state = state.replace(/}/,"")
-  state = state.replace(/h/,"Hit")
-  state = state.replace(/m/,"Miss")
-  state = state.replace(/u/,"Unknown")
+  state = state.replace(/:/g,"")
+  state = state.replace(/,/g," ")
+  state = state.replace(/{/,"<table>")
+  state = state.replace(/}/,"</table>")
+
+
+  state = state.replace(/h/g,"<td><div class =\"cell_hit\"></div></td></tr>")
+  state = state.replace(/m/g,"<td><div class =\"cell_miss\"></div></td></tr>")
+  state = state.replace(/u/g,"<td><div class =\"cell_unknown\"></div></td></tr>")
 
   for player in other_players
     id = player.id
     name = player.name
-    state = state.replace(id, name)
+    state = state.replace(id, "<tr><td>" + name + "</td>" )
 
-  state = state.toUpperCase()
 
   table.coordinates[battlefield_cell.x][battlefield_cell.y].onmouseover = () -> display_battlefield_cell_status(true,state)
   table.coordinates[battlefield_cell.x][battlefield_cell.y].onmouseout = () -> display_battlefield_cell_status(false,state)
