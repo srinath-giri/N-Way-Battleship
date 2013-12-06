@@ -72,18 +72,6 @@ display_battlefield_cell_status = (display,status) ->
 display_battlefield_attacked_cell = (battlefield_cell,other_players) ->
   table = document.getElementById('1')
 
-  state_with_names = ""
-  for id, status of battlefield_cell.state  # "of" for objects, "in" for arrays
-    if status == "m"
-      status = "miss"
-    if status == "h"
-      status = "hit"
-    if status == "u"
-      status = "unknown"
-    state_with_names += game.players[id] + ": " + status + " - "
-
-  state_with_names = state_with_names.substr(0, state_with_names.length - 2)
-
   state = JSON.stringify(battlefield_cell.state); #state = "{2:'u',3:'h', 4:'m'}"
   if(state.indexOf('h') != -1)
     table.coordinates[battlefield_cell.x][battlefield_cell.y].className = "cell_hit"
