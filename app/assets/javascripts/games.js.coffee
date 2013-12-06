@@ -14,6 +14,8 @@ game = {}
     game.game_id =  object.game_id
   if (object.number_of_players)
     game.number_of_players = object.number_of_players
+  if (object.players)
+    game.players = object.players
 
 
 @init_cell_events = (table) ->
@@ -69,20 +71,27 @@ display_battlefield_cell_status = (display,status) ->
 
 display_battlefield_attacked_cell = (battlefield_cell) ->
   table = document.getElementById('1')
+
+  state_with_names = ""
+  for id, status of battlefield_cell.state  # "of" for objects, "in" for arrays
+    if status == "m"
+      status = "miss"
+    if status == "h"
+      status = "hit"
+    if status == "u"
+      status = "unknown"
+    state_with_names += game.players[id] + ": " + status + " - "
+
+  state_with_names = state_with_names.substr(0, state_with_names.length - 2)
+
   state = JSON.stringify(battlefield_cell.state); #state = "{2:'u',3:'h', 4:'m'}"
   if(state.indexOf('h') != -1)
     table.coordinates[battlefield_cell.x][battlefield_cell.y].className = "cell_hit"
   else if(state.indexOf('m') != -1)
     table.coordinates[battlefield_cell.x][battlefield_cell.y].className = "cell_miss"
 
-  state = state.replace(/"/g,"")
-  state = state.replace(/:/g,"-")
-  state = state.replace(/,/g," ")
-  state = state.replace(/{/,"")
-  state = state.replace(/}/,"")
-  state = state.toUpperCase()
-  table.coordinates[battlefield_cell.x][battlefield_cell.y].onmouseover = () -> display_battlefield_cell_status(true,state)
-  table.coordinates[battlefield_cell.x][battlefield_cell.y].onmouseout = () -> display_battlefield_cell_status(false,state)
+  table.coordinates[battlefield_cell.x][battlefield_cell.y].onmouseover = () -> display_battlefield_cell_status(true,state_with_names)
+  table.coordinates[battlefield_cell.x][battlefield_cell.y].onmouseout = () -> display_battlefield_cell_status(false,state_with_names)
 
 display_ship_attacked_cell = (my_ships_cell) ->
   table = document.getElementById('2');
